@@ -1,6 +1,7 @@
 const Docker = require('dockerode');
-const removeContainers = require('../../../../../lib/test/services/docker/removeContainers');
-const createIPFSInstance = require('../../../../../lib/test/services/IPFS/createIPFSInstance');
+
+const removeContainers = require('../../../lib/docker/removeContainers');
+const { createIPFSInstance } = require('../../../lib');
 
 describe('createIPFSInstance', function main() {
   this.timeout(40000);

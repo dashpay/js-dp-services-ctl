@@ -1,6 +1,7 @@
 const Docker = require('dockerode');
-const removeContainers = require('../../../../../lib/test/services/docker/removeContainers');
-const createMongoDbInstance = require('../../../../../lib/test/services/mongoDb/createMongoDbInstance');
+
+const removeContainers = require('../../../lib/docker/removeContainers');
+const { createMongoDbInstance } = require('../../../lib');
 
 describe('createMongoDbInstance', function main() {
   this.timeout(40000);

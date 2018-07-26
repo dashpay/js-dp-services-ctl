@@ -1,5 +1,5 @@
-const removeContainers = require('../../../../../lib/test/services/docker/removeContainers');
-const startDashDriveInstance = require('../../../../../lib/test/services/dashDrive/startDashDriveInstance');
+const removeContainers = require('../../../lib/docker/removeContainers');
+const { startDashDriveInstance } = require('../../../lib');
 
 describe('startDashDriveInstance', function main() {
   this.timeout(90000);

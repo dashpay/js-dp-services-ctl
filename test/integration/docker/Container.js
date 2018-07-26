@@ -1,9 +1,9 @@
 const Docker = require('dockerode');
 
-const removeContainers = require('../../../../../lib/test/services/docker/removeContainers');
-const DashCoreInstanceOptions = require('../../../../../lib/test/services/dashCore/DashCoreInstanceOptions');
-const MongoDbInstanceOptions = require('../../../../../lib/test/services/mongoDb/MongoDbInstanceOptions');
-const Container = require('../../../../../lib/test/services/docker/Container');
+const removeContainers = require('../../../lib/docker/removeContainers');
+const DashCoreInstanceOptions = require('../../../lib/dashCore/DashCoreInstanceOptions');
+const MongoDbInstanceOptions = require('../../../lib/mongoDb/MongoDbInstanceOptions');
+const Container = require('../../../lib/docker/Container');
 
 describe('Container', function main() {
   this.timeout(40000);

@@ -1,5 +1,5 @@
-const removeContainers = require('../../../../../lib/test/services/docker/removeContainers');
-const startMongoDbInstance = require('../../../../../lib/test/services/mongoDb/startMongoDbInstance');
+const removeContainers = require('../../../lib/docker/removeContainers');
+const { startMongoDbInstance } = require('../../../lib');
 
 describe('startMongoDbInstance', function main() {
   this.timeout(90000);

@@ -1,12 +1,12 @@
 const Docker = require('dockerode');
 
-const removeContainers = require('../../../../../lib/test/services/docker/removeContainers');
-const DashCoreInstanceOptions = require('../../../../../lib/test/services/dashCore/DashCoreInstanceOptions');
-const Network = require('../../../../../lib/test/services/docker/Network');
-const getAwsEcrAuthorizationToken = require('../../../../../lib/test/services/docker/getAwsEcrAuthorizationToken');
-const Image = require('../../../../../lib/test/services/docker/Image');
-const Container = require('../../../../../lib/test/services/docker/Container');
-const DockerInstance = require('../../../../../lib/test/services/docker/DockerInstance');
+const removeContainers = require('../../../lib/docker/removeContainers');
+const DashCoreInstanceOptions = require('../../../lib/dashCore/DashCoreInstanceOptions');
+const Network = require('../../../lib/docker/Network');
+const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
+const Image = require('../../../lib/docker/Image');
+const Container = require('../../../lib/docker/Container');
+const DockerInstance = require('../../../lib/docker/DockerInstance');
 
 async function createInstance(options) {
   const { name: networkName, driver } = options.getContainerNetworkOptions();

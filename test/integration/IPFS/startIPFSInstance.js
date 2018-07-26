@@ -1,5 +1,5 @@
-const removeContainers = require('../../../../../lib/test/services/docker/removeContainers');
-const startIPFSInstance = require('../../../../../lib/test/services/IPFS/startIPFSInstance');
+const removeContainers = require('../../../lib/docker/removeContainers');
+const { startIPFSInstance } = require('../../../lib');
 
 describe('startIPFSInstance', function main() {
   this.timeout(40000);
