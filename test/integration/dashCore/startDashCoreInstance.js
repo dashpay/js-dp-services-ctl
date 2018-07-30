@@ -52,7 +52,7 @@ describe('startDashCoreInstance', function main() {
       }
 
       await instances[0].rpcClient.generate(2);
-      await wait(10000);
+      await wait(30000);
 
       for (let i = 0; i < 3; i++) {
         const { result: blocks } = await instances[i].rpcClient.getBlockCount();
