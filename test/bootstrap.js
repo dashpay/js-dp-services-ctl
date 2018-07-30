@@ -14,7 +14,7 @@ use(dirtyChai);
 process.env.NODE_ENV = 'test';
 
 const dotenvConfig = dotenv.config({
-  path: path.resolve(__dirname, '..', '..', '.env'),
+  path: path.resolve(__dirname, '..', '.env'),
 });
 dotenvExpand(dotenvConfig);
 
