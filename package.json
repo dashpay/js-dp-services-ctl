@@ -1,0 +1,51 @@
+{
+  "name": "js-evo-services-ctl",
+  "version": "0.0.1",
+  "description": "Javascript library for manipulation of Evolution services using Docker",
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "mocha './test/**/*.spec.js'",
+    "test:unit": "mocha './test/unit/**/*.spec.js'",
+    "test:integration": "mocha './test/integration/**/*.spec.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dashevo/js-evo-services-ctl.git"
+  },
+  "authors": [
+    "David Rey Acosta",
+    "Ivan Shumkov",
+    "Nathan Marley",
+    "Djavid Gabibiyan"
+  ],
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "dirty-chai": "^2.0.1",
+    "dotenv": "^5.0.1",
+    "dotenv-expand": "^4.2.0",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.13.0",
+    "mocha": "^5.2.0",
+    "mocha-sinon": "^2.1.0",
+    "sinon": "^4.3.0",
+    "sinon-chai": "^2.14.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.272.1",
+    "bitcoind-rpc-dash": "git+ssh://git@github.com/dashevo/bitcoind-rpc-dash-private.git#develop",
+    "dockerode": "^2.5.4",
+    "ipfs-api": "^20.1",
+    "jayson": "^2.0.6",
+    "mongodb": "^3.1.1"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dashevo/js-evo-services-ctl/issues"
+  },
+  "homepage": "https://github.com/dashevo/js-evo-services-ctl#readme"
+}
