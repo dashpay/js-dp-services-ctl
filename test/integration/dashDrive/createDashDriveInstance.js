@@ -15,7 +15,7 @@ describe('createDashDriveInstance', function main() {
     before(async () => {
       mongoInstance = await startMongoDbInstance();
       envs = [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`];
-      instance = await createDashDriveInstance(envs);
+      instance = await createDashDriveInstance({ envs });
     });
     after(async () => {
       await Promise.all([
@@ -61,7 +61,7 @@ describe('createDashDriveInstance', function main() {
     before(async () => {
       mongoInstance = await startMongoDbInstance();
       const envs = [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`];
-      instance = await createDashDriveInstance(envs);
+      instance = await createDashDriveInstance({ envs });
     });
     after(async () => {
       await Promise.all([
