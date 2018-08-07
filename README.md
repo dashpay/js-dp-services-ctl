@@ -42,16 +42,16 @@ startIPFS.many(2).then((instances) => {
 ### Start Dash Core
 
 ```js
-const { startDashCoreInstance } = require('@dashevo/js-evo-services-ctl');
+const { startDashCore } = require('@dashevo/js-evo-services-ctl');
 
 let dashCoreInstance;
-startDashCoreInstance().then((instance) => {
+startDashCore().then((instance) => {
   dashCoreInstance = instance;
 });
 ```
 
  - Use `many` method to start several Dash Core instances
- - `startDashCoreInstance` returns instance of [DashCoreInstance](lib/dashCore/DashCoreInstance.js)
+ - `startDashCore` returns instance of [DashCore](lib/dashCore/DashCore.js)
  
 ### Start MongoDB
 
@@ -81,6 +81,6 @@ startDashDriveInstance().then((instance) => {
 - Use `many` method to start several Dash Drive instances
 - `startDashDriveInstance` returns a set of services it depends on inluding itself:
   - [ipfs](https://github.com/ipfs/js-ipfs-api#api)
-  - [dashCore](lib/dashCore/DashCoreInstance.js)
+  - [dashCore](lib/dashCore/DashCore.js)
   - [dashDrive](lib/dashDrive/DashDriveInstance.js)
   - [mongoDb](lib/mongoDb/MongoDb.js)

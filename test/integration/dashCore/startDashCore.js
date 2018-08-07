@@ -1,5 +1,5 @@
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { startDashCoreInstance } = require('../../../lib');
+const { startDashCore } = require('../../../lib');
 
 const wait = require('../../../lib/util/wait');
 
@@ -12,7 +12,7 @@ describe('startDashCoreInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await startDashCoreInstance();
+      instance = await startDashCore();
     });
     after(async () => instance.remove());
 
@@ -31,7 +31,7 @@ describe('startDashCoreInstance', function main() {
     let instances;
 
     before(async () => {
-      instances = await startDashCoreInstance.many(3);
+      instances = await startDashCore.many(3);
     });
     after(async () => {
       const promises = instances.map(instance => instance.remove());

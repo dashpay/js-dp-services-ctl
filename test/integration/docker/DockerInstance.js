@@ -1,7 +1,7 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const DashCoreInstanceOptions = require('../../../lib/dashCore/DashCoreInstanceOptions');
+const DashCoreOptions = require('../../../lib/dashCore/DashCoreOptions');
 const Network = require('../../../lib/docker/Network');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
@@ -24,7 +24,7 @@ describe('DockerInstance', function main() {
 
   before(removeContainers);
 
-  const options = new DashCoreInstanceOptions();
+  const options = new DashCoreOptions();
 
   describe('usage', () => {
     let instance;
@@ -107,9 +107,9 @@ describe('DockerInstance', function main() {
     let sandbox;
 
     before(async () => {
-      instanceOne = await createInstance(new DashCoreInstanceOptions());
-      instanceTwo = await createInstance(new DashCoreInstanceOptions());
-      instanceThree = await createInstance(new DashCoreInstanceOptions());
+      instanceOne = await createInstance(new DashCoreOptions());
+      instanceTwo = await createInstance(new DashCoreOptions());
+      instanceThree = await createInstance(new DashCoreOptions());
     });
     beforeEach(function before() {
       sandbox = this.sinon;

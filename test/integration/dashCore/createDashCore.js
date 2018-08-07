@@ -1,7 +1,7 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { createDashCoreInstance } = require('../../../lib');
+const { createDashCore } = require('../../../lib');
 
 const wait = require('../../../lib/util/wait');
 
@@ -14,11 +14,11 @@ describe('createDashCoreInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await createDashCoreInstance();
+      instance = await createDashCore();
     });
 
     it('should throw an error if connect', async () => {
-      const instanceTwo = createDashCoreInstance();
+      const instanceTwo = createDashCore();
 
       let error;
       try {
@@ -39,7 +39,7 @@ describe('createDashCoreInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await createDashCoreInstance();
+      instance = await createDashCore();
     });
 
     after(async () => instance.remove());
@@ -88,8 +88,8 @@ describe('createDashCoreInstance', function main() {
     let instanceTwo;
 
     before(async () => {
-      instanceOne = await createDashCoreInstance();
-      instanceTwo = await createDashCoreInstance();
+      instanceOne = await createDashCore();
+      instanceTwo = await createDashCore();
     });
     before(async () => {
       await Promise.all([
@@ -139,7 +139,7 @@ describe('createDashCoreInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await createDashCoreInstance();
+      instance = await createDashCore();
     });
     after(async () => instance.remove());
 
