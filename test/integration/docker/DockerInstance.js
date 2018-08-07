@@ -34,7 +34,7 @@ describe('DockerInstance', function main() {
     });
     after(async () => instance.remove());
 
-    it('should start a DockerInstance with DashCoreInstanceOptions network options', async () => {
+    it('should start a DockerInstance with DashCoreOptions network options', async () => {
       await instance.start();
       const { name, driver } = options.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
@@ -46,7 +46,7 @@ describe('DockerInstance', function main() {
       expect(networks[0]).to.equal(name);
     });
 
-    it('should start an instance with the DashCoreInstanceOptions options', async () => {
+    it('should start an instance with the DashCoreOptions options', async () => {
       await instance.start();
       const { Args } = await instance.container.details();
       expect(Args).to.deep.equal([
