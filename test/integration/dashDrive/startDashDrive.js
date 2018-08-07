@@ -1,8 +1,8 @@
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { startDashDriveInstance } = require('../../../lib');
+const { startDashDrive } = require('../../../lib');
 
-describe('startDashDriveInstance', function main() {
-  this.timeout(180000);
+describe('startDashDrive', function main() {
+  this.timeout(1800000);
 
   before(removeContainers);
 
@@ -10,7 +10,7 @@ describe('startDashDriveInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await startDashDriveInstance();
+      instance = await startDashDrive();
     });
     after(async () => instance.remove());
 
@@ -88,7 +88,7 @@ describe('startDashDriveInstance', function main() {
     let instances;
 
     before(async () => {
-      instances = await startDashDriveInstance.many(3);
+      instances = await startDashDrive.many(3);
     });
     after(async () => {
       const promises = instances.map(instance => instance.remove());

@@ -70,17 +70,17 @@ startMongoDb().then((instance) => {
 ### Start Dash Drive
 
 ```js
-const { startDashDriveInstance } = require('@dashevo/js-evo-services-ctl');
+const { startDashDrive } = require('@dashevo/js-evo-services-ctl');
 
 let dashDriveInstance;
-startDashDriveInstance().then((instance) => {
+startDashDrive().then((instance) => {
   dashDriveInstance = instance;
 });
 ```
 
 - Use `many` method to start several Dash Drive instances
-- `startDashDriveInstance` returns a set of services it depends on inluding itself:
+- `startDashDrive` returns a set of services it depends on inluding itself:
   - [ipfs](https://github.com/ipfs/js-ipfs-api#api)
   - [dashCore](lib/dashCore/DashCore.js)
-  - [dashDrive](lib/dashDrive/DashDriveInstance.js)
+  - [dashDrive](lib/dashDrive/DashDrive.js)
   - [mongoDb](lib/mongoDb/MongoDb.js)
