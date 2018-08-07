@@ -4,7 +4,7 @@ const removeContainers = require('../../../lib/docker/removeContainers');
 const { startMongoDb, createDashDrive } = require('../../../lib');
 
 describe('createDashDrive', function main() {
-  this.timeout(900000);
+  this.timeout(90000);
 
   before(removeContainers);
 
