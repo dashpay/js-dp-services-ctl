@@ -1,7 +1,7 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { startMongoDbInstance, createDashDriveInstance } = require('../../../lib');
+const { startMongoDb, createDashDriveInstance } = require('../../../lib');
 
 describe('createDashDriveInstance', function main() {
   this.timeout(90000);
@@ -13,7 +13,7 @@ describe('createDashDriveInstance', function main() {
     let envs;
     let instance;
     before(async () => {
-      mongoInstance = await startMongoDbInstance();
+      mongoInstance = await startMongoDb();
       envs = [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`];
       instance = await createDashDriveInstance(envs);
     });
@@ -59,7 +59,7 @@ describe('createDashDriveInstance', function main() {
     let mongoInstance;
     let instance;
     before(async () => {
-      mongoInstance = await startMongoDbInstance();
+      mongoInstance = await startMongoDb();
       const envs = [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`];
       instance = await createDashDriveInstance(envs);
     });

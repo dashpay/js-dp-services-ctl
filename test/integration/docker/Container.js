@@ -2,7 +2,7 @@ const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
 const DashCoreInstanceOptions = require('../../../lib/dashCore/DashCoreInstanceOptions');
-const MongoDbInstanceOptions = require('../../../lib/mongoDb/MongoDbInstanceOptions');
+const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
 const Container = require('../../../lib/docker/Container');
 
 describe('Container', function main() {
@@ -11,7 +11,7 @@ describe('Container', function main() {
   before(removeContainers);
 
   const options = new DashCoreInstanceOptions();
-  const mongoDbOptions = new MongoDbInstanceOptions();
+  const mongoDbOptions = new MongoDbOptions();
   const imageName = options.getContainerImageName();
   const mongoDbImageName = mongoDbOptions.getContainerImageName();
   const { name: networkName } = options.getContainerNetworkOptions();

@@ -1,7 +1,7 @@
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { startMongoDbInstance } = require('../../../lib');
+const { startMongoDb } = require('../../../lib');
 
-describe('startMongoDbInstance', function main() {
+describe('startMongoDb', function main() {
   this.timeout(90000);
 
   before(removeContainers);
@@ -10,7 +10,7 @@ describe('startMongoDbInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await startMongoDbInstance();
+      instance = await startMongoDb();
     });
     after(async () => instance.remove());
 
@@ -24,7 +24,7 @@ describe('startMongoDbInstance', function main() {
     let instances;
 
     before(async () => {
-      instances = await startMongoDbInstance.many(3);
+      instances = await startMongoDb.many(3);
     });
     after(async () => {
       const promises = instances.map(instance => instance.remove());

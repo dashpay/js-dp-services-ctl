@@ -1,9 +1,9 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { createMongoDbInstance } = require('../../../lib');
+const { createMongoDb } = require('../../../lib');
 
-describe('createMongoDbInstance', function main() {
+describe('createMongoDb', function main() {
   this.timeout(40000);
 
   before(removeContainers);
@@ -12,7 +12,7 @@ describe('createMongoDbInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await createMongoDbInstance();
+      instance = await createMongoDb();
     });
     after(async () => instance.remove());
 
@@ -66,7 +66,7 @@ describe('createMongoDbInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await createMongoDbInstance();
+      instance = await createMongoDb();
     });
     after(async () => instance.remove());
 

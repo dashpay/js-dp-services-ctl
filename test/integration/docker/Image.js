@@ -1,5 +1,5 @@
 const DashCoreInstanceOptions = require('../../../lib/dashCore/DashCoreInstanceOptions');
-const MongoDbInstanceOptions = require('../../../lib/mongoDb/MongoDbInstanceOptions');
+const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
 
@@ -8,7 +8,7 @@ describe('Image', function main() {
 
 
   it('should pull image without authentication', async () => {
-    const options = new MongoDbInstanceOptions();
+    const options = new MongoDbOptions();
     const imageName = options.getContainerImageName();
     const image = new Image(imageName);
     await image.pull();
