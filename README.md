@@ -17,10 +17,10 @@ Just include this repo in your `package.json`
 ### Start IPFS
 
 ```js
-const { startIPFSInstance } = require('@dashevo/js-evo-services-ctl');
+const { startIPFS } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi;
-startIPFSInstance().then((instance) => {
+startIPFS().then((instance) => {
   ipfsApi = instance;
 });
 ```
@@ -28,16 +28,16 @@ startIPFSInstance().then((instance) => {
 Use `many` method to start several IPFS instances:
 
 ```js
-const { startIPFSInstance } = require('@dashevo/js-evo-services-ctl');
+const { startIPFS } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi1;
 let ipfsApi2;
-startIPFSInstance.many(2).then((instances) => {
+startIPFS.many(2).then((instances) => {
   [ipfsApi1, ipfsApi2] = instances;
 });
 ```
 
- - `startIPFSInstance` returns instance of [IpfsApi](https://github.com/ipfs/js-ipfs-api#api)
+ - `startIPFS` returns instance of [IpfsApi](https://github.com/ipfs/js-ipfs-api#api)
 
 ### Start Dash Core
 

@@ -1,9 +1,9 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { createIPFSInstance } = require('../../../lib');
+const { createIPFS } = require('../../../lib');
 
-describe('createIPFSInstance', function main() {
+describe('createIPFS', function main() {
   this.timeout(40000);
 
   before(removeContainers);
@@ -12,7 +12,7 @@ describe('createIPFSInstance', function main() {
     let instance;
 
     before(async () => {
-      instance = await createIPFSInstance();
+      instance = await createIPFS();
     });
     after(async () => instance.remove());
 
@@ -65,8 +65,8 @@ describe('createIPFSInstance', function main() {
     let instanceTwo;
 
     before(async () => {
-      instanceOne = await createIPFSInstance();
-      instanceTwo = await createIPFSInstance();
+      instanceOne = await createIPFS();
+      instanceTwo = await createIPFS();
     });
     before(async () => {
       await Promise.all([

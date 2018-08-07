@@ -1,5 +1,5 @@
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { startIPFSInstance } = require('../../../lib');
+const { startIPFS } = require('../../../lib');
 
 describe('startIPFSInstance', function main() {
   this.timeout(40000);
@@ -9,7 +9,7 @@ describe('startIPFSInstance', function main() {
   describe('One instance', () => {
     let instance;
     before(async () => {
-      instance = await startIPFSInstance();
+      instance = await startIPFS();
     });
     after(async () => instance.remove());
 
@@ -24,7 +24,7 @@ describe('startIPFSInstance', function main() {
   describe('Three instances', () => {
     let instances;
     before(async () => {
-      instances = await startIPFSInstance.many(3);
+      instances = await startIPFS.many(3);
     });
     after(async () => {
       const promises = instances.map(instance => instance.remove());
