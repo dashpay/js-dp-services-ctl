@@ -100,7 +100,8 @@ describe('createMongoDbInstance', function main() {
       instance = await createMongoDbInstance(options);
       await instance.start();
       const { Mounts } = await instance.container.details();
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
     it('should start an instance with instance of MongoDbInstanceOptions', async () => {
@@ -116,7 +117,8 @@ describe('createMongoDbInstance', function main() {
       instance = await createMongoDbInstance(options);
       await instance.start();
       const { Mounts } = await instance.container.details();
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });
 });
