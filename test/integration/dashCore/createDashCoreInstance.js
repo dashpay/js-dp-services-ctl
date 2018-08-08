@@ -2,6 +2,7 @@ const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { createDashCoreInstance } = require('../../../lib');
+const DashCoreInstanceOptions = require('../../../lib/dashCore/DashCoreInstanceOptions');
 
 const wait = require('../../../lib/util/wait');
 
@@ -159,6 +160,44 @@ describe('createDashCoreInstance', function main() {
       const rpcClient = instance.getApi();
       const { result } = await rpcClient.getInfo();
       expect(result.version).to.equal(120300);
+    });
+  });
+
+  describe('options', async () => {
+    let instance;
+
+    afterEach(async () => instance.remove());
+
+    it('should start an instance with plain object options', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      instance = await createDashCoreInstance(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+    });
+
+    it('should start an instance with instance of DashCoreOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = new DashCoreInstanceOptions({
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      });
+      instance = await createDashCoreInstance(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
   });
 });

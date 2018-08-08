@@ -41,6 +41,7 @@
     "dockerode": "^2.5.4",
     "ipfs-api": "^20.1",
     "jayson": "^2.0.6",
+    "lodash": "^4.17.10",
     "mongodb": "^3.1.1"
   },
   "license": "MIT",

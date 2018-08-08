@@ -14,10 +14,12 @@ describe('startDashCoreInstance', function main() {
 
     before(async () => {
       const rootPath = process.cwd();
-      const volumes = [
-        `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-      ];
-      const options = { volumes };
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = { container };
       instance = await startDashCoreInstance(options);
     });
     after(async () => instance.remove());
@@ -40,10 +42,12 @@ describe('startDashCoreInstance', function main() {
 
     before(async () => {
       const rootPath = process.cwd();
-      const volumes = [
-        `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-      ];
-      const options = { volumes };
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = { container };
       instances = await startDashCoreInstance.many(3, options);
     });
     after(async () => {
