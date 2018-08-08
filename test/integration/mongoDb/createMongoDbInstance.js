@@ -2,6 +2,7 @@ const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { createMongoDbInstance } = require('../../../lib');
+const MongoDbInstanceOptions = require('../../../lib/mongoDb/MongoDbInstanceOptions');
 
 describe('createMongoDbInstance', function main() {
   this.timeout(40000);
@@ -78,6 +79,44 @@ describe('createMongoDbInstance', function main() {
       const count = await db.count({});
 
       expect(count).to.equal(0);
+    });
+  });
+
+  describe('options', async () => {
+    let instance;
+
+    afterEach(async () => instance.remove());
+
+    it('should start an instance with plain object options', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      instance = await createMongoDbInstance(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+    });
+
+    it('should start an instance with instance of MongoDbInstanceOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = new MongoDbInstanceOptions({
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      });
+      instance = await createMongoDbInstance(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
   });
 });
