@@ -115,8 +115,18 @@ startDashDriveInstance(options).then((instance) => {
   - [dashDrive](lib/dashDrive/DashDriveInstance.js)
   - [mongoDb](lib/mongoDb/MongoDbInstance.js)
 
-### Container options
+### Services customization
+Each ervice has its own customizable options:
+  - [ipfs](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/IPFS/IPFSInstanceOptions.js)
+  - [dashCore](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashCore/DashCoreInstanceOptions.js)
+  - [dashDrive](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashDrive/DashDriveInstanceOptions.js)
+  - [mongoDb](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/mongoDb/MongoDbInstanceOptions.js)
 
+These options contains:
+- Specifics about service (ports, endpoints, DB name, ...)
+- Specifics about container (image, volumes, cmd, ...)
+
+Container options (same for all services):
 ```js
 const options = {
   container: {
@@ -134,4 +144,74 @@ const options = {
     },
   },
 };
+```
+
+Service options:
+```js
+// IPFS
+const options = {
+  port,
+  container, // See container options
+};
+
+// DASHCORE
+const options = {
+  port,
+  rpcuser,
+  rpcpassword,
+  rpcport,
+  zmqpubrawtx,
+  zmqpubrawtxlock,
+  zmqpubhashblock,
+  zmqpubhashtx,
+  zmqpubhashtxlock,
+  zmqpubrawblock,
+  container, // See container options
+};
+
+// DASHDRIVE
+const options = {
+  rpcport,
+  container, // See container options
+};
+
+// MONGODB
+const options = {
+  port,
+  name,
+  container, // See container options
+};
+```
+
+Extension of the options class it's also possible:
+```js
+const DashCoreInstanceOptions = require('./lib/dashCoreInstanceOptions');
+
+class DashCoreCustomOptions extends DashCoreInstanceOptions {}
+
+const dashCoreCustomOptions = new DashCoreCustomOptions();
+```
+
+These options should be pass to the `start[ServiceName]Instance` helper or `create[ServiceName]Instance` factory.
+```js
+const startDashCoreInstance = require('./lib/dashCore/startDashCoreInstance');
+const createDashCoreInstance = require('./lib/dashCore/createDashCoreInstance');
+
+// With extended class
+const dashCoreCustomOptions = new DashCoreCustomOptions();
+startDashCoreInstance(dashCoreCustomOptions);
+startDashCoreInstance.many(3, dashCoreCustomOptions);
+createDashCoreInstance(dashCoreCustomOptions);
+
+// With plain object options
+const dashCoreOptions = {
+  port,
+  rpcuser,
+  rpcpassword,
+  rpcport,
+  container, // See container options
+};
+startDashCoreInstance(dashCoreOptions);
+startDashCoreInstance.many(3, dashCoreOptions);
+createDashCoreInstance(dashCoreOptions);
 ```
