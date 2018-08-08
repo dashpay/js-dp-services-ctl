@@ -12,10 +12,12 @@ describe('startMongoDbInstance', function main() {
 
     before(async () => {
       const rootPath = process.cwd();
-      const volumes = [
-        `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-      ];
-      const options = { volumes };
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = { container };
       instance = await startMongoDbInstance(options);
     });
     after(async () => instance.remove());
@@ -34,10 +36,12 @@ describe('startMongoDbInstance', function main() {
 
     before(async () => {
       const rootPath = process.cwd();
-      const volumes = [
-        `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-      ];
-      const options = { volumes };
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = { container };
       instances = await startMongoDbInstance.many(3, options);
     });
     after(async () => {

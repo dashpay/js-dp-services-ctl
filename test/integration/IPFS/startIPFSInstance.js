@@ -11,10 +11,12 @@ describe('startIPFSInstance', function main() {
     let instance;
     before(async () => {
       const rootPath = process.cwd();
-      const volumes = [
-        `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-      ];
-      const options = { volumes };
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = { container };
       instance = await startIPFSInstance(options);
     });
     after(async () => instance.remove());
@@ -39,10 +41,12 @@ describe('startIPFSInstance', function main() {
     let instances;
     before(async () => {
       const rootPath = process.cwd();
-      const volumes = [
-        `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-      ];
-      const options = { volumes };
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = { container };
       instances = await startIPFSInstance.many(3, options);
     });
     after(async () => {

@@ -12,12 +12,14 @@ describe('startDashDriveInstance', function main() {
 
     before(async () => {
       const rootPath = process.cwd();
-      const volumes = [
-        `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-      ];
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
       const options = {
-        dashCore: { volumes },
-        dashDrive: { volumes },
+        dashCore: { container },
+        dashDrive: { container },
       };
       instance = await startDashDriveInstance(options);
     });
@@ -100,12 +102,14 @@ describe('startDashDriveInstance', function main() {
 
     before(async () => {
       const rootPath = process.cwd();
-      const volumes = [
-        `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-      ];
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
       const options = {
-        dashCore: { volumes },
-        dashDrive: { volumes },
+        dashCore: { container },
+        dashDrive: { container },
       };
       instances = await startDashDriveInstance.many(3, options);
     });
