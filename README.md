@@ -20,7 +20,11 @@ Just include this repo in your `package.json`
 const { startIPFSInstance } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi;
-startIPFSInstance().then((instance) => {
+const options = {
+  port: 5001, // IPFS port
+  container: containerOptions,
+};
+startIPFSInstance(options).then((instance) => {
   ipfsApi = instance;
 });
 ```
@@ -32,7 +36,11 @@ const { startIPFSInstance } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi1;
 let ipfsApi2;
-startIPFSInstance.many(2).then((instances) => {
+const options = {
+  port,
+  container, // See container options
+};
+startIPFSInstance.many(2, options).then((instances) => {
   [ipfsApi1, ipfsApi2] = instances;
 });
 ```
@@ -45,35 +53,57 @@ startIPFSInstance.many(2).then((instances) => {
 const { startDashCoreInstance } = require('@dashevo/js-evo-services-ctl');
 
 let dashCoreInstance;
-startDashCoreInstance().then((instance) => {
+const options = {
+  port,
+  rpcuser,
+  rpcpassword,
+  rpcport,
+  zmqpubrawtx,
+  zmqpubrawtxlock,
+  zmqpubhashblock,
+  zmqpubhashtx,
+  zmqpubhashtxlock,
+  zmqpubrawblock,
+  container, // See container options
+};
+startDashCoreInstance(options).then((instance) => {
   dashCoreInstance = instance;
 });
 ```
 
  - Use `many` method to start several Dash Core instances
  - `startDashCoreInstance` returns instance of [DashCoreInstance](lib/dashCore/DashCoreInstance.js)
- 
+
 ### Start MongoDB
 
 ```js
 const { startMongoDbInstance } = require('@dashevo/js-evo-services-ctl');
 
 let mongoDb;
-startMongoDbInstance().then((instance) => {
+const options = {
+  port,
+  name,
+  container, // See container options
+};
+startMongoDbInstance(options).then((instance) => {
   mongoDb = instance;
 });
 ```
 
 - Use `many` method to start several MongoDb instances
 - `startMongoDbInstance` returns instance of [MongoDbInstance](lib/mongoDb/MongoDbInstance.js)
- 
+
 ### Start Dash Drive
 
 ```js
 const { startDashDriveInstance } = require('@dashevo/js-evo-services-ctl');
 
 let dashDriveInstance;
-startDashDriveInstance().then((instance) => {
+const options = {
+  rpcport,
+  container, // See container options
+};
+startDashDriveInstance(options).then((instance) => {
   dashDriveInstance = instance;
 });
 ```
@@ -84,3 +114,24 @@ startDashDriveInstance().then((instance) => {
   - [dashCore](lib/dashCore/DashCoreInstance.js)
   - [dashDrive](lib/dashDrive/DashDriveInstance.js)
   - [mongoDb](lib/mongoDb/MongoDbInstance.js)
+
+### Container options
+
+```js
+const options = {
+  container: {
+    network: {
+      name: '',
+      driver: '',
+    },
+    image: '',
+    cmd: [],
+    volumes: [],
+    envs: [],
+    ports: [],
+    labels: {
+      testHelperName: '',
+    },
+  },
+};
+```
