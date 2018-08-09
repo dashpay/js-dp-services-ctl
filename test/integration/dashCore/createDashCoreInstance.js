@@ -199,5 +199,22 @@ describe('createDashCoreInstance', function main() {
       const { Mounts } = await instance.container.details();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
+
+    it('should start an instance with custom default DashCoreOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      DashCoreInstanceOptions.setDefaultCustomOptions(options);
+      instance = await createDashCoreInstance();
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+    });
   });
 });
