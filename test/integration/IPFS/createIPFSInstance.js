@@ -133,5 +133,23 @@ describe('createIPFSInstance', function main() {
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
+
+    it('should start an instance with custom default IPFSOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      IPFSInstanceOptions.setDefaultCustomOptions(options);
+      instance = await createIPFSInstance();
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
+    });
   });
 });
