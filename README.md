@@ -129,6 +129,7 @@ These options contains:
 Container options (same for all services):
 ```js
 const options = {
+  awsDefaultRegion,
   container: {
     network: {
       name: '',
