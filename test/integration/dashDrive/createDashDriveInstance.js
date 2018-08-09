@@ -145,6 +145,7 @@ describe('createDashDriveInstance', function main() {
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
         container: {
+          envs: [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`],
           volumes: [
             `${rootPath}/README.md:${CONTAINER_VOLUME}`,
           ],
