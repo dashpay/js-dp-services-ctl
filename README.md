@@ -100,7 +100,7 @@ const { startDashDriveInstance } = require('@dashevo/js-evo-services-ctl');
 
 let dashDriveInstance;
 const options = {
-  rpcport,
+  rpcPort,
   container, // See container options
 };
 startDashDriveInstance(options).then((instance) => {
@@ -171,7 +171,7 @@ const options = {
 
 // DASHDRIVE
 const options = {
-  rpcport,
+  rpcPort,
   container, // See container options
 };
 
