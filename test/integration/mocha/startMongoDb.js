@@ -1,9 +1,9 @@
-const startMongoDbInstance = require('../../../lib/mocha/startMongoDbInstance');
+const startMongoDb = require('../../../lib/mocha/startMongoDb');
 
-describe('startMongoDbInstance', () => {
+describe('startMongoDb', () => {
   describe('One instance', () => {
     let instance;
-    startMongoDbInstance().then((_instance) => {
+    startMongoDb().then((_instance) => {
       instance = _instance;
     });
 
@@ -30,7 +30,7 @@ describe('startMongoDbInstance', () => {
 
   describe('Three instance', () => {
     let instances;
-    startMongoDbInstance.many(3).then((_instances) => {
+    startMongoDb.many(3).then((_instances) => {
       instances = _instances;
     });
 

@@ -1,9 +1,9 @@
-const startDashDriveInstance = require('../../../lib/mocha/startDashDriveInstance');
+const startDashDrive = require('../../../lib/mocha/startDashDrive');
 
-describe('startDashDriveInstance', () => {
+describe('startDashDrive', () => {
   describe('One instance', () => {
     let instance;
-    startDashDriveInstance().then((_instance) => {
+    startDashDrive().then((_instance) => {
       instance = _instance;
     });
 
@@ -25,7 +25,7 @@ describe('startDashDriveInstance', () => {
 
   describe('Three instance', () => {
     let instances;
-    startDashDriveInstance.many(3).then((_instance) => {
+    startDashDrive.many(3).then((_instance) => {
       instances = _instance;
     });
 

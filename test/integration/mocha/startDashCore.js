@@ -1,9 +1,9 @@
-const startDashCoreInstance = require('../../../lib/mocha/startDashCoreInstance');
+const startDashCore = require('../../../lib/mocha/startDashCore');
 
-describe('startDashCoreInstance', () => {
+describe('startDashCore', () => {
   describe('One instance', () => {
     let instance;
-    startDashCoreInstance().then((_instance) => {
+    startDashCore().then((_instance) => {
       instance = _instance;
     });
 
@@ -15,7 +15,7 @@ describe('startDashCoreInstance', () => {
 
   describe('Three instances', () => {
     let instances;
-    startDashCoreInstance.many(3).then((_instances) => {
+    startDashCore.many(3).then((_instances) => {
       instances = _instances;
     });
 

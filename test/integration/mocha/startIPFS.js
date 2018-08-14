@@ -1,11 +1,11 @@
-const startIPFSInstance = require('../../../lib/mocha/startIPFSInstance');
+const startIPFS = require('../../../lib/mocha/startIPFS');
 
-describe('startIPFSInstance', function main() {
+describe('startIPFS', function main() {
   this.timeout(40000);
 
   describe('One instance', () => {
     let ipfsAPI;
-    startIPFSInstance().then((_instance) => {
+    startIPFS().then((_instance) => {
       ipfsAPI = _instance.getApi();
     });
 
@@ -18,7 +18,7 @@ describe('startIPFSInstance', function main() {
 
   describe('Three instances', () => {
     let ipfsAPIs;
-    startIPFSInstance.many(3).then((_instances) => {
+    startIPFS.many(3).then((_instances) => {
       ipfsAPIs = _instances.map(instance => instance.getApi());
     });
 
