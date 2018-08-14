@@ -2,6 +2,7 @@ const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { startMongoDb, createDashDrive } = require('../../../lib');
+const DashDriveOptions = require('../../../lib/dashDrive/DashDriveOptions');
 
 describe('createDashDrive', function main() {
   this.timeout(90000);
@@ -15,7 +16,12 @@ describe('createDashDrive', function main() {
     before(async () => {
       mongoInstance = await startMongoDb();
       envs = [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`];
-      instance = await createDashDrive(envs);
+      const options = {
+        container: {
+          envs,
+        },
+      };
+      instance = await createDashDrive(options);
     });
     after(async () => {
       await Promise.all([
@@ -51,7 +57,7 @@ describe('createDashDrive', function main() {
 
     it('should return DashDrive RPC port', async () => {
       await instance.start();
-      expect(instance.getRpcPort()).to.equal(instance.options.rpc.port);
+      expect(instance.getRpcPort()).to.equal(instance.options.getRpcPort());
     });
   });
 
@@ -61,7 +67,12 @@ describe('createDashDrive', function main() {
     before(async () => {
       mongoInstance = await startMongoDb();
       const envs = [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`];
-      instance = await createDashDrive(envs);
+      const options = {
+        container: {
+          envs,
+        },
+      };
+      instance = await createDashDrive(options);
     });
     after(async () => {
       await Promise.all([
@@ -77,6 +88,74 @@ describe('createDashDrive', function main() {
       const res = await rpc.request('addSTPacketMethod', {});
 
       expect(res.error.message).to.equal('Initial sync in progress');
+    });
+  });
+
+  describe('options', async () => {
+    let mongoInstance;
+    let instance;
+
+    beforeEach(async () => {
+      mongoInstance = await startMongoDb();
+    });
+
+    afterEach(async () => {
+      await Promise.all([
+        mongoInstance.remove(),
+        instance.remove(),
+      ]);
+    });
+
+    it('should start an instance with plain object options', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          envs: [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`],
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      instance = await createDashDrive(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+    });
+
+    it('should start an instance with instance of DashDriveOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = new DashDriveOptions({
+        container: {
+          envs: [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`],
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      });
+      instance = await createDashDrive(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+    });
+
+    it('should start an instance with custom default DashDriveOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          envs: [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`],
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      DashDriveOptions.setDefaultCustomOptions(options);
+      instance = await createDashDrive();
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
   });
 });

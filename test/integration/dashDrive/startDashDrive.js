@@ -7,10 +7,21 @@ describe('startDashDrive', function main() {
   before(removeContainers);
 
   describe('One instance', () => {
+    const CONTAINER_VOLUME = '/usr/src/app/README.md';
     let instance;
 
     before(async () => {
-      instance = await startDashDrive();
+      const rootPath = process.cwd();
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = {
+        dashCore: { container },
+        dashDrive: { container },
+      };
+      instance = await startDashDrive(options);
     });
     after(async () => instance.remove());
 
@@ -25,8 +36,9 @@ describe('startDashDrive', function main() {
     });
 
     it('should has DashDrive container running', async () => {
-      const { State } = await instance.dashDrive.container.details();
+      const { State, Mounts } = await instance.dashDrive.container.details();
       expect(State.Status).to.equal('running');
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should has IPFS container running', async () => {
@@ -85,10 +97,21 @@ describe('startDashDrive', function main() {
   });
 
   describe('Three instance', () => {
+    const CONTAINER_VOLUME = '/usr/src/app/README.md';
     let instances;
 
     before(async () => {
-      instances = await startDashDrive.many(3);
+      const rootPath = process.cwd();
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = {
+        dashCore: { container },
+        dashDrive: { container },
+      };
+      instances = await startDashDrive.many(3, options);
     });
     after(async () => {
       const promises = instances.map(instance => instance.remove());
@@ -111,8 +134,9 @@ describe('startDashDrive', function main() {
 
     it('should have DashDrive containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].dashDrive.container.details();
+        const { State, Mounts } = await instances[i].dashDrive.container.details();
         expect(State.Status).to.equal('running');
+        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }
     });
 

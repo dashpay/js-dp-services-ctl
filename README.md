@@ -20,7 +20,12 @@ Just include this repo in your `package.json`
 const { startIPFS } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi;
-startIPFS().then((instance) => {
+const options = {
+  awsDefaultRegion,
+  port: 5001, // IPFS port
+  container, // See container options
+};
+startIPFS(options).then((instance) => {
   ipfsApi = instance;
 });
 ```
@@ -32,7 +37,12 @@ const { startIPFS } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi1;
 let ipfsApi2;
-startIPFS.many(2).then((instances) => {
+const options = {
+  awsDefaultRegion,
+  port,
+  container, // See container options
+};
+startIPFS.many(2, options).then((instances) => {
   [ipfsApi1, ipfsApi2] = instances;
 });
 ```
@@ -45,7 +55,21 @@ startIPFS.many(2).then((instances) => {
 const { startDashCore } = require('@dashevo/js-evo-services-ctl');
 
 let dashCoreInstance;
-startDashCore().then((instance) => {
+const options = {
+  awsDefaultRegion,
+  port,
+  rpcuser,
+  rpcpassword,
+  rpcport,
+  zmqpubrawtx,
+  zmqpubrawtxlock,
+  zmqpubhashblock,
+  zmqpubhashtx,
+  zmqpubhashtxlock,
+  zmqpubrawblock,
+  container, // See container options
+};
+startDashCore(options).then((instance) => {
   dashCoreInstance = instance;
 });
 ```
@@ -59,7 +83,13 @@ startDashCore().then((instance) => {
 const { startMongoDb } = require('@dashevo/js-evo-services-ctl');
 
 let mongoDb;
-startMongoDb().then((instance) => {
+const options = {
+  awsDefaultRegion,
+  port,
+  name,
+  container, // See container options
+};
+startMongoDb(options).then((instance) => {
   mongoDb = instance;
 });
 ```
@@ -73,7 +103,12 @@ startMongoDb().then((instance) => {
 const { startDashDrive } = require('@dashevo/js-evo-services-ctl');
 
 let dashDriveInstance;
-startDashDrive().then((instance) => {
+const options = {
+  awsDefaultRegion,
+  rpcPort,
+  container, // See container options
+};
+startDashDrive(options).then((instance) => {
   dashDriveInstance = instance;
 });
 ```
@@ -84,3 +119,102 @@ startDashDrive().then((instance) => {
   - [dashCore](lib/dashCore/DashCore.js)
   - [dashDrive](lib/dashDrive/DashDrive.js)
   - [mongoDb](lib/mongoDb/MongoDb.js)
+
+### Services customization
+Each service has its own customizable options:
+  - [ipfs](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/IPFS/IPFSOptions.js)
+  - [dashCore](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashCore/DashCoreOptions.js)
+  - [dashDrive](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashDrive/DashDriveOptions.js)
+  - [mongoDb](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/mongoDb/MongoDbOptions.js)
+
+These options contains:
+- Specifics about service (ports, endpoints, DB name, ...)
+- Specifics about container (image, volumes, cmd, ...)
+
+Container options (same for all services):
+```js
+const container = {
+  network: {
+    name: '',
+    driver: '',
+  },
+  image: '',
+  cmd: [],
+  volumes: [],
+  envs: [],
+  ports: [],
+  labels: {
+    testHelperName: '',
+  },
+};
+```
+
+Service options:
+```js
+// IPFS
+const options = {
+  port,
+  container, // See container options
+};
+
+// DASHCORE
+const options = {
+  port,
+  rpcuser,
+  rpcpassword,
+  rpcport,
+  zmqpubrawtx,
+  zmqpubrawtxlock,
+  zmqpubhashblock,
+  zmqpubhashtx,
+  zmqpubhashtxlock,
+  zmqpubrawblock,
+  container, // See container options
+};
+
+// DASHDRIVE
+const options = {
+  rpcPort,
+  container, // See container options
+};
+
+// MONGODB
+const options = {
+  port,
+  name,
+  container, // See container options
+};
+```
+
+Extension of the options class it's also possible:
+```js
+const DashCoreOptions = require('./lib/dashCoreOptions');
+
+class DashCoreCustomOptions extends DashCoreOptions {}
+
+const dashCoreCustomOptions = new DashCoreCustomOptions();
+```
+
+These options should be pass to the `start[ServiceName]` helper or `create[ServiceName]` factory.
+```js
+const startDashCore = require('./lib/dashCore/startDashCore');
+const createDashCore = require('./lib/dashCore/createDashCore');
+
+// With extended class
+const dashCoreCustomOptions = new DashCoreCustomOptions();
+startDashCore(dashCoreCustomOptions);
+startDashCore.many(3, dashCoreCustomOptions);
+createDashCore(dashCoreCustomOptions);
+
+// With plain object options
+const dashCoreOptions = {
+  port,
+  rpcuser,
+  rpcpassword,
+  rpcport,
+  container, // See container options
+};
+startDashCore(dashCoreOptions);
+startDashCore.many(3, dashCoreOptions);
+createDashCore(dashCoreOptions);
+```

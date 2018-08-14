@@ -39,7 +39,6 @@ before_install:
 
 install:
   - npm install
-  - cp .env.example .env
 
 script:
   - npm run lint

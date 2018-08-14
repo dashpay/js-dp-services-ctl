@@ -2,6 +2,7 @@ const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { createMongoDb } = require('../../../lib');
+const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
 
 describe('createMongoDb', function main() {
   this.timeout(40000);
@@ -78,6 +79,64 @@ describe('createMongoDb', function main() {
       const count = await db.count({});
 
       expect(count).to.equal(0);
+    });
+  });
+
+  describe('options', async () => {
+    let instance;
+
+    afterEach(async () => instance.remove());
+
+    it('should start an instance with plain object options', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      instance = await createMongoDb(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
+    });
+
+    it('should start an instance with instance of MongoDbInstanceOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = new MongoDbOptions({
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      });
+      instance = await createMongoDb(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
+    });
+
+    it('should start an instance with custom default MongoDbInstanceOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      MongoDbOptions.setDefaultCustomOptions(options);
+      instance = await createMongoDb();
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });
 });
