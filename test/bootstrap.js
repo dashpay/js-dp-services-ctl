@@ -1,6 +1,3 @@
-const path = require('path');
-const dotenv = require('dotenv');
-const dotenvExpand = require('dotenv-expand');
 const { expect, use } = require('chai');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
@@ -12,11 +9,6 @@ use(chaiAsPromised);
 use(dirtyChai);
 
 process.env.NODE_ENV = 'test';
-
-const dotenvConfig = dotenv.config({
-  path: path.resolve(__dirname, '..', '.env'),
-});
-dotenvExpand(dotenvConfig);
 
 beforeEach(function beforeEach() {
   if (!this.sinon) {

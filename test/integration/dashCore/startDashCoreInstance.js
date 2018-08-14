@@ -9,16 +9,25 @@ describe('startDashCoreInstance', function main() {
   before(removeContainers);
 
   describe('One instance', () => {
+    const CONTAINER_VOLUME = '/usr/src/app/README.md';
     let instance;
 
     before(async () => {
-      instance = await startDashCoreInstance();
+      const rootPath = process.cwd();
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = { container };
+      instance = await startDashCoreInstance(options);
     });
     after(async () => instance.remove());
 
     it('should has container running', async () => {
-      const { State } = await instance.container.details();
+      const { State, Mounts } = await instance.container.details();
       expect(State.Status).to.equal('running');
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should has RPC connected', async () => {
@@ -28,10 +37,18 @@ describe('startDashCoreInstance', function main() {
   });
 
   describe('Three instances', () => {
+    const CONTAINER_VOLUME = '/usr/src/app/README.md';
     let instances;
 
     before(async () => {
-      instances = await startDashCoreInstance.many(3);
+      const rootPath = process.cwd();
+      const container = {
+        volumes: [
+          `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+        ],
+      };
+      const options = { container };
+      instances = await startDashCoreInstance.many(3, options);
     });
     after(async () => {
       const promises = instances.map(instance => instance.remove());
@@ -40,8 +57,9 @@ describe('startDashCoreInstance', function main() {
 
     it('should have containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].container.details();
+        const { State, Mounts } = await instances[i].container.details();
         expect(State.Status).to.equal('running');
+        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }
     });
 

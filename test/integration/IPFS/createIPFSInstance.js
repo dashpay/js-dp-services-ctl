@@ -2,6 +2,7 @@ const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { createIPFSInstance } = require('../../../lib');
+const IPFSInstanceOptions = require('../../../lib/IPFS/IPFSInstanceOptions');
 
 describe('createIPFSInstance', function main() {
   this.timeout(40000);
@@ -37,7 +38,7 @@ describe('createIPFSInstance', function main() {
           'ipfs init',
           'ipfs config --json Bootstrap []',
           'ipfs config --json Discovery.MDNS.Enabled false',
-          `ipfs config Addresses.API /ip4/0.0.0.0/tcp/${instance.options.ipfs.internalPort}`,
+          `ipfs config Addresses.API /ip4/0.0.0.0/tcp/${instance.options.getIpfsInternalPort()}`,
           'ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080',
           'ipfs daemon',
         ].join(' && '),
@@ -91,6 +92,64 @@ describe('createIPFSInstance', function main() {
       const data = await clientTwo.dag.get(cid, 'name', { format: 'dag-cbor', hashAlg: 'sha2-256' });
 
       expect(data.value).to.equal('world');
+    });
+  });
+
+  describe('options', async () => {
+    let instance;
+
+    afterEach(async () => instance.remove());
+
+    it('should start an instance with plain object options', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      instance = await createIPFSInstance(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
+    });
+
+    it('should start an instance with instance of IPFSOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = new IPFSInstanceOptions({
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      });
+      instance = await createIPFSInstance(options);
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
+    });
+
+    it('should start an instance with custom default IPFSOptions', async () => {
+      const rootPath = process.cwd();
+      const CONTAINER_VOLUME = '/usr/src/app/README.md';
+      const options = {
+        container: {
+          volumes: [
+            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
+          ],
+        },
+      };
+      IPFSInstanceOptions.setDefaultCustomOptions(options);
+      instance = await createIPFSInstance();
+      await instance.start();
+      const { Mounts } = await instance.container.details();
+      const destinations = Mounts.map(volume => volume.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });
 });
