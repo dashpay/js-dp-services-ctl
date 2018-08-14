@@ -1,8 +1,8 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const DashCoreInstanceOptions = require('../../../lib/dashCore/DashCoreInstanceOptions');
-const MongoDbInstanceOptions = require('../../../lib/mongoDb/MongoDbInstanceOptions');
+const DashCoreOptions = require('../../../lib/dashCore/DashCoreOptions');
+const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
 const Container = require('../../../lib/docker/Container');
 
 describe('Container', function main() {
@@ -10,8 +10,8 @@ describe('Container', function main() {
 
   before(removeContainers);
 
-  const options = new DashCoreInstanceOptions();
-  const mongoDbOptions = new MongoDbInstanceOptions();
+  const options = new DashCoreOptions();
+  const mongoDbOptions = new MongoDbOptions();
   const imageName = options.getContainerImageName();
   const mongoDbImageName = mongoDbOptions.getContainerImageName();
   const { name: networkName } = options.getContainerNetworkOptions();
@@ -41,7 +41,7 @@ describe('Container', function main() {
 
     after(async () => container.remove());
 
-    it('should start a BaseInstance with DashCoreInstanceOptions network options', async () => {
+    it('should start a BaseInstance with DashCoreOptions network options', async () => {
       await container.start();
       const { name, driver } = options.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
@@ -53,7 +53,7 @@ describe('Container', function main() {
       expect(networks[0]).to.equal(name);
     });
 
-    it('should start an instance with the DashCoreInstanceOptions options', async () => {
+    it('should start an instance with the DashCoreOptions options', async () => {
       await container.start();
       const { Args } = await container.details();
       expect(Args).to.deep.equal([

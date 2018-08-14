@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
 describe('DashDrive', () => {
-  require('./createDashDriveInstance');
-  require('./startDashDriveInstance');
+  require('./createDashDrive');
+  require('./startDashDrive');
 });

@@ -17,7 +17,7 @@ Just include this repo in your `package.json`
 ### Start IPFS
 
 ```js
-const { startIPFSInstance } = require('@dashevo/js-evo-services-ctl');
+const { startIPFS } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi;
 const options = {
@@ -25,7 +25,7 @@ const options = {
   port: 5001, // IPFS port
   container, // See container options
 };
-startIPFSInstance(options).then((instance) => {
+startIPFS(options).then((instance) => {
   ipfsApi = instance;
 });
 ```
@@ -33,7 +33,7 @@ startIPFSInstance(options).then((instance) => {
 Use `many` method to start several IPFS instances:
 
 ```js
-const { startIPFSInstance } = require('@dashevo/js-evo-services-ctl');
+const { startIPFS } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi1;
 let ipfsApi2;
@@ -42,17 +42,17 @@ const options = {
   port,
   container, // See container options
 };
-startIPFSInstance.many(2, options).then((instances) => {
+startIPFS.many(2, options).then((instances) => {
   [ipfsApi1, ipfsApi2] = instances;
 });
 ```
 
- - `startIPFSInstance` returns instance of [IpfsApi](https://github.com/ipfs/js-ipfs-api#api)
+ - `startIPFS` returns instance of [IpfsApi](https://github.com/ipfs/js-ipfs-api#api)
 
 ### Start Dash Core
 
 ```js
-const { startDashCoreInstance } = require('@dashevo/js-evo-services-ctl');
+const { startDashCore } = require('@dashevo/js-evo-services-ctl');
 
 let dashCoreInstance;
 const options = {
@@ -69,18 +69,18 @@ const options = {
   zmqpubrawblock,
   container, // See container options
 };
-startDashCoreInstance(options).then((instance) => {
+startDashCore(options).then((instance) => {
   dashCoreInstance = instance;
 });
 ```
 
  - Use `many` method to start several Dash Core instances
- - `startDashCoreInstance` returns instance of [DashCoreInstance](lib/dashCore/DashCoreInstance.js)
-
+ - `startDashCore` returns instance of [DashCore](lib/dashCore/DashCore.js)
+ 
 ### Start MongoDB
 
 ```js
-const { startMongoDbInstance } = require('@dashevo/js-evo-services-ctl');
+const { startMongoDb } = require('@dashevo/js-evo-services-ctl');
 
 let mongoDb;
 const options = {
@@ -89,18 +89,18 @@ const options = {
   name,
   container, // See container options
 };
-startMongoDbInstance(options).then((instance) => {
+startMongoDb(options).then((instance) => {
   mongoDb = instance;
 });
 ```
 
 - Use `many` method to start several MongoDb instances
-- `startMongoDbInstance` returns instance of [MongoDbInstance](lib/mongoDb/MongoDbInstance.js)
-
+- `startMongoDb` returns instance of [MongoDb](lib/mongoDb/MongoDb.js)
+ 
 ### Start Dash Drive
 
 ```js
-const { startDashDriveInstance } = require('@dashevo/js-evo-services-ctl');
+const { startDashDrive } = require('@dashevo/js-evo-services-ctl');
 
 let dashDriveInstance;
 const options = {
@@ -108,24 +108,24 @@ const options = {
   rpcPort,
   container, // See container options
 };
-startDashDriveInstance(options).then((instance) => {
+startDashDrive(options).then((instance) => {
   dashDriveInstance = instance;
 });
 ```
 
 - Use `many` method to start several Dash Drive instances
-- `startDashDriveInstance` returns a set of services it depends on inluding itself:
+- `startDashDrive` returns a set of services it depends on inluding itself:
   - [ipfs](https://github.com/ipfs/js-ipfs-api#api)
-  - [dashCore](lib/dashCore/DashCoreInstance.js)
-  - [dashDrive](lib/dashDrive/DashDriveInstance.js)
-  - [mongoDb](lib/mongoDb/MongoDbInstance.js)
+  - [dashCore](lib/dashCore/DashCore.js)
+  - [dashDrive](lib/dashDrive/DashDrive.js)
+  - [mongoDb](lib/mongoDb/MongoDb.js)
 
 ### Services customization
 Each service has its own customizable options:
-  - [ipfs](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/IPFS/IPFSInstanceOptions.js)
-  - [dashCore](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashCore/DashCoreInstanceOptions.js)
-  - [dashDrive](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashDrive/DashDriveInstanceOptions.js)
-  - [mongoDb](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/mongoDb/MongoDbInstanceOptions.js)
+  - [ipfs](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/IPFS/IPFSOptions.js)
+  - [dashCore](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashCore/DashCoreOptions.js)
+  - [dashDrive](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashDrive/DashDriveOptions.js)
+  - [mongoDb](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/mongoDb/MongoDbOptions.js)
 
 These options contains:
 - Specifics about service (ports, endpoints, DB name, ...)
@@ -188,23 +188,23 @@ const options = {
 
 Extension of the options class it's also possible:
 ```js
-const DashCoreInstanceOptions = require('./lib/dashCoreInstanceOptions');
+const DashCoreOptions = require('./lib/dashCoreOptions');
 
-class DashCoreCustomOptions extends DashCoreInstanceOptions {}
+class DashCoreCustomOptions extends DashCoreOptions {}
 
 const dashCoreCustomOptions = new DashCoreCustomOptions();
 ```
 
-These options should be pass to the `start[ServiceName]Instance` helper or `create[ServiceName]Instance` factory.
+These options should be pass to the `start[ServiceName]` helper or `create[ServiceName]` factory.
 ```js
-const startDashCoreInstance = require('./lib/dashCore/startDashCoreInstance');
-const createDashCoreInstance = require('./lib/dashCore/createDashCoreInstance');
+const startDashCore = require('./lib/dashCore/startDashCore');
+const createDashCore = require('./lib/dashCore/createDashCore');
 
 // With extended class
 const dashCoreCustomOptions = new DashCoreCustomOptions();
-startDashCoreInstance(dashCoreCustomOptions);
-startDashCoreInstance.many(3, dashCoreCustomOptions);
-createDashCoreInstance(dashCoreCustomOptions);
+startDashCore(dashCoreCustomOptions);
+startDashCore.many(3, dashCoreCustomOptions);
+createDashCore(dashCoreCustomOptions);
 
 // With plain object options
 const dashCoreOptions = {
@@ -214,7 +214,7 @@ const dashCoreOptions = {
   rpcport,
   container, // See container options
 };
-startDashCoreInstance(dashCoreOptions);
-startDashCoreInstance.many(3, dashCoreOptions);
-createDashCoreInstance(dashCoreOptions);
+startDashCore(dashCoreOptions);
+startDashCore.many(3, dashCoreOptions);
+createDashCore(dashCoreOptions);
 ```
