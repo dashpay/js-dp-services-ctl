@@ -6,7 +6,7 @@ const Network = require('../../../lib/docker/Network');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
 const Container = require('../../../lib/docker/Container');
-const DockerInstance = require('../../../lib/docker/DockerInstance');
+const DockerService = require('../../../lib/docker/DockerService');
 
 async function createInstance(options) {
   const { name: networkName, driver } = options.getContainerNetworkOptions();
@@ -16,10 +16,10 @@ async function createInstance(options) {
   const authorizationToken = await getAwsEcrAuthorizationToken(process.env.AWS_DEFAULT_REGION);
   const image = new Image(imageName, authorizationToken);
   const container = new Container(networkName, imageName, containerOptions);
-  return new DockerInstance(network, image, container, options);
+  return new DockerService(network, image, container, options);
 }
 
-describe('DockerInstance', function main() {
+describe('DockerService', function main() {
   this.timeout(40000);
 
   before(removeContainers);
@@ -34,7 +34,7 @@ describe('DockerInstance', function main() {
     });
     after(async () => instance.remove());
 
-    it('should start a DockerInstance with DashCoreOptions network options', async () => {
+    it('should start a DockerService with DashCoreOptions network options', async () => {
       await instance.start();
       const { name, driver } = options.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
