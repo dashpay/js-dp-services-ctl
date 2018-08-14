@@ -21,8 +21,9 @@ const { startIPFSInstance } = require('@dashevo/js-evo-services-ctl');
 
 let ipfsApi;
 const options = {
+  awsDefaultRegion,
   port: 5001, // IPFS port
-  container: containerOptions,
+  container, // See container options
 };
 startIPFSInstance(options).then((instance) => {
   ipfsApi = instance;
@@ -37,6 +38,7 @@ const { startIPFSInstance } = require('@dashevo/js-evo-services-ctl');
 let ipfsApi1;
 let ipfsApi2;
 const options = {
+  awsDefaultRegion,
   port,
   container, // See container options
 };
@@ -54,6 +56,7 @@ const { startDashCoreInstance } = require('@dashevo/js-evo-services-ctl');
 
 let dashCoreInstance;
 const options = {
+  awsDefaultRegion,
   port,
   rpcuser,
   rpcpassword,
@@ -81,6 +84,7 @@ const { startMongoDbInstance } = require('@dashevo/js-evo-services-ctl');
 
 let mongoDb;
 const options = {
+  awsDefaultRegion,
   port,
   name,
   container, // See container options
@@ -100,6 +104,7 @@ const { startDashDriveInstance } = require('@dashevo/js-evo-services-ctl');
 
 let dashDriveInstance;
 const options = {
+  awsDefaultRegion,
   rpcPort,
   container, // See container options
 };
@@ -116,7 +121,7 @@ startDashDriveInstance(options).then((instance) => {
   - [mongoDb](lib/mongoDb/MongoDbInstance.js)
 
 ### Services customization
-Each ervice has its own customizable options:
+Each service has its own customizable options:
   - [ipfs](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/IPFS/IPFSInstanceOptions.js)
   - [dashCore](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashCore/DashCoreInstanceOptions.js)
   - [dashDrive](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashDrive/DashDriveInstanceOptions.js)
@@ -128,21 +133,18 @@ These options contains:
 
 Container options (same for all services):
 ```js
-const options = {
-  awsDefaultRegion,
-  container: {
-    network: {
-      name: '',
-      driver: '',
-    },
-    image: '',
-    cmd: [],
-    volumes: [],
-    envs: [],
-    ports: [],
-    labels: {
-      testHelperName: '',
-    },
+const container = {
+  network: {
+    name: '',
+    driver: '',
+  },
+  image: '',
+  cmd: [],
+  volumes: [],
+  envs: [],
+  ports: [],
+  labels: {
+    testHelperName: '',
   },
 };
 ```
