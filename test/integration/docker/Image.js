@@ -17,7 +17,7 @@ describe('Image', function main() {
   it('should pull image with authentication', async () => {
     const options = new DashCoreOptions();
     const imageName = options.getContainerImageName();
-    const authorizationToken = await getAwsEcrAuthorizationToken(process.env.AWS_DEFAULT_REGION);
+    const authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());
     const image = new Image(imageName, authorizationToken);
     await image.pull();
   });
