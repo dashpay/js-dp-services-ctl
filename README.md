@@ -24,6 +24,7 @@ const options = {
   awsDefaultRegion,
   port: 5001, // IPFS port
   container, // See container options
+  aws, // See AWS options
 };
 startIPFS(options).then((instance) => {
   ipfsApi = instance;
@@ -41,6 +42,7 @@ const options = {
   awsDefaultRegion,
   port,
   container, // See container options
+  aws, // See AWS options
 };
 startIPFS.many(2, options).then((instances) => {
   [ipfsApi1, ipfsApi2] = instances;
@@ -68,6 +70,7 @@ const options = {
   zmqpubhashtxlock,
   zmqpubrawblock,
   container, // See container options
+  aws, // See AWS options
 };
 startDashCore(options).then((instance) => {
   dashCoreInstance = instance;
@@ -88,6 +91,7 @@ const options = {
   port,
   name,
   container, // See container options
+  aws, // See AWS options
 };
 startMongoDb(options).then((instance) => {
   mongoDb = instance;
@@ -104,9 +108,9 @@ const { startDashDrive } = require('@dashevo/js-evo-services-ctl');
 
 let dashDriveInstance;
 const options = {
-  awsDefaultRegion,
   rpcPort,
   container, // See container options
+  aws, // See AWS options
 };
 startDashDrive(options).then((instance) => {
   dashDriveInstance = instance;
@@ -130,6 +134,7 @@ Each service has its own customizable options:
 These options contains:
 - Specifics about service (ports, endpoints, DB name, ...)
 - Specifics about container (image, volumes, cmd, ...)
+- Specifics about AWS (region, credentials, ...)
 
 Container options (same for all services):
 ```js
@@ -146,6 +151,18 @@ const container = {
   labels: {
     testHelperName: '',
   },
+};
+```
+
+AWS options (same for all services):
+```js
+// This set up is not needed if you have:
+// ~/.aws/credentials
+// ~/.aws/config
+const aws = {
+  region,
+  accessKeyId,
+  secretAccessKey,
 };
 ```
 
@@ -170,12 +187,14 @@ const options = {
   zmqpubhashtxlock,
   zmqpubrawblock,
   container, // See container options
+  aws, // See AWS options
 };
 
 // DASHDRIVE
 const options = {
   rpcPort,
   container, // See container options
+  aws, // See AWS options
 };
 
 // MONGODB
@@ -183,6 +202,7 @@ const options = {
   port,
   name,
   container, // See container options
+  aws, // See AWS options
 };
 ```
 

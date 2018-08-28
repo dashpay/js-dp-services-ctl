@@ -13,7 +13,7 @@ async function createInstance(options) {
   const imageName = options.getContainerImageName();
   const containerOptions = options.getContainerOptions();
   const network = new Network(networkName, driver);
-  const authorizationToken = await getAwsEcrAuthorizationToken(process.env.AWS_DEFAULT_REGION);
+  const authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());
   const image = new Image(imageName, authorizationToken);
   const container = new Container(networkName, imageName, containerOptions);
   return new DockerService(network, image, container, options);
