@@ -59,7 +59,7 @@ describe('startDashCore', function main() {
       for (let i = 0; i < 3; i++) {
         const { State, Mounts } = await instances[i].container.details();
         expect(State.Status).to.equal('running');
-        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+        expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
       }
     });
 
@@ -74,7 +74,7 @@ describe('startDashCore', function main() {
 
       for (let i = 0; i < 3; i++) {
         const { result: blocks } = await instances[i].rpcClient.getBlockCount();
-        expect(blocks).to.equal(3);
+        expect(blocks).to.be.equal(3);
       }
     });
   });
