@@ -1,5 +1,5 @@
-const DashCoreInstanceOptions = require('../../../lib/dashCore/DashCoreInstanceOptions');
-const MongoDbInstanceOptions = require('../../../lib/mongoDb/MongoDbInstanceOptions');
+const DashCoreOptions = require('../../../lib/dashCore/DashCoreOptions');
+const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
 
@@ -8,16 +8,16 @@ describe('Image', function main() {
 
 
   it('should pull image without authentication', async () => {
-    const options = new MongoDbInstanceOptions();
+    const options = new MongoDbOptions();
     const imageName = options.getContainerImageName();
     const image = new Image(imageName);
     await image.pull();
   });
 
   it('should pull image with authentication', async () => {
-    const options = new DashCoreInstanceOptions();
+    const options = new DashCoreOptions();
     const imageName = options.getContainerImageName();
-    const authorizationToken = await getAwsEcrAuthorizationToken(process.env.AWS_DEFAULT_REGION);
+    const authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());
     const image = new Image(imageName, authorizationToken);
     await image.pull();
   });

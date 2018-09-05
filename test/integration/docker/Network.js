@@ -1,11 +1,11 @@
 const Docker = require('dockerode');
 
-const MongoDbInstanceOptions = require('../../../lib/mongoDb/MongoDbInstanceOptions');
+const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
 const Network = require('../../../lib/docker/Network');
 
 describe('Image', () => {
   it('should create a network according to options', async () => {
-    const options = new MongoDbInstanceOptions();
+    const options = new MongoDbOptions();
     const { name, driver } = options.getContainerNetworkOptions();
     const network = new Network(name, driver);
 
@@ -19,7 +19,7 @@ describe('Image', () => {
   });
 
   it('should not fail creating a network that already exists', async () => {
-    const options = new MongoDbInstanceOptions();
+    const options = new MongoDbOptions();
     const { name, driver } = options.getContainerNetworkOptions();
     const network = new Network(name, driver);
 

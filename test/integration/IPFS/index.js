@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
 describe('IPFS', () => {
-  require('./createIPFSInstance');
-  require('./startIPFSInstance');
+  require('./createIPFS');
+  require('./startIPFS');
 });
