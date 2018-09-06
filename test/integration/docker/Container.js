@@ -1,8 +1,8 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const DashCoreOptions = require('../../../lib/dashCore/DashCoreOptions');
-const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
+const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
+const MongoDbOptions = require('../../../lib/services/mongoDb/MongoDbOptions');
 const Container = require('../../../lib/docker/Container');
 
 describe('Container', function main() {

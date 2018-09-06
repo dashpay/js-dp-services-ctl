@@ -1,7 +1,7 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const DashCoreOptions = require('../../../lib/dashCore/DashCoreOptions');
+const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
 const Network = require('../../../lib/docker/Network');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');

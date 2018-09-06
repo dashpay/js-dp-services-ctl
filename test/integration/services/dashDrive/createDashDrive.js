@@ -1,8 +1,8 @@
 const Docker = require('dockerode');
 
-const removeContainers = require('../../../lib/docker/removeContainers');
-const { startMongoDb, createDashDrive } = require('../../../lib');
-const DashDriveOptions = require('../../../lib/dashDrive/DashDriveOptions');
+const removeContainers = require('../../../../lib/docker/removeContainers');
+const { startMongoDb, createDashDrive } = require('../../../../lib');
+const DashDriveOptions = require('../../../../lib/services/dashDrive/DashDriveOptions');
 
 describe('createDashDrive', function main() {
   this.timeout(90000);

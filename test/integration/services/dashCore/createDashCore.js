@@ -1,10 +1,10 @@
 const Docker = require('dockerode');
 
-const removeContainers = require('../../../lib/docker/removeContainers');
-const { createDashCore } = require('../../../lib');
-const DashCoreOptions = require('../../../lib/dashCore/DashCoreOptions');
+const removeContainers = require('../../../../lib/docker/removeContainers');
+const { createDashCore } = require('../../../../lib');
+const DashCoreOptions = require('../../../../lib/services/dashCore/DashCoreOptions');
 
-const wait = require('../../../lib/util/wait');
+const wait = require('../../../../lib/util/wait');
 
 describe('createDashCore', function main() {
   this.timeout(40000);
