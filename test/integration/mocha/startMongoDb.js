@@ -7,23 +7,35 @@ describe('startMongoDb', () => {
       instance = _instance;
     });
 
-    it('should start one instance and insert with MongoClient', async () => {
-      const client = await instance.getMongoClient();
+    it('should start one instance and insert with MongoDb', async () => {
+      const client = await instance.getDb();
       const db = client.collection('syncState');
       await db.insertOne({
         blocks: [],
         lastSynced: new Date(),
       });
 
-      const countBefore = await db.count({});
+      const countBefore = await db.countDocuments({});
+      expect(countBefore).to.equal(1);
+    });
+
+    it('should insert with MongoClient to test db', async () => {
+      const client = await instance.getClient();
+      const db = client.db('test').collection('syncState');
+      await db.insertOne({
+        blocks: [],
+        lastSynced: new Date(),
+      });
+
+      const countBefore = await db.countDocuments({});
       expect(countBefore).to.equal(1);
     });
 
     it('should drop MongoDb after last test', async () => {
-      const client = await instance.getMongoClient();
+      const client = await instance.getDb();
       const db = client.collection('syncState');
 
-      const countBefore = await db.count({});
+      const countBefore = await db.countDocuments({});
       expect(countBefore).to.equal(0);
     });
   });

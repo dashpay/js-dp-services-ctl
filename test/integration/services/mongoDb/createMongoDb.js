@@ -36,12 +36,22 @@ describe('createMongoDb', function main() {
       ]);
     });
 
-    it('should get Mongo db client', async () => {
+    it('should get Mongo db', async () => {
       await instance.start();
 
-      const client = await instance.getMongoClient();
+      const client = await instance.getDb();
       const db = client.collection('syncState');
-      const count = await db.count({});
+      const count = await db.countDocuments({});
+
+      expect(count).to.equal(0);
+    });
+
+    it('should get Mongo client', async () => {
+      await instance.start();
+
+      const client = await instance.getClient();
+      const db = client.db('test').collection('syncState');
+      const count = await db.countDocuments({});
 
       expect(count).to.equal(0);
     });
@@ -49,16 +59,16 @@ describe('createMongoDb', function main() {
     it('should clean Mongo database', async () => {
       await instance.start();
 
-      const client = await instance.getMongoClient();
+      const client = await instance.getDb();
       const db = client.collection('syncState');
       await db.insertOne({ blocks: [], lastSynced: new Date() });
 
-      const countBefore = await db.count({});
+      const countBefore = await db.countDocuments({});
       expect(countBefore).to.equal(1);
 
       await instance.clean();
 
-      const countAfter = await db.count({});
+      const countAfter = await db.countDocuments({});
       expect(countAfter).to.equal(0);
     });
   });
@@ -74,9 +84,9 @@ describe('createMongoDb', function main() {
     it('should not fail if mongod is not running yet (MongoNetworkError)', async () => {
       await instance.start();
 
-      const client = await instance.getMongoClient();
+      const client = await instance.getDb();
       const db = client.collection('syncState');
-      const count = await db.count({});
+      const count = await db.countDocuments({});
 
       expect(count).to.equal(0);
     });
