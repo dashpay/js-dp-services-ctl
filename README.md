@@ -121,14 +121,17 @@ startDashDrive(options).then((instance) => {
 - `startDashDrive` returns a set of services it depends on inluding itself:
   - [ipfs](https://github.com/ipfs/js-ipfs-api#api)
   - [dashCore](lib/dashCore/DashCore.js)
-  - [dashDrive](lib/dashDrive/DashDrive.js)
+  - dashDrive:
+    - [api](lib/driveApi/DriveApi.js)
+    - [sync](lib/driveSync/DriveSync.js)
   - [mongoDb](lib/mongoDb/MongoDb.js)
 
 ### Services customization
 Each service has its own customizable options:
   - [ipfs](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/IPFS/IPFSOptions.js)
   - [dashCore](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashCore/DashCoreOptions.js)
-  - [dashDrive](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashDrive/DashDriveOptions.js)
+  - [driveApi](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/driveApi/DriveApiOptions.js)
+  - [driveSync](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/driveSync/DriveSyncOptions.js)
   - [mongoDb](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/mongoDb/MongoDbOptions.js)
 
 These options contains:
