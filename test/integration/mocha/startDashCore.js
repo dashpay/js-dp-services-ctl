@@ -8,7 +8,7 @@ describe('startDashCore', () => {
     });
 
     it('should has container running', async () => {
-      const { State } = await instance.container.details();
+      const { State } = await instance.container.inspect();
       expect(State.Status).to.equal('running');
     });
   });
@@ -21,7 +21,7 @@ describe('startDashCore', () => {
 
     it('should have containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].container.details();
+        const { State } = await instances[i].container.inspect();
         expect(State.Status).to.equal('running');
       }
     });
