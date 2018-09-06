@@ -5,11 +5,11 @@ Javascript library for manipulation of evolution services using Docker.
 
 Just include this repo in your `package.json`
 ```json
-...
+{
   "dependencies": {
-      "@dashevo/js-evo-services-ctl": "git+ssh://git@github.com/dashevo/js-evo-services-ctl.git#master",
+      "@dashevo/js-evo-services-ctl": "git+ssh://git@github.com/dashevo/js-evo-services-ctl.git#master"
   }
-...
+}
 ```
 
 ## Usage (briefly)

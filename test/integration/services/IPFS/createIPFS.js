@@ -1,10 +1,10 @@
 const Docker = require('dockerode');
 
-const removeContainers = require('../../../lib/docker/removeContainers');
-const { createMongoDb } = require('../../../lib');
-const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
+const removeContainers = require('../../../../lib/docker/removeContainers');
+const { createIPFS } = require('../../../../lib');
+const IPFSOptions = require('../../../../lib/services/IPFS/IPFSOptions');
 
-describe('createMongoDb', function main() {
+describe('createIPFS', function main() {
   this.timeout(40000);
 
   before(removeContainers);
@@ -13,7 +13,7 @@ describe('createMongoDb', function main() {
     let instance;
 
     before(async () => {
-      instance = await createMongoDb();
+      instance = await createIPFS();
     });
     after(async () => instance.remove());
 
@@ -32,53 +32,66 @@ describe('createMongoDb', function main() {
       await instance.start();
       const { Args } = await instance.container.details();
       expect(Args).to.deep.equal([
-        'mongod',
+        '--',
+        '/bin/sh', '-c',
+        [
+          'ipfs init',
+          'ipfs config --json Bootstrap []',
+          'ipfs config --json Discovery.MDNS.Enabled false',
+          `ipfs config Addresses.API /ip4/0.0.0.0/tcp/${instance.options.getIpfsInternalPort()}`,
+          'ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080',
+          'ipfs daemon',
+        ].join(' && '),
       ]);
     });
 
-    it('should get Mongo db client', async () => {
+    it('should get IPFS address', async () => {
       await instance.start();
 
-      const client = await instance.getMongoClient();
-      const db = client.collection('syncState');
-      const count = await db.count({});
+      const address = instance.getIpfsAddress();
 
-      expect(count).to.equal(0);
+      expect(address).to.equal(`/ip4/${instance.getIp()}/tcp/${instance.options.getIpfsInternalPort()}`);
     });
 
-    it('should clean Mongo database', async () => {
+    it('should get IPFS client', async () => {
       await instance.start();
 
-      const client = await instance.getMongoClient();
-      const db = client.collection('syncState');
-      await db.insertOne({ blocks: [], lastSynced: new Date() });
-
-      const countBefore = await db.count({});
-      expect(countBefore).to.equal(1);
-
-      await instance.clean();
-
-      const countAfter = await db.count({});
-      expect(countAfter).to.equal(0);
+      const client = instance.getApi();
+      await client.repo.stat();
     });
   });
 
-  describe('Mongo client', () => {
-    let instance;
+  describe('networking', () => {
+    let instanceOne;
+    let instanceTwo;
 
     before(async () => {
-      instance = await createMongoDb();
+      instanceOne = await createIPFS();
+      instanceTwo = await createIPFS();
     });
-    after(async () => instance.remove());
+    before(async () => {
+      await Promise.all([
+        instanceOne.start(),
+        instanceTwo.start(),
+      ]);
+    });
+    after(async () => {
+      await Promise.all([
+        instanceOne.remove(),
+        instanceTwo.remove(),
+      ]);
+    });
 
-    it('should not fail if mongod is not running yet (MongoNetworkError)', async () => {
-      await instance.start();
+    it('should propagate data from one instance to the other', async () => {
+      await instanceOne.connect(instanceTwo);
 
-      const client = await instance.getMongoClient();
-      const db = client.collection('syncState');
-      const count = await db.count({});
+      const clientOne = instanceOne.getApi();
+      const cid = await clientOne.dag.put({ name: 'world' }, { format: 'dag-cbor', hashAlg: 'sha2-256' });
 
-      expect(count).to.equal(0);
+      const clientTwo = instanceTwo.getApi();
+      const data = await clientTwo.dag.get(cid, 'name', { format: 'dag-cbor', hashAlg: 'sha2-256' });
+
+      expect(data.value).to.equal('world');
     });
   });
 
@@ -97,31 +110,31 @@ describe('createMongoDb', function main() {
           ],
         },
       };
-      instance = await createMongoDb(options);
+      instance = await createIPFS(options);
       await instance.start();
       const { Mounts } = await instance.container.details();
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with instance of MongoDbInstanceOptions', async () => {
+    it('should start an instance with instance of IPFSOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = new MongoDbOptions({
+      const options = new IPFSOptions({
         container: {
           volumes: [
             `${rootPath}/README.md:${CONTAINER_VOLUME}`,
           ],
         },
       });
-      instance = await createMongoDb(options);
+      instance = await createIPFS(options);
       await instance.start();
       const { Mounts } = await instance.container.details();
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with custom default MongoDbInstanceOptions', async () => {
+    it('should start an instance with custom default IPFSOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
@@ -131,8 +144,8 @@ describe('createMongoDb', function main() {
           ],
         },
       };
-      MongoDbOptions.setDefaultCustomOptions(options);
-      instance = await createMongoDb();
+      IPFSOptions.setDefaultCustomOptions(options);
+      instance = await createIPFS();
       await instance.start();
       const { Mounts } = await instance.container.details();
       const destinations = Mounts.map(volume => volume.Destination);
