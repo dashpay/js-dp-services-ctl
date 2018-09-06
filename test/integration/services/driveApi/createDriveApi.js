@@ -55,7 +55,7 @@ describe('createDriveApi', function main() {
       expect(Args).to.deep.equal(['run', 'api']);
     });
 
-    it('should return DashDrive RPC port', async () => {
+    it('should return Drive Api RPC port', async () => {
       await instance.start();
       expect(instance.getRpcPort()).to.equal(instance.options.getRpcPort());
     });
@@ -81,7 +81,7 @@ describe('createDriveApi', function main() {
       ]);
     });
 
-    it('should DashDrive api return error if initial sync in progress', async () => {
+    it('should API return error if initial sync in progress', async () => {
       await instance.start();
 
       const rpc = instance.getApi();

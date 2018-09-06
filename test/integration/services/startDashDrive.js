@@ -36,7 +36,7 @@ describe('startDashDrive', function main() {
     });
 
     it('should has Drive API container running', async () => {
-      const { State, Mounts } = await instance.dashDrive.api.container.details();
+      const { State, Mounts } = await instance.driveApi.container.details();
       expect(State.Status).to.equal('running');
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
@@ -53,7 +53,7 @@ describe('startDashDrive', function main() {
     });
 
     it('should DashDrive container has the right env variables', async () => {
-      const { Config: { Env: ApiEnvs } } = await instance.dashDrive.api.container.details();
+      const { Config: { Env: ApiEnvs } } = await instance.driveApi.container.details();
       const { Config: { Env: SyncEnvs } } = await instance.dashDrive.sync.container.details();
       const expectedEnv = [
         `DASHCORE_ZMQ_PUB_HASHBLOCK=${instance.dashCore.getZmqSockets().hashblock}`,
@@ -78,7 +78,7 @@ describe('startDashDrive', function main() {
       } = await instance.dashCore.container.details();
       const {
         NetworkSettings: driveApiNetworkSettings,
-      } = await instance.dashDrive.api.container.details();
+      } = await instance.driveApi.container.details();
       const {
         NetworkSettings: driveSyncNetworkSettings,
       } = await instance.dashDrive.sync.container.details();
@@ -135,7 +135,7 @@ describe('startDashDrive', function main() {
 
     it('should have Drive API containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].dashDrive.api.container.details();
+        const { State, Mounts } = await instances[i].driveApi.container.details();
         expect(State.Status).to.equal('running');
         expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }
