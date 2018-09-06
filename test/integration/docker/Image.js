@@ -1,5 +1,5 @@
-const DashCoreOptions = require('../../../lib/dashCore/DashCoreOptions');
-const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
+const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
+const MongoDbOptions = require('../../../lib/services/mongoDb/MongoDbOptions');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
 

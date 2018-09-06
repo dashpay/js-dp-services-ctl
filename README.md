@@ -5,11 +5,11 @@ Javascript library for manipulation of evolution services using Docker.
 
 Just include this repo in your `package.json`
 ```json
-...
+{
   "dependencies": {
-      "@dashevo/js-evo-services-ctl": "git+ssh://git@github.com/dashevo/js-evo-services-ctl.git#master",
+      "@dashevo/js-evo-services-ctl": "git+ssh://git@github.com/dashevo/js-evo-services-ctl.git#master"
   }
-...
+}
 ```
 
 ## Usage (briefly)
@@ -122,8 +122,8 @@ startDashDrive(options).then((instance) => {
   - [ipfs](https://github.com/ipfs/js-ipfs-api#api)
   - [dashCore](lib/dashCore/DashCore.js)
   - dashDrive:
-    - [api](lib/driveApi/DriveApi.js)
-    - [sync](lib/driveSync/DriveSync.js)
+    - [api](lib/services/driveApi/DriveApi.js)
+    - [sync](lib/services/driveSync/DriveSync.js)
   - [mongoDb](lib/mongoDb/MongoDb.js)
 
 ### Services customization

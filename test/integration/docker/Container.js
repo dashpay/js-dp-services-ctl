@@ -1,27 +1,27 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../lib/docker/removeContainers');
-const DashCoreOptions = require('../../../lib/dashCore/DashCoreOptions');
-const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
+const MongoDbOptions = require('../../../lib/services/mongoDb/MongoDbOptions');
 const Container = require('../../../lib/docker/Container');
+const Image = require('../../../lib/docker/Image');
 
 describe('Container', function main() {
   this.timeout(40000);
 
-  before(removeContainers);
-
-  const options = new DashCoreOptions();
+  let container;
   const mongoDbOptions = new MongoDbOptions();
-  const imageName = options.getContainerImageName();
-  const mongoDbImageName = mongoDbOptions.getContainerImageName();
-  const { name: networkName } = options.getContainerNetworkOptions();
-  const { name: mongoDbNetworkName } = mongoDbOptions.getContainerNetworkOptions();
-  const containerOptions = options.getContainerOptions();
-  const mongoDbContainerOptions = mongoDbOptions.getContainerOptions();
+  const imageName = mongoDbOptions.getContainerImageName();
+  const { name: networkName } = mongoDbOptions.getContainerNetworkOptions();
+  const containerOptions = mongoDbOptions.getContainerOptions();
+
+  before(async () => {
+    await removeContainers();
+    const mongoDbImage = new Image(imageName);
+    await mongoDbImage.pull();
+    container = new Container(networkName, imageName, containerOptions);
+  });
 
   describe('before start', () => {
-    const container = new Container(networkName, imageName, containerOptions);
-
     it('should not crash if stop', async () => {
       await container.stop();
     });
@@ -37,40 +37,25 @@ describe('Container', function main() {
   });
 
   describe('usage', () => {
-    const container = new Container(networkName, imageName, containerOptions);
-
     after(async () => container.remove());
 
-    it('should start a BaseInstance with DashCoreOptions network options', async () => {
+    it('should start a BaseInstance with MongoDbOptions network options', async () => {
       await container.start();
-      const { name, driver } = options.getContainerNetworkOptions();
+      const { name, driver } = mongoDbOptions.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
       const { Driver } = await dockerNetwork.inspect();
       const { NetworkSettings: { Networks } } = await container.details();
       const networks = Object.keys(Networks);
-      expect(Driver).to.equal(driver);
-      expect(networks.length).to.equal(1);
-      expect(networks[0]).to.equal(name);
+      expect(Driver).to.be.equal(driver);
+      expect(networks.length).to.be.equal(1);
+      expect(networks[0]).to.be.equal(name);
     });
 
-    it('should start an instance with the DashCoreOptions options', async () => {
+    it('should start an instance with the MongoDbOptions ports', async () => {
       await container.start();
-      const { Args } = await container.details();
-      expect(Args).to.deep.equal([
-        `-port=${options.getDashdPort()}`,
-        `-rpcuser=${options.getRpcUser()}`,
-        `-rpcpassword=${options.getRpcPassword()}`,
-        '-rpcallowip=0.0.0.0/0',
-        '-regtest=1',
-        '-keypool=1',
-        `-rpcport=${options.getRpcPort()}`,
-        `-zmqpubrawtx=tcp://0.0.0.0:${options.getZmqPorts().rawtx}`,
-        `-zmqpubrawtxlock=tcp://0.0.0.0:${options.getZmqPorts().rawtxlock}`,
-        `-zmqpubhashblock=tcp://0.0.0.0:${options.getZmqPorts().hashblock}`,
-        `-zmqpubhashtx=tcp://0.0.0.0:${options.getZmqPorts().hashtx}`,
-        `-zmqpubhashtxlock=tcp://0.0.0.0:${options.getZmqPorts().hashtxlock}`,
-        `-zmqpubrawblock=tcp://0.0.0.0:${options.getZmqPorts().rawblock}`,
-      ]);
+      const { NetworkSettings: { Ports } } = await container.details();
+      expect(Ports).to.have.property('27017/tcp');
+      expect(Ports['27017/tcp']).to.be.not.null();
     });
 
     it('should not crash if start is called multiple times', async () => {
@@ -115,8 +100,11 @@ describe('Container', function main() {
   });
 
   describe('containers removal', () => {
-    const containerOne = new Container(networkName, imageName, containerOptions);
-    const containerTwo = new Container(networkName, imageName, containerOptions);
+    const containerOptionsOne = (new MongoDbOptions()).getContainerOptions();
+    const containerOne = new Container(networkName, imageName, containerOptionsOne);
+
+    const containerOptionsTwo = (new MongoDbOptions()).getContainerOptions();
+    const containerTwo = new Container(networkName, imageName, containerOptionsTwo);
 
     let sandbox;
     beforeEach(function before() {
@@ -156,9 +144,6 @@ describe('Container', function main() {
 
     it('should remove its volumes upon calling remove method', async () => {
       const docker = new Docker();
-
-      const container =
-        new Container(mongoDbNetworkName, mongoDbImageName, mongoDbContainerOptions);
 
       await container.start();
 

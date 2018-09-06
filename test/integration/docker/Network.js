@@ -1,9 +1,9 @@
 const Docker = require('dockerode');
 
-const MongoDbOptions = require('../../../lib/mongoDb/MongoDbOptions');
+const MongoDbOptions = require('../../../lib/services/mongoDb/MongoDbOptions');
 const Network = require('../../../lib/docker/Network');
 
-describe('Image', () => {
+describe('Network', () => {
   it('should create a network according to options', async () => {
     const options = new MongoDbOptions();
     const { name, driver } = options.getContainerNetworkOptions();
