@@ -1,5 +1,5 @@
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
-const DashDriveOptions = require('../../../lib/dashDrive/DashDriveOptions');
+const DashDriveOptions = require('../../../lib/driveApi/DriveApiOptions');
 
 describe('getAwsEcrAuthorizationToken', function main() {
   this.timeout(10000);
