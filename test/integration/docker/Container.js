@@ -100,8 +100,11 @@ describe('Container', function main() {
   });
 
   describe('containers removal', () => {
-    const containerOne = new Container(networkName, imageName, containerOptions);
-    const containerTwo = new Container(networkName, imageName, containerOptions);
+    const containerOptionsOne = (new MongoDbOptions()).getContainerOptions();
+    const containerOne = new Container(networkName, imageName, containerOptionsOne);
+
+    const containerOptionsTwo = (new MongoDbOptions()).getContainerOptions();
+    const containerTwo = new Container(networkName, imageName, containerOptionsTwo);
 
     let sandbox;
     beforeEach(function before() {
