@@ -49,7 +49,7 @@ describe('createDashCore', function main() {
       await instance.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.details();
+      const { NetworkSettings: { Networks } } = await instance.container.inspect();
       const networks = Object.keys(Networks);
       expect(Driver).to.equal('bridge');
       expect(networks.length).to.equal(1);
@@ -58,7 +58,7 @@ describe('createDashCore', function main() {
 
     it('should start an instance with the default options', async () => {
       await instance.start();
-      const { Args } = await instance.container.details();
+      const { Args } = await instance.container.inspect();
       expect(Args).to.deep.equal([
         `-port=${instance.options.getDashdPort()}`,
         `-rpcuser=${instance.options.getRpcUser()}`,
@@ -184,7 +184,7 @@ describe('createDashCore', function main() {
       };
       instance = await createDashCore(options);
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
@@ -200,7 +200,7 @@ describe('createDashCore', function main() {
       });
       instance = await createDashCore(options);
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
@@ -217,7 +217,7 @@ describe('createDashCore', function main() {
       DashCoreOptions.setDefaultCustomOptions(options);
       instance = await createDashCore();
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
   });

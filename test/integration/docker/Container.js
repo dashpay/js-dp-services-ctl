@@ -44,7 +44,7 @@ describe('Container', function main() {
       const { name, driver } = mongoDbOptions.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
       const { Driver } = await dockerNetwork.inspect();
-      const { NetworkSettings: { Networks } } = await container.details();
+      const { NetworkSettings: { Networks } } = await container.inspect();
       const networks = Object.keys(Networks);
       expect(Driver).to.be.equal(driver);
       expect(networks.length).to.be.equal(1);
@@ -53,7 +53,7 @@ describe('Container', function main() {
 
     it('should start an instance with the DashCoreOptions options', async () => {
       await container.start();
-      const { NetworkSettings: { Ports } } = await container.details();
+      const { NetworkSettings: { Ports } } = await container.inspect();
       expect(Ports).to.have.property('27017/tcp');
       expect(Ports['27017/tcp']).to.be.not.null();
     });
@@ -65,20 +65,20 @@ describe('Container', function main() {
 
     it('should stop the container', async () => {
       await container.stop();
-      const { State } = await container.details();
+      const { State } = await container.inspect();
       expect(State.Status).to.equal('exited');
     });
 
     it('should start after stop', async () => {
       await container.start();
-      const { State } = await container.details();
+      const { State } = await container.inspect();
       expect(State.Status).to.equal('running');
     });
 
     it('should start after remove', async () => {
       await container.remove();
       await container.start();
-      const { State } = await container.details();
+      const { State } = await container.inspect();
       expect(State.Status).to.equal('running');
     });
 
@@ -91,7 +91,7 @@ describe('Container', function main() {
 
       let error;
       try {
-        await container.details();
+        await container.inspect();
       } catch (err) {
         error = err;
       }
@@ -147,7 +147,7 @@ describe('Container', function main() {
 
       await container.start();
 
-      const containerDetails = await container.details();
+      const containerDetails = await container.inspect();
       const containerVolumeNames = containerDetails.Mounts.map(mount => mount.Name);
 
       await container.remove();
