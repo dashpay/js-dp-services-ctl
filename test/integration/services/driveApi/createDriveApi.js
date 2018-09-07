@@ -52,7 +52,7 @@ describe('createDriveApi', function main() {
     it('should start an instance with the default options', async () => {
       await instance.start();
       const { Args } = await instance.container.details();
-      expect(Args).to.deep.equal(['run', 'api']);
+      expect(Args).to.deep.equal(['-c', 'cd / && npm i && cd /usr/src/app && npm run api']);
     });
 
     it('should return Drive Api RPC port', async () => {
