@@ -138,6 +138,17 @@ describe('createDashCore', function main() {
       expect(blocksOne).to.equal(3);
       expect(blocksTwo).to.equal(3);
     });
+
+    it('should disconnect from instance two', async () => {
+      const peersBefore = await instanceOne.rpcClient.getPeerInfo();
+      expect(peersBefore.result.length).to.be.equal(1);
+
+      instanceOne.disconnect(instanceTwo);
+      await wait(3000);
+
+      const peersAfter = await instanceOne.rpcClient.getPeerInfo();
+      expect(peersAfter.result.length).to.be.equal(0);
+    });
   });
 
   describe('RPC', async () => {
