@@ -25,7 +25,7 @@ describe('startDashCore', function main() {
     after(async () => instance.remove());
 
     it('should has container running', async () => {
-      const { State, Mounts } = await instance.container.details();
+      const { State, Mounts } = await instance.container.inspect();
       expect(State.Status).to.equal('running');
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
@@ -57,7 +57,7 @@ describe('startDashCore', function main() {
 
     it('should have containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].container.details();
+        const { State, Mounts } = await instances[i].container.inspect();
         expect(State.Status).to.equal('running');
         expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
       }

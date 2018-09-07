@@ -39,7 +39,7 @@ describe('DockerService', function main() {
       const { name, driver } = options.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
       const { Driver } = await dockerNetwork.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.details();
+      const { NetworkSettings: { Networks } } = await instance.container.inspect();
       const networks = Object.keys(Networks);
       expect(Driver).to.equal(driver);
       expect(networks.length).to.equal(1);
@@ -48,7 +48,7 @@ describe('DockerService', function main() {
 
     it('should start an instance with the DashCoreOptions options', async () => {
       await instance.start();
-      const { Args } = await instance.container.details();
+      const { Args } = await instance.container.inspect();
       expect(Args).to.deep.equal([
         `-port=${options.getDashdPort()}`,
         `-rpcuser=${options.getRpcUser()}`,
@@ -73,13 +73,13 @@ describe('DockerService', function main() {
 
     it('should stop the instance', async () => {
       await instance.stop();
-      const { State } = await instance.container.details();
+      const { State } = await instance.container.inspect();
       expect(State.Status).to.equal('exited');
     });
 
     it('should start after stop', async () => {
       await instance.start();
-      const { State } = await instance.container.details();
+      const { State } = await instance.container.inspect();
       expect(State.Status).to.equal('running');
     });
 
@@ -92,7 +92,7 @@ describe('DockerService', function main() {
 
       let error;
       try {
-        await instance.container.details();
+        await instance.container.inspect();
       } catch (err) {
         error = err;
       }

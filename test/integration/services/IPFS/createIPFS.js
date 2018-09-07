@@ -21,7 +21,7 @@ describe('createIPFS', function main() {
       await instance.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.details();
+      const { NetworkSettings: { Networks } } = await instance.container.inspect();
       const networks = Object.keys(Networks);
       expect(Driver).to.equal('bridge');
       expect(networks.length).to.equal(1);
@@ -30,7 +30,7 @@ describe('createIPFS', function main() {
 
     it('should start an instance with the default options', async () => {
       await instance.start();
-      const { Args } = await instance.container.details();
+      const { Args } = await instance.container.inspect();
       expect(Args).to.deep.equal([
         '--',
         '/bin/sh', '-c',
@@ -112,7 +112,7 @@ describe('createIPFS', function main() {
       };
       instance = await createIPFS(options);
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
@@ -129,7 +129,7 @@ describe('createIPFS', function main() {
       });
       instance = await createIPFS(options);
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
@@ -147,7 +147,7 @@ describe('createIPFS', function main() {
       IPFSOptions.setDefaultCustomOptions(options);
       instance = await createIPFS();
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });

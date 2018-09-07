@@ -21,7 +21,7 @@ describe('createMongoDb', function main() {
       await instance.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.details();
+      const { NetworkSettings: { Networks } } = await instance.container.inspect();
       const networks = Object.keys(Networks);
       expect(Driver).to.equal('bridge');
       expect(networks.length).to.equal(1);
@@ -30,7 +30,7 @@ describe('createMongoDb', function main() {
 
     it('should start an instance with the default options', async () => {
       await instance.start();
-      const { Args } = await instance.container.details();
+      const { Args } = await instance.container.inspect();
       expect(Args).to.deep.equal([
         'mongod',
       ]);
@@ -40,8 +40,8 @@ describe('createMongoDb', function main() {
       await instance.start();
 
       const client = await instance.getMongoClient();
-      const db = client.collection('syncState');
-      const count = await db.count({});
+      const collection = client.collection('syncState');
+      const count = await collection.count({});
 
       expect(count).to.equal(0);
     });
@@ -50,15 +50,15 @@ describe('createMongoDb', function main() {
       await instance.start();
 
       const client = await instance.getMongoClient();
-      const db = client.collection('syncState');
-      await db.insertOne({ blocks: [], lastSynced: new Date() });
+      const collection = client.collection('syncState');
+      await collection.insertOne({ blocks: [], lastSynced: new Date() });
 
-      const countBefore = await db.count({});
+      const countBefore = await collection.count({});
       expect(countBefore).to.equal(1);
 
       await instance.clean();
 
-      const countAfter = await db.count({});
+      const countAfter = await collection.count({});
       expect(countAfter).to.equal(0);
     });
   });
@@ -75,8 +75,8 @@ describe('createMongoDb', function main() {
       await instance.start();
 
       const client = await instance.getMongoClient();
-      const db = client.collection('syncState');
-      const count = await db.count({});
+      const collection = client.collection('syncState');
+      const count = await collection.count({});
 
       expect(count).to.equal(0);
     });
@@ -99,7 +99,7 @@ describe('createMongoDb', function main() {
       };
       instance = await createMongoDb(options);
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
@@ -116,7 +116,7 @@ describe('createMongoDb', function main() {
       });
       instance = await createMongoDb(options);
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
@@ -134,7 +134,7 @@ describe('createMongoDb', function main() {
       MongoDbOptions.setDefaultCustomOptions(options);
       instance = await createMongoDb();
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
