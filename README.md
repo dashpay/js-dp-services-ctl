@@ -121,9 +121,8 @@ startDashDrive(options).then((instance) => {
 - `startDashDrive` returns a set of services it depends on inluding itself:
   - [ipfs](https://github.com/ipfs/js-ipfs-api#api)
   - [dashCore](lib/dashCore/DashCore.js)
-  - dashDrive:
-    - [api](lib/services/driveApi/DriveApi.js)
-    - [sync](lib/services/driveSync/DriveSync.js)
+  - [driveApi](lib/services/driveApi/DriveApi.js)
+  - [driveSync](lib/services/driveSync/DriveSync.js)
   - [mongoDb](lib/mongoDb/MongoDb.js)
 
 ### Services customization
