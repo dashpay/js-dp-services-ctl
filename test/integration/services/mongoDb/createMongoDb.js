@@ -36,12 +36,22 @@ describe('createMongoDb', function main() {
       ]);
     });
 
-    it('should get Mongo db client', async () => {
+    it('should get Mongo db', async () => {
       await instance.start();
 
-      const client = await instance.getMongoClient();
-      const collection = client.collection('syncState');
-      const count = await collection.count({});
+      const db = await instance.getDb();
+      const collection = db.collection('syncState');
+      const count = await collection.countDocuments({});
+
+      expect(count).to.equal(0);
+    });
+
+    it('should get Mongo client', async () => {
+      await instance.start();
+
+      const client = await instance.getClient();
+      const collection = client.db('test').collection('syncState');
+      const count = await collection.countDocuments({});
 
       expect(count).to.equal(0);
     });
@@ -49,11 +59,11 @@ describe('createMongoDb', function main() {
     it('should clean Mongo database', async () => {
       await instance.start();
 
-      const client = await instance.getMongoClient();
+      const client = await instance.getDb();
       const collection = client.collection('syncState');
       await collection.insertOne({ blocks: [], lastSynced: new Date() });
 
-      const countBefore = await collection.count({});
+      const countBefore = await collection.countDocuments({});
       expect(countBefore).to.equal(1);
 
       await instance.clean();
@@ -74,9 +84,9 @@ describe('createMongoDb', function main() {
     it('should not fail if mongod is not running yet (MongoNetworkError)', async () => {
       await instance.start();
 
-      const client = await instance.getMongoClient();
-      const collection = client.collection('syncState');
-      const count = await collection.count({});
+      const db = await instance.getDb();
+      const collection = db.collection('syncState');
+      const count = await collection.countDocuments({});
 
       expect(count).to.equal(0);
     });
