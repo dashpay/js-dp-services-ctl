@@ -23,7 +23,7 @@ describe('startMongoDb', function main() {
     after(async () => instance.remove());
 
     it('should has MongoDb container running', async () => {
-      const { State, Mounts } = await instance.container.details();
+      const { State, Mounts } = await instance.container.inspect();
       expect(State.Status).to.equal('running');
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
@@ -51,7 +51,7 @@ describe('startMongoDb', function main() {
 
     it('should have MongoDb containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].container.details();
+        const { State, Mounts } = await instances[i].container.inspect();
         expect(State.Status).to.equal('running');
         const destinations = Mounts.map(volume => volume.Destination);
         expect(destinations).to.include(CONTAINER_VOLUME);

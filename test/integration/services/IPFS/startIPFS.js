@@ -22,7 +22,7 @@ describe('startIPFS', function main() {
     after(async () => instance.remove());
 
     it('should has container running', async () => {
-      const { State, Mounts } = await instance.container.details();
+      const { State, Mounts } = await instance.container.inspect();
       expect(State.Status).to.equal('running');
       const destinations = Mounts.map(volume => volume.Destination);
       expect(destinations).to.include(CONTAINER_VOLUME);
@@ -56,7 +56,7 @@ describe('startIPFS', function main() {
 
     it('should have containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].container.details();
+        const { State, Mounts } = await instances[i].container.inspect();
         expect(State.Status).to.equal('running');
         const destinations = Mounts.map(volume => volume.Destination);
         expect(destinations).to.include(CONTAINER_VOLUME);
