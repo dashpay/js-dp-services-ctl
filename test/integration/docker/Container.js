@@ -51,7 +51,7 @@ describe('Container', function main() {
       expect(networks[0]).to.be.equal(name);
     });
 
-    it('should start an instance with the DashCoreOptions options', async () => {
+    it('should start an instance with the MongoDbOptions ports', async () => {
       await container.start();
       const { NetworkSettings: { Ports } } = await container.inspect();
       expect(Ports).to.have.property('27017/tcp');

@@ -1,10 +1,10 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../../lib/docker/removeContainers');
-const { startMongoDb, createDashDrive } = require('../../../../lib');
-const DashDriveOptions = require('../../../../lib/services/dashDrive/DashDriveOptions');
+const { startMongoDb, createDriveApi } = require('../../../../lib/index');
+const DriveApiOptions = require('../../../../lib/services/driveApi/DriveApiOptions');
 
-describe('createDashDrive', function main() {
+describe('createDriveApi', function main() {
   this.timeout(90000);
 
   before(removeContainers);
@@ -21,7 +21,7 @@ describe('createDashDrive', function main() {
           envs,
         },
       };
-      instance = await createDashDrive(options);
+      instance = await createDriveApi(options);
     });
     after(async () => {
       await Promise.all([
@@ -52,10 +52,10 @@ describe('createDashDrive', function main() {
     it('should start an instance with the default options', async () => {
       await instance.start();
       const { Args } = await instance.container.inspect();
-      expect(Args).to.deep.equal(['-c', 'cd / && npm i && cd /usr/src/app && npm run sync & npm run api']);
+      expect(Args).to.deep.equal(['-c', 'cd / && npm i && cd /usr/src/app && npm run api']);
     });
 
-    it('should return DashDrive RPC port', async () => {
+    it('should return Drive Api RPC port', async () => {
       await instance.start();
       expect(instance.getRpcPort()).to.equal(instance.options.getRpcPort());
     });
@@ -72,7 +72,7 @@ describe('createDashDrive', function main() {
           envs,
         },
       };
-      instance = await createDashDrive(options);
+      instance = await createDriveApi(options);
     });
     after(async () => {
       await Promise.all([
@@ -81,7 +81,7 @@ describe('createDashDrive', function main() {
       ]);
     });
 
-    it('should DashDrive api return error if initial sync in progress', async () => {
+    it('should API return error if initial sync in progress', async () => {
       await instance.start();
 
       const rpc = instance.getApi();
@@ -117,16 +117,16 @@ describe('createDashDrive', function main() {
           ],
         },
       };
-      instance = await createDashDrive(options);
+      instance = await createDriveApi(options);
       await instance.start();
       const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with instance of DashDriveOptions', async () => {
+    it('should start an instance with instance of DriveApiOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = new DashDriveOptions({
+      const options = new DriveApiOptions({
         container: {
           envs: [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`],
           volumes: [
@@ -134,13 +134,13 @@ describe('createDashDrive', function main() {
           ],
         },
       });
-      instance = await createDashDrive(options);
+      instance = await createDriveApi(options);
       await instance.start();
       const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with custom default DashDriveOptions', async () => {
+    it('should start an instance with custom default DriveApiOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
@@ -151,8 +151,8 @@ describe('createDashDrive', function main() {
           ],
         },
       };
-      DashDriveOptions.setDefaultCustomOptions(options);
-      instance = await createDashDrive();
+      DriveApiOptions.setDefaultCustomOptions(options);
+      instance = await createDriveApi();
       await instance.start();
       const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
