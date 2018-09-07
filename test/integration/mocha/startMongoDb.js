@@ -15,7 +15,7 @@ describe('startMongoDb', () => {
         lastSynced: new Date(),
       });
 
-      const countBefore = await db.countDocuments({});
+      const countBefore = await collection.countDocuments({});
       expect(countBefore).to.equal(1);
     });
 
