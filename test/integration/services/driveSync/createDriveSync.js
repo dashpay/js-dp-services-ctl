@@ -34,7 +34,7 @@ describe('createDriveSync', function main() {
       await instance.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.details();
+      const { NetworkSettings: { Networks } } = await instance.container.inspect();
       const networks = Object.keys(Networks);
       expect(Driver).to.equal('bridge');
       expect(networks.length).to.equal(1);
@@ -43,7 +43,7 @@ describe('createDriveSync', function main() {
 
     it('should start an instance with custom environment variables', async () => {
       await instance.start();
-      const { Config: { Env } } = await instance.container.details();
+      const { Config: { Env } } = await instance.container.inspect();
 
       const instanceEnv = Env.filter(variable => envs.includes(variable));
       expect(envs.length).to.equal(instanceEnv.length);
@@ -51,7 +51,7 @@ describe('createDriveSync', function main() {
 
     it('should start an instance with the default options', async () => {
       await instance.start();
-      const { Args } = await instance.container.details();
+      const { Args } = await instance.container.inspect();
       expect(Args).to.deep.equal(['-c', 'cd / && npm i && cd /usr/src/app && npm run sync']);
     });
   });
@@ -84,7 +84,7 @@ describe('createDriveSync', function main() {
       };
       instance = await createDriveSync(options);
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
@@ -101,7 +101,7 @@ describe('createDriveSync', function main() {
       });
       instance = await createDriveSync(options);
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
@@ -119,7 +119,7 @@ describe('createDriveSync', function main() {
       DriveSyncOptions.setDefaultCustomOptions(options);
       instance = await createDriveSync();
       await instance.start();
-      const { Mounts } = await instance.container.details();
+      const { Mounts } = await instance.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
   });

@@ -51,7 +51,7 @@ describe('createDriveApi', function main() {
 
     it('should start an instance with the default options', async () => {
       await instance.start();
-      const { Args } = await instance.container.details();
+      const { Args } = await instance.container.inspect();
       expect(Args).to.deep.equal(['-c', 'cd / && npm i && cd /usr/src/app && npm run api']);
     });
 

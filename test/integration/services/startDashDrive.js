@@ -36,25 +36,25 @@ describe('startDashDrive', function main() {
     });
 
     it('should has Drive API container running', async () => {
-      const { State, Mounts } = await instance.driveApi.container.details();
+      const { State, Mounts } = await instance.driveApi.container.inspect();
       expect(State.Status).to.equal('running');
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should has Drive sync container running', async () => {
-      const { State, Mounts } = await instance.driveSync.container.details();
+      const { State, Mounts } = await instance.driveSync.container.inspect();
       expect(State.Status).to.equal('running');
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should has IPFS container running', async () => {
-      const { State } = await instance.ipfs.container.details();
+      const { State } = await instance.ipfs.container.inspect();
       expect(State.Status).to.equal('running');
     });
 
     it('should DashDrive container has the right env variables', async () => {
-      const { Config: { Env: ApiEnvs } } = await instance.driveApi.container.details();
-      const { Config: { Env: SyncEnvs } } = await instance.driveSync.container.details();
+      const { Config: { Env: ApiEnvs } } = await instance.driveApi.container.inspect();
+      const { Config: { Env: SyncEnvs } } = await instance.driveSync.container.inspect();
       const expectedEnv = [
         `DASHCORE_ZMQ_PUB_HASHBLOCK=${instance.dashCore.getZmqSockets().hashblock}`,
         `DASHCORE_JSON_RPC_HOST=${instance.dashCore.getIp()}`,
@@ -78,10 +78,10 @@ describe('startDashDrive', function main() {
       } = await instance.dashCore.container.inspect();
       const {
         NetworkSettings: driveApiNetworkSettings,
-      } = await instance.driveApi.container.details();
+      } = await instance.driveApi.container.inspect();
       const {
         NetworkSettings: driveSyncNetworkSettings,
-      } = await instance.driveSync.container.details();
+      } = await instance.driveSync.container.inspect();
       const {
         NetworkSettings: ipfsNetworkSettings,
       } = await instance.ipfs.container.inspect();
@@ -135,7 +135,7 @@ describe('startDashDrive', function main() {
 
     it('should have Drive API containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].driveApi.container.details();
+        const { State, Mounts } = await instances[i].driveApi.container.inspect();
         expect(State.Status).to.equal('running');
         expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }
@@ -143,7 +143,7 @@ describe('startDashDrive', function main() {
 
     it('should have Drive sync containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].driveSync.container.details();
+        const { State, Mounts } = await instances[i].driveSync.container.inspect();
         expect(State.Status).to.equal('running');
         expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }

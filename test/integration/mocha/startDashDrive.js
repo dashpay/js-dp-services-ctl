@@ -18,12 +18,12 @@ describe('startDashDrive', () => {
     });
 
     it('should has Drive API container running', async () => {
-      const { State } = await instance.driveApi.container.details();
+      const { State } = await instance.driveApi.container.inspect();
       expect(State.Status).to.equal('running');
     });
 
     it('should has Drive sync container running', async () => {
-      const { State } = await instance.driveSync.container.details();
+      const { State } = await instance.driveSync.container.inspect();
       expect(State.Status).to.equal('running');
     });
   });
@@ -50,14 +50,14 @@ describe('startDashDrive', () => {
 
     it('should have Drive API containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].driveApi.container.details();
+        const { State } = await instances[i].driveApi.container.inspect();
         expect(State.Status).to.equal('running');
       }
     });
 
     it('should have Drive sync containers running', async () => {
       for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].driveSync.container.details();
+        const { State } = await instances[i].driveSync.container.inspect();
         expect(State.Status).to.equal('running');
       }
     });
