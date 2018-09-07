@@ -58,7 +58,7 @@ describe('createMongoDb', function main() {
 
     it('should clean Mongo database', async () => {
       await instance.start();
-      
+
       const client = await instance.getDb();
       const collection = client.collection('syncState');
       await collection.insertOne({ blocks: [], lastSynced: new Date() });
