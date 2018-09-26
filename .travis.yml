@@ -45,5 +45,8 @@ script:
   - npm run test
 
 deploy:
-  provider: npm
-  api_key: ${NPM_TOKEN}
+  provider: script
+  skip_cleanup: true
+  script: npm publish
+  on:
+    tags: true
