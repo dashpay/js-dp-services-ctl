@@ -1,5 +1,5 @@
 {
-  "name": "js-evo-services-ctl",
+  "name": "@dashevo/js-evo-services-ctl",
   "version": "0.0.1",
   "description": "Javascript library for manipulation of Evolution services using Docker",
   "engines": {

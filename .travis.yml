@@ -45,7 +45,9 @@ script:
   - npm run test
 
 deploy:
-  provider: script
-  script: bash bin/build_docker_images.sh
-  on:
-branch: master
+  - provider: npm
+    api_key: ${NPM_TOKEN}
+  - provider: script
+    script: bash bin/build_docker_images.sh
+    on:
+      branch: master
