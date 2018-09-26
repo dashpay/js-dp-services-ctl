@@ -1,7 +1,7 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../../lib/docker/removeContainers');
-const { startMongoDb, createDriveApi } = require('../../../../lib/index');
+const { startDashCore, startMongoDb, createDriveApi } = require('../../../../lib/index');
 const DriveApiOptions = require('../../../../lib/services/driveApi/DriveApiOptions');
 
 describe('createDriveApi', function main() {
@@ -10,31 +10,40 @@ describe('createDriveApi', function main() {
   before(removeContainers);
 
   describe('usage', () => {
-    let mongoInstance;
+    let dashCore;
+    let mongoDb;
     let envs;
-    let instance;
+    let driveApi;
     before(async () => {
-      mongoInstance = await startMongoDb();
-      envs = [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`];
+      dashCore = await startDashCore();
+      mongoDb = await startMongoDb();
+      envs = [
+        `STORAGE_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
+        `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
+        `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
+        `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
+        `DASHCORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
+      ];
       const options = {
         container: {
           envs,
         },
       };
-      instance = await createDriveApi(options);
+      driveApi = await createDriveApi(options);
     });
     after(async () => {
       await Promise.all([
-        mongoInstance.remove(),
-        instance.remove(),
+        dashCore.remove(),
+        mongoDb.remove(),
+        driveApi.remove(),
       ]);
     });
 
     it('should start an instance with a bridge dash_test_network', async () => {
-      await instance.start();
+      await driveApi.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.inspect();
+      const { NetworkSettings: { Networks } } = await driveApi.container.inspect();
       const networks = Object.keys(Networks);
       expect(Driver).to.equal('bridge');
       expect(networks.length).to.equal(1);
@@ -42,49 +51,58 @@ describe('createDriveApi', function main() {
     });
 
     it('should start an instance with custom environment variables', async () => {
-      await instance.start();
-      const { Config: { Env } } = await instance.container.inspect();
+      await driveApi.start();
+      const { Config: { Env } } = await driveApi.container.inspect();
 
       const instanceEnv = Env.filter(variable => envs.includes(variable));
       expect(envs.length).to.equal(instanceEnv.length);
     });
 
     it('should start an instance with the default options', async () => {
-      await instance.start();
-      const { Args } = await instance.container.inspect();
+      await driveApi.start();
+      const { Args } = await driveApi.container.inspect();
       expect(Args).to.deep.equal(['-c', 'cd / && npm i && cd /usr/src/app && npm run api']);
     });
 
     it('should return Drive Api RPC port', async () => {
-      await instance.start();
-      expect(instance.getRpcPort()).to.equal(instance.options.getRpcPort());
+      await driveApi.start();
+      expect(driveApi.getRpcPort()).to.equal(driveApi.options.getRpcPort());
     });
   });
 
   describe('RPC', () => {
-    let mongoInstance;
-    let instance;
+    let dashCore;
+    let mongoDb;
+    let driveApi;
     before(async () => {
-      mongoInstance = await startMongoDb();
-      const envs = [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`];
+      dashCore = await startDashCore();
+      mongoDb = await startMongoDb();
+      const envs = [
+        `STORAGE_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
+        `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
+        `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
+        `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
+        `DASHCORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
+      ];
       const options = {
         container: {
           envs,
         },
       };
-      instance = await createDriveApi(options);
+      driveApi = await createDriveApi(options);
     });
     after(async () => {
       await Promise.all([
-        mongoInstance.remove(),
-        instance.remove(),
+        dashCore.remove(),
+        mongoDb.remove(),
+        driveApi.remove(),
       ]);
     });
 
     it('should API return error if initial sync in progress', async () => {
-      await instance.start();
+      await driveApi.start();
 
-      const rpc = instance.getApi();
+      const rpc = driveApi.getApi();
       const res = await rpc.request('addSTPacketMethod', {});
 
       expect(res.error.code).to.be.equal(100);
@@ -92,17 +110,28 @@ describe('createDriveApi', function main() {
   });
 
   describe('options', async () => {
-    let mongoInstance;
-    let instance;
+    let dashCore;
+    let mongoDb;
+    let driveApi;
+    let envs;
 
     beforeEach(async () => {
-      mongoInstance = await startMongoDb();
+      dashCore = await startDashCore();
+      mongoDb = await startMongoDb();
+      envs = [
+        `STORAGE_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
+        `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
+        `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
+        `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
+        `DASHCORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
+      ];
     });
 
     afterEach(async () => {
       await Promise.all([
-        mongoInstance.remove(),
-        instance.remove(),
+        dashCore.remove(),
+        mongoDb.remove(),
+        driveApi.remove(),
       ]);
     });
 
@@ -111,15 +140,15 @@ describe('createDriveApi', function main() {
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
         container: {
-          envs: [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`],
+          envs,
           volumes: [
             `${rootPath}/README.md:${CONTAINER_VOLUME}`,
           ],
         },
       };
-      instance = await createDriveApi(options);
-      await instance.start();
-      const { Mounts } = await instance.container.inspect();
+      driveApi = await createDriveApi(options);
+      await driveApi.start();
+      const { Mounts } = await driveApi.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
@@ -128,15 +157,15 @@ describe('createDriveApi', function main() {
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = new DriveApiOptions({
         container: {
-          envs: [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`],
+          envs,
           volumes: [
             `${rootPath}/README.md:${CONTAINER_VOLUME}`,
           ],
         },
       });
-      instance = await createDriveApi(options);
-      await instance.start();
-      const { Mounts } = await instance.container.inspect();
+      driveApi = await createDriveApi(options);
+      await driveApi.start();
+      const { Mounts } = await driveApi.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
@@ -145,16 +174,16 @@ describe('createDriveApi', function main() {
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
         container: {
-          envs: [`STORAGE_MONGODB_URL=mongodb://${mongoInstance.getIp()}:27017`],
+          envs,
           volumes: [
             `${rootPath}/README.md:${CONTAINER_VOLUME}`,
           ],
         },
       };
       DriveApiOptions.setDefaultCustomOptions(options);
-      instance = await createDriveApi();
-      await instance.start();
-      const { Mounts } = await instance.container.inspect();
+      driveApi = await createDriveApi();
+      await driveApi.start();
+      const { Mounts } = await driveApi.container.inspect();
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
   });
