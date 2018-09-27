@@ -50,5 +50,4 @@ deploy:
   script: npm publish
   on:
     tags: true
-    branch: master
     repo: dashevo/js-evo-services-ctl
