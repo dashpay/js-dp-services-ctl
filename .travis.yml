@@ -46,6 +46,8 @@ script:
 
 deploy:
   provider: script
-  script: bash bin/build_docker_images.sh
+  skip_cleanup: true
+  script: npm publish
   on:
-branch: master
+    tags: true
+    repo: dashevo/js-evo-services-ctl
