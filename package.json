@@ -34,8 +34,8 @@
     "sinon-chai": "^2.14.0"
   },
   "dependencies": {
+    "@dashevo/dashd-rpc": "^1.2.0",
     "aws-sdk": "^2.272.1",
-    "bitcoind-rpc-dash": "git+ssh://git@github.com/dashevo/bitcoind-rpc-dash-private.git#develop",
     "dockerode": "^2.5.4",
     "ipfs-api": "^20.1",
     "jayson": "^2.0.6",
