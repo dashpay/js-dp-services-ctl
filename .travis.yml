@@ -47,6 +47,6 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: /bin/bash publish.sh
+  script: npm publish
   on:
     tags: true
