@@ -7,7 +7,6 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "prepublish": "npm config set git-tag-version true && npm version from-git",
     "test": "mocha './test/**/*.spec.js'",
     "test:unit": "mocha './test/unit/**/*.spec.js'",
     "test:integration": "mocha './test/integration/**/*.spec.js'"
