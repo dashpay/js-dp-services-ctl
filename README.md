@@ -240,3 +240,13 @@ startDashCore(dashCoreOptions);
 startDashCore.many(3, dashCoreOptions);
 createDashCore(dashCoreOptions);
 ```
+
+## Releasing to NPM
+
+1. Create new branch if you don't have it: `git checkout -b bump-<version>`
+2. Bump version with [npm version](https://docs.npmjs.com/cli/version) command
+3. Push commit changes and create PR
+4. Make sure PR is approved and all checks pass
+5. Merge squash to master and wait until the Travis build is green
+6. Push the new tag: `git push origin <tag_name>` (it will trigger Travis job for NPM publishing)
+7. Make sure Travis job is green and package is published
