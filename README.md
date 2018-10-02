@@ -243,7 +243,7 @@ createDashCore(dashCoreOptions);
 
 ## Releasing to NPM
 
-1. Create new branch: `git checkout -b bump-<version>`
+1. Create new branch if you don't have it: `git checkout -b bump-<version>`
 2. Bump version with [npm version](https://docs.npmjs.com/cli/version) command
 3. Push commit changes and create PR
 4. Make sure PR is approved and all checks pass
