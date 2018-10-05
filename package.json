@@ -1,6 +1,6 @@
 {
   "name": "@dashevo/js-evo-services-ctl",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "Javascript library for manipulation of Evolution services using Docker",
   "engines": {
     "node": ">=8"
@@ -37,7 +37,7 @@
     "@dashevo/dashd-rpc": "^1.2.0",
     "aws-sdk": "^2.272.1",
     "dockerode": "^2.5.4",
-    "ipfs-api": "^20.1",
+    "ipfs-api": "^24.0.2",
     "jayson": "^2.0.6",
     "lodash": "^4.17.10",
     "mongodb": "^3.1.1"
