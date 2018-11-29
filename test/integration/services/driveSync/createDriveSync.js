@@ -61,7 +61,8 @@ describe('createDriveSync', function main() {
     it('should start an instance with the default options', async () => {
       await driveSync.start();
       const { Args } = await driveSync.container.inspect();
-      expect(Args).to.deep.equal(['-c', 'cd / && npm i --production && cd /usr/src/app && npm run sync']);
+      expect(Args).to.deep
+        .equal(['-c', 'cd / && if [ -z "$(ls -A /node_modules)" ]; then npm i --production; fi && cd /usr/src/app && npm run sync']);
     });
   });
 
