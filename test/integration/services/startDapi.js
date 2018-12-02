@@ -1,3 +1,4 @@
+const os = require('os');
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { startDapi } = require('../../../lib');
 
@@ -75,12 +76,16 @@ describe('startDapi', function main() {
           `DASHCORE_ZMQ_PORT=${instance.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
           `DASHCORE_P2P_HOST=${instance.dashCore.getIp()}`,
           `DASHCORE_P2P_PORT=${instance.dashCore.options.options.port}`,
-          // `DASHDRIVE_RPC_HOST=${driveApiInstance.getIp()}`,
-          'DASHDRIVE_RPC_HOST=docker.for.mac.localhost',
           `DASHDRIVE_RPC_PORT=${instance.driveApi.options.getRpcPort()}`,
           'DASHCORE_P2P_NETWORK=regtest',
           'NETWORK=regtest',
         ];
+      if (os.platform() === 'darwin') {
+        expectedEnv.push('DASHDRIVE_RPC_HOST=docker.for.mac.localhost');
+      } else {
+        expectedEnv.push(`DASHDRIVE_RPC_HOST=${instance.driveApi.getIp()}`);
+      }
+
       const dapiEnvs = DapiEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
       expect(dapiEnvs.length).to.equal(expectedEnv.length);
     });
