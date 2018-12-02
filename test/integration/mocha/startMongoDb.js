@@ -7,6 +7,11 @@ describe('startMongoDb', () => {
       instance = _instance;
     });
 
+    afterEach(async function afterEach() {
+      this.timeout(10000);
+      await instance.clean();
+    });
+
     it('should start one instance and insert with MongoDb', async () => {
       const db = await instance.getDb();
       const collection = db.collection('syncState');

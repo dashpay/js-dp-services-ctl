@@ -67,7 +67,6 @@ describe('createDashCore', function main() {
         '-regtest=1',
         '-keypool=1',
         '-addressindex=1',
-        '-reindex',
         '-spentindex=1',
         '-txindex=1',
         '-timestampindex=1',
