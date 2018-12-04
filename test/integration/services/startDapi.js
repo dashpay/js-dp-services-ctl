@@ -67,7 +67,7 @@ describe('startDapi', function main() {
       const { Config: { Env: DapiEnvs } } = await instance.dapi.container.inspect();
       const expectedEnv =
         [
-          `INSIGHT_URI=http://${instance.insight.getIp()}:${insightInstance.options.getApiPort()}/insight-api-dash`,
+          `INSIGHT_URI=http://${instance.insight.getIp()}:${instance.insight.options.getApiPort()}/insight-api-dash`,
           `DASHCORE_RPC_HOST=${instance.dashCore.getIp()}`,
           `DASHCORE_RPC_PORT=${instance.dashCore.options.getRpcPort()}`,
           `DASHCORE_RPC_USER=${instance.dashCore.options.getRpcUser()}`,
@@ -75,7 +75,7 @@ describe('startDapi', function main() {
           `DASHCORE_ZMQ_HOST=${instance.dashCore.getIp()}`,
           `DASHCORE_ZMQ_PORT=${instance.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
           `DASHCORE_P2P_HOST=${instance.dashCore.getIp()}`,
-          `DASHCORE_P2P_PORT=${dashCoreInstance.options.getDashdPort()}`,
+          `DASHCORE_P2P_PORT=${instance.dashCore.options.getDashdPort()}`,
           `DASHDRIVE_RPC_PORT=${instance.driveApi.options.getRpcPort()}`,
           'DASHCORE_P2P_NETWORK=regtest',
           'NETWORK=regtest',
