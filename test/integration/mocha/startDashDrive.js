@@ -7,15 +7,24 @@ describe('startDashDrive', () => {
       instance = _instance;
     });
 
-    it('should has all containers running', async () => {
-      const { State: StateDashCore } = await instance.dashCore.container.inspect();
-      expect(StateDashCore.Status).to.equal('running');
-      const { State: StateMongoDb } = await instance.mongoDb.container.inspect();
-      expect(StateMongoDb.Status).to.equal('running');
-      const { State: StateDriveApi } = await instance.driveApi.container.inspect();
-      expect(StateDriveApi.Status).to.equal('running');
-      const { State: StateDriveSync } = await instance.driveSync.container.inspect();
-      expect(StateDriveSync.Status).to.equal('running');
+    it('should has DashCore container running', async () => {
+      const { State } = await instance.dashCore.container.inspect();
+      expect(State.Status).to.equal('running');
+    });
+
+    it('should has MongoDb container running', async () => {
+      const { State } = await instance.mongoDb.container.inspect();
+      expect(State.Status).to.equal('running');
+    });
+
+    it('should has Drive API container running', async () => {
+      const { State } = await instance.driveApi.container.inspect();
+      expect(State.Status).to.equal('running');
+    });
+
+    it('should has Drive sync container running', async () => {
+      const { State } = await instance.driveSync.container.inspect();
+      expect(State.Status).to.equal('running');
     });
   });
 
@@ -25,19 +34,28 @@ describe('startDashDrive', () => {
       instances = _instance;
     });
 
-    it('should have all containers running', async () => {
+    it('should have DashCore containers running', async () => {
       for (let i = 0; i < 3; i++) {
         const { State } = await instances[i].dashCore.container.inspect();
         expect(State.Status).to.equal('running');
       }
+    });
+
+    it('should have MongoDb containers running', async () => {
       for (let i = 0; i < 3; i++) {
         const { State } = await instances[i].mongoDb.container.inspect();
         expect(State.Status).to.equal('running');
       }
+    });
+
+    it('should have Drive API containers running', async () => {
       for (let i = 0; i < 3; i++) {
         const { State } = await instances[i].driveApi.container.inspect();
         expect(State.Status).to.equal('running');
       }
+    });
+
+    it('should have Drive sync containers running', async () => {
       for (let i = 0; i < 3; i++) {
         const { State } = await instances[i].driveSync.container.inspect();
         expect(State.Status).to.equal('running');
@@ -45,4 +63,3 @@ describe('startDashDrive', () => {
     });
   });
 });
-
