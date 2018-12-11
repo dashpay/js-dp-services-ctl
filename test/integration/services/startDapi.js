@@ -123,7 +123,7 @@ describe('startDapi', function main() {
     });
   });
 
-  describe('Three instance', () => {
+  xdescribe('Three instance', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
     let instances;
 
