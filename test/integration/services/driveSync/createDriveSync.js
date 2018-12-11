@@ -62,7 +62,7 @@ describe('createDriveSync', function main() {
       await driveSync.start();
       const { Args } = await driveSync.container.inspect();
       expect(Args).to.deep
-        .equal(['-c', 'cd / && if [ -z "$(ls -A /node_modules)" ]; then npm i --production; fi && cd /usr/src/app && npm run sync']);
+        .equal(['-c', 'cd / && cd /usr/src/app && npm run sync']);
     });
   });
 
@@ -106,7 +106,8 @@ describe('createDriveSync', function main() {
       driveSync = await createDriveSync(options);
       await driveSync.start();
       const { Mounts } = await driveSync.container.inspect();
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const destinations = Mounts.map(m => m.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
     it('should start an instance with instance of DriveSyncOptions', async () => {
@@ -123,7 +124,8 @@ describe('createDriveSync', function main() {
       driveSync = await createDriveSync(options);
       await driveSync.start();
       const { Mounts } = await driveSync.container.inspect();
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const destinations = Mounts.map(m => m.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
     it('should start an instance with custom default DriveSyncOptions', async () => {
@@ -141,7 +143,8 @@ describe('createDriveSync', function main() {
       driveSync = await createDriveSync();
       await driveSync.start();
       const { Mounts } = await driveSync.container.inspect();
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const destinations = Mounts.map(m => m.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });
 });
