@@ -8,33 +8,23 @@ describe('startDapi', () => {
         instance = _instance;
       });
 
-    it('should has Dapi container running', async () => {
-      const { State } = await instance.dapi.container.inspect();
-      expect(State.Status).to.equal('running');
-    });
-    it('should has DashCore container running', async () => {
-      const { State } = await instance.dashCore.container.inspect();
-      expect(State.Status).to.equal('running');
-    });
-    it('should has MongoDb container running', async () => {
-      const { State } = await instance.mongoDb.container.inspect();
-      expect(State.Status).to.equal('running');
-    });
-    it('should has Drive API container running', async () => {
-      const { State } = await instance.driveApi.container.inspect();
-      expect(State.Status).to.equal('running');
-    });
-    it('should has Drive sync container running', async () => {
-      const { State } = await instance.driveSync.container.inspect();
-      expect(State.Status).to.equal('running');
-    });
-    it('should has Insight container running', async () => {
-      const { State } = await instance.insight.container.inspect();
-      expect(State.Status).to.equal('running');
+    it('should has all Dapi containers running', async () => {
+      const { State: stateDapi } = await instance.dapi.container.inspect();
+      expect(stateDapi.Status).to.equal('running');
+      const { State: stateDashCore } = await instance.dashCore.container.inspect();
+      expect(stateDashCore.Status).to.equal('running');
+      const { State: stateMongoDb } = await instance.mongoDb.container.inspect();
+      expect(stateMongoDb.Status).to.equal('running');
+      const { State: stateDriveApi } = await instance.driveApi.container.inspect();
+      expect(stateDriveApi.Status).to.equal('running');
+      const { State: stateDriveSync } = await instance.driveSync.container.inspect();
+      expect(stateDriveSync.Status).to.equal('running');
+      const { State: stateInsight } = await instance.insight.container.inspect();
+      expect(stateInsight.Status).to.equal('running');
     });
   });
 
-  describe('Three instance', () => {
+  xdescribe('Three instance', () => {
     let instances;
     startDapi.many(3)
       .then((_instance) => {
