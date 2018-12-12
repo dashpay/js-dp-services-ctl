@@ -4,4 +4,5 @@ describe('Mocha', () => {
   require('./startDashDrive');
   require('./startIPFS');
   require('./startMongoDb');
+  require('./startDapi');
 });

@@ -6,4 +6,5 @@ describe('Services', () => {
   require('./IPFS');
   require('./mongoDb');
   require('./startDashDrive');
+  require('./startDapi');
 });
