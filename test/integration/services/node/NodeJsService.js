@@ -24,7 +24,7 @@ describe('NodeJsService', function main() {
       scripts: {},
       author: '',
       dependencies: {
-        "has-flag": '^3.0.0',
+        'has-flag': '^3.0.0',
       },
     };
 
@@ -85,9 +85,9 @@ describe('NodeJsService', function main() {
 
     runOutputs = [];
     const writableStreamPath = path.join(tmpDir, 'docker.out');
-    this.sinon.stub(container.docker, 'run').callsFake(async (imgName, cmd, stream, options) => {
+    this.sinon.stub(container.docker, 'run').callsFake(async (imgName, cmd, stream, runOptions) => {
       const writableStream = fs.createWriteStream(writableStreamPath);
-      const result = await docker.run(imgName, cmd, writableStream, options);
+      const result = await docker.run(imgName, cmd, writableStream, runOptions);
       const output = fs.readFileSync(writableStreamPath);
       runOutputs.push(output.toString('utf8'));
       fs.unlinkSync(writableStreamPath);
@@ -95,7 +95,7 @@ describe('NodeJsService', function main() {
     });
   });
 
-  it.only('should create volume, copy and install packages there, if no volume present', async () => {
+  it('should create volume, copy and install packages there, if no volume present', async () => {
     await service.start();
     expect(service.container.docker.run).to.be.calledTwice();
 
@@ -104,7 +104,7 @@ describe('NodeJsService', function main() {
     expect(runOutputs[1]).to.not.be.deep.equal('');
   });
 
-  it.only('should only run npm install once on subsequent starts if caching is enabled', async () => {
+  it('should only run npm install once on subsequent starts if caching is enabled', async () => {
     await service.start();
     await service.stop();
     await service.start();
@@ -113,7 +113,7 @@ describe('NodeJsService', function main() {
     expect(runOutputs[2]).to.be.deep.equal('');
   });
 
-  it.only('should run npm install once package lock file is changed', async () => {
+  it('should run npm install once package lock file is changed', async () => {
     await service.start();
     await service.stop();
 
@@ -137,7 +137,7 @@ describe('NodeJsService', function main() {
         'color-name': {
           version: '1.1.4',
           resolved: 'https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz',
-          integrity: 'sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA=='
+          integrity: 'sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==',
         },
         'has-flag': {
           version: '3.0.0',
@@ -156,7 +156,7 @@ describe('NodeJsService', function main() {
     expect(runOutputs[2]).to.not.be.deep.equal('');
   });
 
-  it.only('should do nothing if caching is disabled', async () => {
+  it('should do nothing if caching is disabled', async () => {
     service.options.options.cacheNodeModules = false;
 
     await service.start();
