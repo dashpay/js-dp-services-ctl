@@ -97,6 +97,24 @@ describe('Container', function main() {
       }
       expect(error.message).to.equal('Container not found');
     });
+
+    it.only('should follow error log', async function it() {
+      const anotherContainer = new Container('dash_test_network', 'busybox', {
+        ports: [],
+        volumes: [],
+        cmd: ['sh', '-c', 'fail'],
+      });
+
+      this.sinon.spy(anotherContainer, 'followErrorLog');
+
+      await anotherContainer.start();
+      await anotherContainer.stop();
+
+      expect(anotherContainer.followErrorLog).to.be.calledOnce();
+      expect(anotherContainer.errorLog).to.contain('sh: fail: not found');
+
+      await anotherContainer.remove();
+    });
   });
 
   describe('containers removal', () => {
