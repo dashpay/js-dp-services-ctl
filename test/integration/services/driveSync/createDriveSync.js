@@ -62,7 +62,7 @@ describe('createDriveSync', function main() {
       await driveSync.start();
       const { Args } = await driveSync.container.inspect();
       expect(Args).to.deep
-        .equal(['-c', 'npm run sync']);
+        .equal(['run', 'sync']);
     });
   });
 
