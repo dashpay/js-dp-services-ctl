@@ -3,7 +3,7 @@ const NodeJsServiceOptions = require('../../../../lib/services/node/NodeJsServic
 describe('NodeJsServiceOptions', () => {
   it('should return a proper npm install cmd', () => {
     const options = new NodeJsServiceOptions({
-      nodeModulesPath: '/node_modules',
+      containerNodeModulesPath: '/node_modules',
     });
 
     const cmd = options.getNpmInstallCmd();

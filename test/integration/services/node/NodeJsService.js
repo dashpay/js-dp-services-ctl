@@ -57,10 +57,9 @@ describe('NodeJsService', function main() {
 
     const options = new NodeJsServiceOptions({
       cacheNodeModules: true,
-      nodeModulesPath: '/node_modules',
-      appPath: '/app',
-      localPackageJsonFile: packageFilePath,
-      localPackageLockJsonFile: lockFilePath,
+      containerNodeModulesPath: '/node_modules',
+      containerAppPath: '/app',
+      localAppPath: tmpDir,
       container: {
         image: 'node:10-alpine',
         network: {
