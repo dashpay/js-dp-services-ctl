@@ -61,7 +61,8 @@ describe('createDriveApi', function main() {
     it('should start an instance with the default options', async () => {
       await driveApi.start();
       const { Args } = await driveApi.container.inspect();
-      expect(Args).to.deep.equal(['-c', 'cd / && npm i --production && cd /usr/src/app && npm run api']);
+      expect(Args).to.deep
+        .equal(['run', 'api']);
     });
 
     it('should return Drive Api RPC port', async () => {
@@ -149,7 +150,8 @@ describe('createDriveApi', function main() {
       driveApi = await createDriveApi(options);
       await driveApi.start();
       const { Mounts } = await driveApi.container.inspect();
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const destinations = Mounts.map(m => m.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
     it('should start an instance with instance of DriveApiOptions', async () => {
@@ -166,7 +168,8 @@ describe('createDriveApi', function main() {
       driveApi = await createDriveApi(options);
       await driveApi.start();
       const { Mounts } = await driveApi.container.inspect();
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const destinations = Mounts.map(m => m.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
     it('should start an instance with custom default DriveApiOptions', async () => {
@@ -184,7 +187,8 @@ describe('createDriveApi', function main() {
       driveApi = await createDriveApi();
       await driveApi.start();
       const { Mounts } = await driveApi.container.inspect();
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const destinations = Mounts.map(m => m.Destination);
+      expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });
 });

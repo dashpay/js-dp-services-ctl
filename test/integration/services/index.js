@@ -7,4 +7,5 @@ describe('Services', () => {
   require('./mongoDb');
   require('./startDashDrive');
   require('./startDapi');
+  require('./node');
 });
