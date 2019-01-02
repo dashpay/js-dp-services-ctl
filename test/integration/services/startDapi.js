@@ -65,21 +65,20 @@ describe('startDapi', function main() {
 
     it('should Dapi container has the right env variables', async () => {
       const { Config: { Env: DapiEnvs } } = await instance.dapi.container.inspect();
-      const expectedEnv =
-        [
-          `INSIGHT_URI=http://${instance.insight.getIp()}:${instance.insight.options.getApiPort()}/insight-api-dash`,
-          `DASHCORE_RPC_HOST=${instance.dashCore.getIp()}`,
-          `DASHCORE_RPC_PORT=${instance.dashCore.options.getRpcPort()}`,
-          `DASHCORE_RPC_USER=${instance.dashCore.options.getRpcUser()}`,
-          `DASHCORE_RPC_PASS=${instance.dashCore.options.getRpcPassword()}`,
-          `DASHCORE_ZMQ_HOST=${instance.dashCore.getIp()}`,
-          `DASHCORE_ZMQ_PORT=${instance.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
-          `DASHCORE_P2P_HOST=${instance.dashCore.getIp()}`,
-          `DASHCORE_P2P_PORT=${instance.dashCore.options.getDashdPort()}`,
-          `DASHDRIVE_RPC_PORT=${instance.driveApi.options.getRpcPort()}`,
-          'DASHCORE_P2P_NETWORK=regtest',
-          'NETWORK=regtest',
-        ];
+      const expectedEnv = [
+        `INSIGHT_URI=http://${instance.insight.getIp()}:${instance.insight.options.getApiPort()}/insight-api-dash`,
+        `DASHCORE_RPC_HOST=${instance.dashCore.getIp()}`,
+        `DASHCORE_RPC_PORT=${instance.dashCore.options.getRpcPort()}`,
+        `DASHCORE_RPC_USER=${instance.dashCore.options.getRpcUser()}`,
+        `DASHCORE_RPC_PASS=${instance.dashCore.options.getRpcPassword()}`,
+        `DASHCORE_ZMQ_HOST=${instance.dashCore.getIp()}`,
+        `DASHCORE_ZMQ_PORT=${instance.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
+        `DASHCORE_P2P_HOST=${instance.dashCore.getIp()}`,
+        `DASHCORE_P2P_PORT=${instance.dashCore.options.getDashdPort()}`,
+        `DASHDRIVE_RPC_PORT=${instance.driveApi.options.getRpcPort()}`,
+        'DASHCORE_P2P_NETWORK=regtest',
+        'NETWORK=regtest',
+      ];
       if (os.platform() === 'darwin') {
         expectedEnv.push('DASHDRIVE_RPC_HOST=docker.for.mac.localhost');
       } else {
