@@ -13,7 +13,8 @@ describe('NodeJsServiceOptions', () => {
       .equal([
         'sh',
         '-c',
-        'if [ "$(md5sum /node_modules/package-lock.json | awk \'{print $1}\')" !='
+        'ssh -o StrictHostKeyChecking=accept-new github.com; cd /; '
+          + 'if [ "$(md5sum /node_modules/package-lock.json | awk \'{print $1}\')" !='
           + ' "$(md5sum /package-lock.json | awk \'{print $1}\')" ]; then'
           + ' npm i --production; cp /package-lock.json /node_modules/; fi',
       ]);
