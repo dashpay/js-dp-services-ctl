@@ -13,7 +13,7 @@ describe('NodeJsServiceOptions', () => {
       .equal([
         'sh',
         '-c',
-        'ssh -o StrictHostKeyChecking=accept-new github.com; cd /; '
+        'mkdir -p ~/.ssh/; ssh-keyscan github.com > ~/.ssh/known_hosts 2> /dev/null; cd /; '
           + 'if [ "$(md5sum /node_modules/package-lock.json | awk \'{print $1}\')" !='
           + ' "$(md5sum /package-lock.json | awk \'{print $1}\')" ]; then'
           + ' npm i --production; cp /package-lock.json /node_modules/; fi',
