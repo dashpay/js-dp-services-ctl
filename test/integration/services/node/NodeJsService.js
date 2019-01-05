@@ -61,7 +61,7 @@ describe('NodeJsService', function main() {
       containerAppPath: '/app',
       localAppPath: tmpDir,
       container: {
-        image: '103738324493.dkr.ecr.us-west-2.amazonaws.com/dashevo/dashdrive',
+        image: 'node:10-alpine',
         network: {
           name: 'dash_test_network',
           driver: 'bridge',
