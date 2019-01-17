@@ -59,17 +59,30 @@ describe('createMongoDb', function main() {
     it('should clean Mongo database', async () => {
       await instance.start();
 
-      const client = await instance.getDb();
-      const collection = client.collection('syncState');
-      await collection.insertOne({ blocks: [], lastSynced: new Date() });
+      const client = await instance.getClient();
+      await client.db('other-db').createCollection('some-collection');
 
-      const countBefore = await collection.countDocuments({});
-      expect(countBefore).to.equal(1);
+      const adminDb = await instance.getDb().admin();
+      let dbList = await adminDb.listDatabases({ onlyNames: true });
+      dbList = dbList.databases.map(db => db.name);
+
+      expect(dbList).to.deep.equal([
+        'admin',
+        'config',
+        'local',
+        'other-db',
+      ]);
 
       await instance.clean();
 
-      const countAfter = await collection.count({});
-      expect(countAfter).to.equal(0);
+      dbList = await adminDb.listDatabases({ onlyNames: true });
+      dbList = dbList.databases.map(db => db.name);
+
+      expect(dbList).to.deep.equal([
+        'admin',
+        'config',
+        'local',
+      ]);
     });
   });
 
