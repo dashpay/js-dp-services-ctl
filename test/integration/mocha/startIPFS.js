@@ -1,3 +1,7 @@
+const cbor = require('cbor');
+const multihash = require('multihashes');
+const CID = require('cids');
+
 const startIPFS = require('../../../lib/mocha/startIPFS');
 
 describe('startIPFS', function main() {
@@ -5,20 +9,33 @@ describe('startIPFS', function main() {
 
   describe('One instance', () => {
     let ipfsAPI;
-    let actualTrueObject;
+    let jsonObject;
+    let cid;
     startIPFS().then((_instance) => {
       ipfsAPI = _instance.getApi();
     });
 
+    before(() => {
+      jsonObject = {
+        answer: 42,
+        anotherField: 'Some important data is here',
+      };
+
+      const encodedObject = cbor.encodeCanonical(jsonObject);
+
+      const hashedObject = multihash.encode(encodedObject, 'sha2-256');
+      cid = new CID(1, 'dag-cbor', hashedObject);
+    });
+
     it('should start one instance', async () => {
-      actualTrueObject = await ipfsAPI.block.put(Buffer.from('{"true": true}'));
-      const expectedTrueObject = await ipfsAPI.block.get(actualTrueObject.cid);
-      expect(expectedTrueObject.data).to.be.deep.equal(actualTrueObject.data);
+      const actualCid = await ipfsAPI.dag.put(jsonObject, { cid });
+      const expectedObject = await ipfsAPI.dag.get(cid);
+      expect(expectedObject.value).to.be.deep.equal(jsonObject);
     });
 
     it('should not have any of the previous data', async () => {
       const result = await Promise.race([
-        ipfsAPI.block.get(actualTrueObject.cid),
+        ipfsAPI.dag.get(cid),
         new Promise(resolve => setTimeout(() => resolve(false), 2000)),
       ]);
       expect(result).to.be.equal(false);
@@ -27,24 +44,36 @@ describe('startIPFS', function main() {
 
   describe('Three instances', () => {
     let ipfsAPIs;
-    let actualTrueObject;
+    let jsonObject;
+    let cid;
     startIPFS.many(3).then((_instances) => {
       ipfsAPIs = _instances.map(instance => instance.getApi());
     });
 
-    it('should start many instances', async () => {
-      actualTrueObject = await ipfsAPIs[0].block.put(Buffer.from('{"true": true}'));
+    before(() => {
+      jsonObject = {
+        answer: 42,
+        anotherField: 'Some important data is here',
+      };
 
+      const encodedObject = cbor.encodeCanonical(jsonObject);
+
+      const hashedObject = multihash.encode(encodedObject, 'sha2-256');
+      cid = new CID(1, 'dag-cbor', hashedObject);
+    });
+
+    it('should start many instances', async () => {
+      const actualCid = await ipfsAPIs[0].dag.put(jsonObject, { cid });
       for (let i = 1; i < 3; i++) {
-        const expectedTrueObject = await ipfsAPIs[i].block.get(actualTrueObject.cid);
-        expect(expectedTrueObject.data).to.be.deep.equal(actualTrueObject.data);
+        const expectedTrueObject = await ipfsAPIs[i].dag.get(cid);
+        expect(expectedTrueObject.value).to.be.deep.equal(jsonObject);
       }
     });
 
     it('should not have any of the previous data', async () => {
       for (let i = 1; i < 3; i++) {
         const result = await Promise.race([
-          ipfsAPIs[i].block.get(actualTrueObject.cid),
+          ipfsAPIs[i].dag.get(cid),
           new Promise(resolve => setTimeout(() => resolve(false), 2000)),
         ]);
         expect(result).to.be.equal(false);
