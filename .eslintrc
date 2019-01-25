@@ -1,7 +1,6 @@
 {
   "extends": "airbnb-base",
   "rules": {
-    "import/no-extraneous-dependencies": "off",
     "no-plusplus": 0,
     "eol-last": [
       "error",
