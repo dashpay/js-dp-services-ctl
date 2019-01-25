@@ -1,6 +1,6 @@
 {
   "name": "@dashevo/js-evo-services-ctl",
-  "version": "1.0.0-alpha.15",
+  "version": "1.0.0-alpha.16",
   "description": "Javascript library for manipulation of Evolution services using Docker",
   "engines": {
     "node": ">=8"
@@ -22,6 +22,7 @@
     "Djavid Gabibiyan"
   ],
   "devDependencies": {
+    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client#develop",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
@@ -34,7 +35,6 @@
     "sinon-chai": "^3.3.0"
   },
   "dependencies": {
-    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client#develop",
     "@dashevo/dashd-rpc": "^1.2.1",
     "aws-sdk": "^2.382.0",
     "dockerode": "^2.5.7",
