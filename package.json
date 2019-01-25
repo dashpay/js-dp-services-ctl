@@ -22,6 +22,7 @@
     "Djavid Gabibiyan"
   ],
   "devDependencies": {
+    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client#develop",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
@@ -35,7 +36,6 @@
   },
   "dependencies": {
     "@dashevo/dashd-rpc": "^1.2.1",
-    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client#develop",
     "aws-sdk": "^2.382.0",
     "dockerode": "^2.5.7",
     "ipfs-http-client": "^28.1.0",
