@@ -21,6 +21,29 @@ describe('startIPFS', function main() {
     });
     after(async () => instance.remove());
 
+    it('should clean IPFS data upon calling clean method', async () => {
+      const client = instance.getApi();
+
+      const someData = {
+        answer: 42,
+      };
+
+      const cid = await client.dag.put(someData);
+      await client.pin.add(cid.toBaseEncodedString());
+
+      const lsBeforeClean = await client.pin.ls();
+      const pinsBeforeClean = lsBeforeClean.map(i => i.hash);
+
+      expect(pinsBeforeClean).to.include(cid.toBaseEncodedString());
+
+      await instance.clean();
+
+      const lsAfterClean = await client.pin.ls();
+      const pinsAfterClean = lsAfterClean.map(i => i.hash);
+
+      expect(pinsAfterClean).to.not.include(cid.toBaseEncodedString());
+    });
+
     it('should has container running', async () => {
       const { State, Mounts } = await instance.container.inspect();
       expect(State.Status).to.equal('running');
@@ -52,6 +75,45 @@ describe('startIPFS', function main() {
     after(async () => {
       const promises = instances.map(instance => instance.remove());
       await Promise.all(promises);
+    });
+
+    it('should clean IPFS data upon calling clean method', async () => {
+      const firstClient = instances[0].getApi();
+
+      const someData = {
+        answer: 42,
+      };
+
+      const cid = await firstClient.dag.put(someData);
+
+      for (let i = 0; i < 3; i++) {
+        const client = instances[i].getApi();
+        await client.pin.add(cid.toBaseEncodedString());
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const client = instances[i].getApi();
+
+        const lsBeforeClean = await client.pin.ls();
+        const pinsBeforeClean = lsBeforeClean.map(item => item.hash);
+
+        expect(pinsBeforeClean).to.include(cid.toBaseEncodedString());
+      }
+
+      await Promise.all([
+        instances[0].clean(),
+        instances[1].clean(),
+        instances[2].clean(),
+      ]);
+
+      for (let i = 0; i < 3; i++) {
+        const client = instances[i].getApi();
+
+        const lsAfterClean = await client.pin.ls();
+        const pinsAfterClean = lsAfterClean.map(item => item.hash);
+
+        expect(pinsAfterClean).to.not.include(cid.toBaseEncodedString());
+      }
     });
 
     it('should have containers running', async () => {
