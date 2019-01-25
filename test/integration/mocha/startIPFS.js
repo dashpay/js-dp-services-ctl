@@ -1,35 +1,42 @@
 const cbor = require('cbor');
-const multihash = require('multihashes');
+const multihashes = require('multihashes');
 const CID = require('cids');
+const crypto = require('crypto');
 
 const startIPFS = require('../../../lib/mocha/startIPFS');
 
 describe('startIPFS', function main() {
+  let jsonObject;
+  let cid;
+
   this.timeout(40000);
+
+  beforeEach(() => {
+    jsonObject = {
+      answer: 42,
+      anotherField: 'Some important data is here',
+    };
+
+    const encodedObject = cbor.encodeCanonical(jsonObject);
+    const objectHash = crypto.createHash('sha256').update(encodedObject).digest();
+    const objectMultiHash = multihashes.encode(objectHash, 'sha2-256');
+    cid = new CID(1, 'dag-cbor', objectMultiHash);
+  });
 
   describe('One instance', () => {
     let ipfsAPI;
-    let jsonObject;
-    let cid;
+
     startIPFS().then((_instance) => {
       ipfsAPI = _instance.getApi();
     });
 
-    before(() => {
-      jsonObject = {
-        answer: 42,
-        anotherField: 'Some important data is here',
-      };
-
-      const encodedObject = cbor.encodeCanonical(jsonObject);
-
-      const hashedObject = multihash.encode(encodedObject, 'sha2-256');
-      cid = new CID(1, 'dag-cbor', hashedObject);
-    });
-
     it('should start one instance', async () => {
       const actualCid = await ipfsAPI.dag.put(jsonObject, { cid });
+
+      expect(cid.equals(actualCid)).to.be.true();
+
       const expectedObject = await ipfsAPI.dag.get(cid);
+
       expect(expectedObject.value).to.be.deep.equal(jsonObject);
     });
 
@@ -44,26 +51,16 @@ describe('startIPFS', function main() {
 
   describe('Three instances', () => {
     let ipfsAPIs;
-    let jsonObject;
-    let cid;
+
     startIPFS.many(3).then((_instances) => {
       ipfsAPIs = _instances.map(instance => instance.getApi());
     });
 
-    before(() => {
-      jsonObject = {
-        answer: 42,
-        anotherField: 'Some important data is here',
-      };
-
-      const encodedObject = cbor.encodeCanonical(jsonObject);
-
-      const hashedObject = multihash.encode(encodedObject, 'sha2-256');
-      cid = new CID(1, 'dag-cbor', hashedObject);
-    });
-
     it('should start many instances', async () => {
       const actualCid = await ipfsAPIs[0].dag.put(jsonObject, { cid });
+
+      expect(cid.equals(actualCid)).to.be.true();
+
       for (let i = 1; i < 3; i++) {
         const expectedTrueObject = await ipfsAPIs[i].dag.get(cid);
         expect(expectedTrueObject.value).to.be.deep.equal(jsonObject);
