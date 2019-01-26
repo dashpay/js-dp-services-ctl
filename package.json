@@ -37,8 +37,9 @@
     "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client#develop",
     "@dashevo/dashd-rpc": "^1.2.1",
     "aws-sdk": "^2.382.0",
+    "cbor": "^4.1.4",
     "dockerode": "^2.5.7",
-    "ipfs-http-client": "^28.1.0",
+    "ipfs-http-client": "^29.0.1",
     "jayson": "^2.1.0",
     "lodash": "^4.17.11",
     "mongodb": "^3.1.10"
