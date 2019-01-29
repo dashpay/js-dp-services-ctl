@@ -12,10 +12,14 @@ process.env.NODE_ENV = 'test';
 
 beforeEach(function beforeEach() {
   if (!this.sinon) {
-    this.sinon = sinon.sandbox.create();
+    this.sinon = sinon.createSandbox();
   } else {
     this.sinon.restore();
   }
+});
+
+afterEach(function afterEach() {
+  this.sinon.restore();
 });
 
 global.expect = expect;
