@@ -14,8 +14,7 @@ describe('Image', function main() {
   });
 
   it('should pull image without authentication', async () => {
-    const options = new MongoDbOptions();
-    const imageName = options.getContainerImageName();
+    const imageName = 'busybox';
 
     const dockerImage = await docker.getImage(imageName);
     try {
@@ -29,8 +28,7 @@ describe('Image', function main() {
   });
 
   it('should pull image with authentication', async () => {
-    const options = new DashCoreOptions();
-    const imageName = options.getContainerImageName();
+    const imageName = '103738324493.dkr.ecr.us-west-2.amazonaws.com/dashevo/node:10-alpine';
 
     const dockerImage = await docker.getImage(imageName);
     try {
