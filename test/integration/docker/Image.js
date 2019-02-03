@@ -1,6 +1,5 @@
 const Docker = require('dockerode');
 const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
-const MongoDbOptions = require('../../../lib/services/mongoDb/MongoDbOptions');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
 
@@ -14,7 +13,7 @@ describe('Image', function main() {
   });
 
   it('should pull image without authentication', async () => {
-    const imageName = 'busybox';
+    const imageName = 'alpine';
 
     const dockerImage = await docker.getImage(imageName);
     try {
@@ -28,6 +27,7 @@ describe('Image', function main() {
   });
 
   it('should pull image with authentication', async () => {
+    const options = new DashCoreOptions();
     const imageName = '103738324493.dkr.ecr.us-west-2.amazonaws.com/dashevo/node:10-alpine';
 
     const dockerImage = await docker.getImage(imageName);
