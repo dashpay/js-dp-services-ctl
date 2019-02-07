@@ -129,22 +129,15 @@ describe('createDriveSync', function main() {
     });
 
     it('should start an instance with custom default DriveSyncOptions', async () => {
-      const rootPath = process.cwd();
-      const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = {
+      const options = new DriveSyncOptions({
         container: {
           envs,
-          volumes: [
-            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-          ],
         },
-      };
-      DriveSyncOptions.setDefaultCustomOptions(options);
-      driveSync = await createDriveSync();
+      });
+      driveSync = await createDriveSync(options);
       await driveSync.start();
-      const { Mounts } = await driveSync.container.inspect();
-      const destinations = Mounts.map(m => m.Destination);
-      expect(destinations).to.include(CONTAINER_VOLUME);
+      const { Config: { Image: imageName } } = await driveSync.container.inspect();
+      expect(imageName).to.contain('dashdrive');
     });
   });
 });

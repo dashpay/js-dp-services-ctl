@@ -173,22 +173,15 @@ describe('createDriveApi', function main() {
     });
 
     it('should start an instance with custom default DriveApiOptions', async () => {
-      const rootPath = process.cwd();
-      const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = {
+      const options = new DriveApiOptions({
         container: {
           envs,
-          volumes: [
-            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-          ],
         },
-      };
-      DriveApiOptions.setDefaultCustomOptions(options);
-      driveApi = await createDriveApi();
+      });
+      driveApi = await createDriveApi(options);
       await driveApi.start();
-      const { Mounts } = await driveApi.container.inspect();
-      const destinations = Mounts.map(m => m.Destination);
-      expect(destinations).to.include(CONTAINER_VOLUME);
+      const { Config: { Image: imageName } } = await driveApi.container.inspect();
+      expect(imageName).to.contain('dashdrive');
     });
   });
 });
