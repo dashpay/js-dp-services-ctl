@@ -94,7 +94,7 @@ const options = {
 };
 
 // Start service
-const ipfs = await startIPFS();
+const ipfs = await startIPFS(options);
 
 // Get peer ID
 const peerId = await ipfs.getApi().id();
