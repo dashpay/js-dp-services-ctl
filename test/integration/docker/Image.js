@@ -30,7 +30,7 @@ describe('Image', function main() {
     await image.pull();
   });
 
-  it.only('should pull image with authentication', async function() {
+  it('should pull image with authentication', async function() {
     const options = new DashCoreOptions();
     const imageName = 'private/image:name';
 
@@ -48,7 +48,7 @@ describe('Image', function main() {
     await image.pull();
   });
 
-  it.only('should pull image only if it is not present', async function() {
+  it('should pull image only if it is not present', async function() {
     const imageName = 'alpine';
     const dockerImage = await docker.getImage(imageName);
     try {
