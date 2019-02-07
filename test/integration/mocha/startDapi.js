@@ -1,6 +1,6 @@
 const startDapi = require('../../../lib/mocha/startDapi');
 
-describe('startDapi', () => {
+describe.skip('startDapi', () => {
   describe('One instance', () => {
     let instance;
     startDapi()
@@ -24,7 +24,7 @@ describe('startDapi', () => {
     });
   });
 
-  xdescribe('Three instances', () => {
+  describe('Three instances', () => {
     let instances;
     startDapi.many(3)
       .then((_instance) => {
