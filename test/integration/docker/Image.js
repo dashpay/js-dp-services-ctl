@@ -1,19 +1,20 @@
+const stream = require('stream');
+
 const Docker = require('dockerode');
 const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
-
-const stream = require('stream');
 
 describe('Image', function main() {
   this.timeout(200000);
 
   let docker;
   let mockedStream;
-  beforeEach(function beforeEach() {
+  beforeEach(() => {
     docker = new Docker();
     mockedStream = new stream.Readable();
-    mockedStream._read = function(size) { /* stub */ };
+    // eslint-disable-next-line no-underscore-dangle
+    mockedStream._read = () => { /* stub */ };
   });
 
   it('should pull image without authentication', async () => {
@@ -30,7 +31,7 @@ describe('Image', function main() {
     await image.pull();
   });
 
-  it('should pull image with authentication', async function() {
+  it('should pull image with authentication', async function it() {
     const options = new DashCoreOptions();
     const imageName = 'private/image:name';
 
@@ -48,7 +49,7 @@ describe('Image', function main() {
     await image.pull();
   });
 
-  it('should pull image only if it is not present', async function() {
+  it('should pull image only if it is not present', async function it() {
     const imageName = 'alpine';
     const dockerImage = await docker.getImage(imageName);
     try {
