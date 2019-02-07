@@ -7,7 +7,7 @@ describe('startDapi', function main() {
 
   before(removeContainers);
 
-  describe('One instance', () => {
+  describe.skip('One instance', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
     let instance;
 
@@ -122,7 +122,7 @@ describe('startDapi', function main() {
     });
   });
 
-  xdescribe('Three instance', () => {
+  describe.skip('Three instance', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
     let instances;
 
