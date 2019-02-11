@@ -6,9 +6,6 @@
 > Control Dash Platform services using JavaScript and Docker
 
 The tool provides a convenient JavaScript interface for configuration and interaction with Dash Platform services. Services are started in Docker containers.
-  interface for configuration and interaction with Dash Platform services.
-  Services are started in Docker containers.
-
 
 ## Table of Contents
 
