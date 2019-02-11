@@ -22,31 +22,45 @@ process.env.NODE_ENV = 'test';
 const dotenvConfig = dotenv.config();
 dotenvExpand(dotenvConfig);
 
-DashApiOptions.setDefaultCustomOptions({
-  container: {
-    image: (process.env.SERVICE_IMAGE_NAME_DRIVE || 'dashpay/dashdrive:latest'),
-  },
-});
-DashSyncOptions.setDefaultCustomOptions({
-  container: {
-    image: (process.env.SERVICE_IMAGE_NAME_DRIVE || 'dashpay/dashdrive:latest'),
-  },
-});
-DashCoreOptions.setDefaultCustomOptions({
-  container: {
-    image: (process.env.SERVICE_IMAGE_NAME_CORE || 'dashpay/dashcore:v13.0.0-evo.5'),
-  },
-});
-DapiOptions.setDefaultCustomOptions({
-  container: {
-    image: (process.env.SERVICE_IMAGE_NAME_DAPI || 'dashpay/dapi:latest'),
-  },
-});
-InsightOptions.setDefaultCustomOptions({
-  container: {
-    image: (process.env.SERVICE_IMAGE_NAME_INSIGHT || 'dashpay/evoinsight:latest'),
-  },
-});
+if (process.env.SERVICE_IMAGE_DRIVE) {
+  DashApiOptions.setDefaultCustomOptions({
+    container: {
+      image: process.env.SERVICE_IMAGE_DRIVE,
+    },
+  });
+}
+
+if (process.env.SERVICE_IMAGE_DRIVE) {
+  DashSyncOptions.setDefaultCustomOptions({
+    container: {
+      image: process.env.SERVICE_IMAGE_DRIVE,
+    },
+  });
+}
+
+if (process.env.SERVICE_IMAGE_CORE) {
+  DashCoreOptions.setDefaultCustomOptions({
+    container: {
+      image: process.env.SERVICE_IMAGE_CORE,
+    },
+  });
+}
+
+if (process.env.SERVICE_IMAGE_DAPI) {
+  DapiOptions.setDefaultCustomOptions({
+    container: {
+      image: process.env.SERVICE_IMAGE_DAPI,
+    },
+  });
+}
+
+if (process.env.SERVICE_IMAGE_INSIGHT) {
+  InsightOptions.setDefaultCustomOptions({
+    container: {
+      image: process.env.SERVICE_IMAGE_INSIGHT,
+    },
+  });
+}
 
 beforeEach(function beforeEach() {
   if (!this.sinon) {
