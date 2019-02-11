@@ -1,6 +1,6 @@
 const startDapi = require('../../../lib/mocha/startDapi');
 
-describe('startDapi', () => {
+describe.skip('startDapi', () => {
   describe('One instance', () => {
     let instance;
     startDapi()
