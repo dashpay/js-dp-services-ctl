@@ -1,5 +1,4 @@
-const path = require('path');
-const dotenvSafe = require('dotenv-safe');
+const dotenv = require('dotenv');
 const dotenvExpand = require('dotenv-expand');
 
 const { expect, use } = require('chai');
@@ -20,9 +19,7 @@ use(dirtyChai);
 
 process.env.NODE_ENV = 'test';
 
-const dotenvConfig = dotenvSafe.config({
-  path: path.resolve(__dirname, '..', '.env'),
-});
+const dotenvConfig = dotenv.config();
 dotenvExpand(dotenvConfig);
 
 DashApiOptions.setDefaultCustomOptions({
