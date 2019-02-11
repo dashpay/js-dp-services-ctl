@@ -3,7 +3,9 @@
 [![Build Status](https://travis-ci.com/dashevo/js-evo-services-ctl.svg?branch=master)](https://travis-ci.com/dashevo/js-evo-services-ctl)
 [![NPM version](https://img.shields.io/npm/v/@dashevo/js-evo-services-ctl.svg)](https://npmjs.org/package/@dashevo/js-evo-services-ctl)
 
-> Control Dash Platform services using JavaScript and Docker. The tool provides a convenient JavaScript
+> Control Dash Platform services using JavaScript and Docker
+
+The tool provides a convenient JavaScript interface for configuration and interaction with Dash Platform services. Services are started in Docker containers.
   interface for configuration and interaction with Dash Platform services.
   Services are started in Docker containers.
 
