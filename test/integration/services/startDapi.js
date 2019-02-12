@@ -2,7 +2,7 @@ const os = require('os');
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { startDapi } = require('../../../lib');
 
-describe('startDapi', function main() {
+describe.skip('startDapi', function main() {
   this.timeout(180000);
 
   before(removeContainers);
@@ -122,7 +122,7 @@ describe('startDapi', function main() {
     });
   });
 
-  xdescribe('Three instance', () => {
+  describe('Three instance', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
     let instances;
 
@@ -139,6 +139,7 @@ describe('startDapi', function main() {
       };
       instances = await startDapi.many(3, options);
     });
+
     after(async () => {
       const promises = instances.map(instance => instance.remove());
       await Promise.all(promises);
