@@ -24,7 +24,7 @@ describe.skip('startDapi', () => {
     });
   });
 
-  xdescribe('Three instances', () => {
+  describe('Three instances', () => {
     let instances;
     startDapi.many(3)
       .then((_instance) => {
