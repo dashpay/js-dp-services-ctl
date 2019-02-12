@@ -179,6 +179,7 @@ describe('createDashCore', function main() {
 
       const rpcClient = dashCore.getApi();
       const { result } = await rpcClient.getInfo();
+
       expect(result).to.have.property('version');
     });
 
@@ -189,6 +190,7 @@ describe('createDashCore', function main() {
 
       const rpcClient = dashCore.getApi();
       const { result } = await rpcClient.getInfo();
+
       expect(result).to.have.property('version');
     });
   });
@@ -208,9 +210,13 @@ describe('createDashCore', function main() {
           ],
         },
       };
+
       instance = await createDashCore(options);
+
       await instance.start();
+
       const { Mounts } = await instance.container.inspect();
+
       expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
@@ -224,32 +230,26 @@ describe('createDashCore', function main() {
           ],
         },
       });
+
       instance = await createDashCore(options);
+
       await instance.start();
+
       const { Mounts } = await instance.container.inspect();
+
       expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
     it('should start an instance with custom default DashCoreOptions', async () => {
-      const rootPath = process.cwd();
-      const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = {
-        container: {
-          volumes: [
-            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-          ],
-        },
-      };
+      const options = new DashCoreOptions();
 
-      DashCoreOptions.setDefaultCustomOptions(options);
-
-      instance = await createDashCore();
+      instance = await createDashCore(options);
 
       await instance.start();
 
-      const { Mounts } = await instance.container.inspect();
+      const { Config: { Image: imageName } } = await instance.container.inspect();
 
-      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+      expect(imageName).to.contain('dashcore');
     });
   });
 });
