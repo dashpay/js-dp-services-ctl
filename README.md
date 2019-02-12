@@ -1,252 +1,174 @@
-# js-evo-services-ctl
-Javascript library for manipulation of evolution services using Docker.
+# Dash Platform services ctl 
+
+[![Build Status](https://travis-ci.com/dashevo/js-evo-services-ctl.svg?branch=master)](https://travis-ci.com/dashevo/js-evo-services-ctl)
+[![NPM version](https://img.shields.io/npm/v/@dashevo/js-evo-services-ctl.svg)](https://npmjs.org/package/@dashevo/js-evo-services-ctl)
+
+> Control Dash Platform services using JavaScript and Docker
+
+The tool provides a convenient JavaScript interface for configuration and interaction with Dash Platform services. Services are started in Docker containers.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Available DP services](#available-dp-services)
+    - [Services configuration](#services-configuration)
+    - [Integration with Mocha](#integration-with-mocha)
+- [Maintainers](#maintainers)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Installation
 
-Just include this repo in your `package.json`
-```json
-{
-  "dependencies": {
-      "@dashevo/js-evo-services-ctl": "git+ssh://git@github.com/dashevo/js-evo-services-ctl.git#master"
-  }
-}
-```
+1. [Install Docker](https://docs.docker.com/install/)
+2. Install NPM package:
 
-## Usage (briefly)
+    ```sh
+    npm install @dashevo/js-evo-services-ctl
+    ```
 
-### Start IPFS
+## Usage
+
+### Available DP services
+
+#### Drive
+
+[Drive](https://github.com/dashevo/dashdrive) service starts a bunch of related services:
+- Drive Api
+    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/driveApi/DriveApi.js)
+    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/driveApi/DriveApiOptions.js)
+- Drive Sync
+    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/driveSync/DriveSync.js)
+    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/driveSync/DriveSyncOptions.js)
+- [IPFS](#ipfs)
+- [MongoDB](#mongodb)
+- [Dash Core](#dash-core)
+
+#### DAPI 
+
+[DAPI](https://github.com/dashevo/dapi) service starts all DP services:
+- DAPI
+    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/dapi/Dapi.js)
+    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/dapi/DapiOptions.js)
+- [Drive Api](#drive)
+- [Drive Sync](#drive)
+- [IPFS](#ipfs)
+- [MongoDB](#mongodb)
+- [DashCore](#dash-core)
+- [Insight](#insight)
+
+#### Dash Core
+
+[Dash Core](https://github.com/dashpay/dash) service
+    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/dashCore/DashCore.js)
+    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/dashCore/DashCoreOptions.js)
+
+#### Insight
+
+- [Insight](https://github.com/dashevo/insight-api) service
+    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/insight/Insight.js)
+    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/insight/InsightOptions.js)
+
+#### IPFS
+
+- [IPFS](https://github.com/ipfs/go-ipfs) service
+    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/IPFS/IPFS.js)
+    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/IPFS/IPFSOptions.js)
+
+#### MongoDB
+
+- [MongoDB](https://www.mongodb.com/) service
+    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/mongoDb/MongoDb.js)
+    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/mongoDb/MongoDbOptions.js)
+
+### Starting a service
 
 ```js
+// Export service(s)
 const { startIPFS } = require('@dashevo/js-evo-services-ctl');
 
-let ipfsApi;
+// This is optional. Default options listed in options class
 const options = {
-  awsDefaultRegion,
   port: 5001, // IPFS port
-  container, // See container options
-  aws, // See AWS options
 };
-startIPFS(options).then((instance) => {
-  ipfsApi = instance;
-});
+
+// Start service
+const ipfs = await startIPFS(options);
+
+// Get peer ID
+const peerId = await ipfs.getApi().id();
+
+// Stop IPFS
+await ipfs.remove();
 ```
 
-Use `many` method to start several IPFS instances:
+Use `many` method to start several instances:
 
 ```js
 const { startIPFS } = require('@dashevo/js-evo-services-ctl');
 
-let ipfsApi1;
-let ipfsApi2;
+// This is optional. Default options listed in options class
 const options = {
-  awsDefaultRegion,
-  port,
-  container, // See container options
-  aws, // See AWS options
+  port: 5001, // IPFS port
 };
-startIPFS.many(2, options).then((instances) => {
-  [ipfsApi1, ipfsApi2] = instances;
+
+// Start two services
+const ipfsNodes = await startIPFS.many(2, options);
+
+// Get peer IDs
+const [peerId1, peerId2] = await Promise.all(
+  ipfsNodes.map(ipfs => ipfs.getApi().id()),
+);
+
+// Stop IPFS nodes
+await Promise.all(
+  ipfsNodes.map(ipfs => ipfs.remove()),
+);
+```
+
+### Services configuration
+
+Each service has default options which can be overwrited in three ways:
+1. Pass options as plain JS object to `start[service]` or `create[service]` methods
+2. Pass instance of options class to `start[service]` or `create[service]` methods
+3. Pass default options as plain JS object to `setDefaultCustomOptions` method of options class
+
+### Integration with Mocha
+
+Services [Mocha](https://mochajs.org/) hooks provide automatization for your mocha tests:
+- Removing obsolete related Docker containers (`before`)
+- Cleaning a service state between tests (`beforeEach`, `afterEach`)
+- Stopping service after tests (`after`)
+
+```js
+// Export service(s) with mocha hooks
+const { mocha: { startIPFS } } = require('@dashevo/js-evo-services-ctl');
+
+describe('Test suite', () => {
+  let ipfsApi;
+
+  startIPFS().then(ipfs => () => {
+    ipfsApi = ipfs.getApi();
+  });
+
+  it('should do something', async () => {
+    const peerId = await ipfsApi.id();
+
+    expect(peerId).to.be.a('string');
+  });
 });
 ```
 
- - `startIPFS` returns instance of [IpfsApi](https://github.com/ipfs/js-ipfs-api#api)
+## Maintainers
 
-### Start Dash Core
+[@shumkov](https://github.com/shumkov)
+[@jawid-h](https://github.com/jawid-h)
+[@abvgedeika](https://github.com/abvgedeika)
 
-```js
-const { startDashCore } = require('@dashevo/js-evo-services-ctl');
+## Contributing
 
-let dashCoreInstance;
-const options = {
-  awsDefaultRegion,
-  port,
-  rpcuser,
-  rpcpassword,
-  rpcport,
-  zmqpubrawtx,
-  zmqpubrawtxlock,
-  zmqpubhashblock,
-  zmqpubhashtx,
-  zmqpubhashtxlock,
-  zmqpubrawblock,
-  container, // See container options
-  aws, // See AWS options
-};
-startDashCore(options).then((instance) => {
-  dashCoreInstance = instance;
-});
-```
+Feel free to dive in! [Open an issue](https://github.com/dashevo/js-evo-services-ctl/issues/new) or submit PRs.
 
- - Use `many` method to start several Dash Core instances
- - `startDashCore` returns instance of [DashCore](lib/dashCore/DashCore.js)
- 
-### Start MongoDB
+## License
 
-```js
-const { startMongoDb } = require('@dashevo/js-evo-services-ctl');
-
-let mongoDb;
-const options = {
-  awsDefaultRegion,
-  port,
-  name,
-  container, // See container options
-  aws, // See AWS options
-};
-startMongoDb(options).then((instance) => {
-  mongoDb = instance;
-});
-```
-
-- Use `many` method to start several MongoDb instances
-- `startMongoDb` returns instance of [MongoDb](lib/mongoDb/MongoDb.js)
- 
-### Start Dash Drive
-
-```js
-const { startDashDrive } = require('@dashevo/js-evo-services-ctl');
-
-let dashDriveInstance;
-const options = {
-  rpcPort,
-  container, // See container options
-  aws, // See AWS options
-};
-startDashDrive(options).then((instance) => {
-  dashDriveInstance = instance;
-});
-```
-
-- Use `many` method to start several Dash Drive instances
-- `startDashDrive` returns a set of services it depends on inluding itself:
-  - [ipfs](https://github.com/ipfs/js-ipfs-api#api)
-  - [dashCore](lib/dashCore/DashCore.js)
-  - [driveApi](lib/services/driveApi/DriveApi.js)
-  - [driveSync](lib/services/driveSync/DriveSync.js)
-  - [mongoDb](lib/mongoDb/MongoDb.js)
-
-### Services customization
-Each service has its own customizable options:
-  - [ipfs](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/IPFS/IPFSOptions.js)
-  - [dashCore](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/dashCore/DashCoreOptions.js)
-  - [driveApi](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/driveApi/DriveApiOptions.js)
-  - [driveSync](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/driveSync/DriveSyncOptions.js)
-  - [mongoDb](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/mongoDb/MongoDbOptions.js)
-
-These options contains:
-- Specifics about service (ports, endpoints, DB name, ...)
-- Specifics about container (image, volumes, cmd, ...)
-- Specifics about AWS (region, credentials, ...)
-
-Container options (same for all services):
-```js
-const container = {
-  network: {
-    name: '',
-    driver: '',
-  },
-  image: '',
-  cmd: [],
-  volumes: [],
-  envs: [],
-  ports: [],
-  labels: {
-    testHelperName: '',
-  },
-};
-```
-
-AWS options (same for all services):
-```js
-// This set up is not needed if you have:
-// ~/.aws/credentials
-// ~/.aws/config
-const aws = {
-  region,
-  accessKeyId,
-  secretAccessKey,
-};
-```
-
-Service options:
-```js
-// IPFS
-const options = {
-  port,
-  container, // See container options
-};
-
-// DASHCORE
-const options = {
-  port,
-  rpcuser,
-  rpcpassword,
-  rpcport,
-  zmqpubrawtx,
-  zmqpubrawtxlock,
-  zmqpubhashblock,
-  zmqpubhashtx,
-  zmqpubhashtxlock,
-  zmqpubrawblock,
-  container, // See container options
-  aws, // See AWS options
-};
-
-// DASHDRIVE
-const options = {
-  rpcPort,
-  container, // See container options
-  aws, // See AWS options
-};
-
-// MONGODB
-const options = {
-  port,
-  name,
-  container, // See container options
-  aws, // See AWS options
-};
-```
-
-Extension of the options class it's also possible:
-```js
-const DashCoreOptions = require('./lib/dashCoreOptions');
-
-class DashCoreCustomOptions extends DashCoreOptions {}
-
-const dashCoreCustomOptions = new DashCoreCustomOptions();
-```
-
-These options should be pass to the `start[ServiceName]` helper or `create[ServiceName]` factory.
-```js
-const startDashCore = require('./lib/dashCore/startDashCore');
-const createDashCore = require('./lib/dashCore/createDashCore');
-
-// With extended class
-const dashCoreCustomOptions = new DashCoreCustomOptions();
-startDashCore(dashCoreCustomOptions);
-startDashCore.many(3, dashCoreCustomOptions);
-createDashCore(dashCoreCustomOptions);
-
-// With plain object options
-const dashCoreOptions = {
-  port,
-  rpcuser,
-  rpcpassword,
-  rpcport,
-  container, // See container options
-};
-startDashCore(dashCoreOptions);
-startDashCore.many(3, dashCoreOptions);
-createDashCore(dashCoreOptions);
-```
-
-## Releasing to NPM
-
-1. Create new branch if you don't have it: `git checkout -b bump-<version>`
-2. Bump version with [npm version](https://docs.npmjs.com/cli/version) command
-3. Push commit changes and create PR
-4. Make sure PR is approved and all checks pass
-5. Merge squash to master and wait until the Travis build is green
-6. Push the new tag: `git push origin <tag_name>` (it will trigger Travis job for NPM publishing)
-7. Make sure Travis job is green and package is published
+[MIT](LICENSE) &copy; Dash Core Group, Inc.

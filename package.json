@@ -1,7 +1,7 @@
 {
   "name": "@dashevo/js-evo-services-ctl",
   "version": "0.2.0",
-  "description": "Javascript library for manipulation of Evolution services using Docker",
+  "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
   },
@@ -15,11 +15,23 @@
     "type": "git",
     "url": "git+https://github.com/dashevo/js-evo-services-ctl.git"
   },
-  "authors": [
-    "David Rey Acosta",
-    "Ivan Shumkov",
-    "Nathan Marley",
-    "Djavid Gabibiyan"
+  "contributors": [
+    {
+      "name": "David Rey Acosta",
+      "url": "https://github.com/dreyacosta"
+    },
+    {
+      "name": "Ivan Shumkov",
+      "url": "https://github.com/shumkov"
+    },
+    {
+      "name": "Djavid Gabibiyan",
+      "url": "https://github.com/jawid-h"
+    },
+    {
+      "name": "Andrei Abvgedeika",
+      "url": "https://github.com/abvgedeika"
+    }
   ],
   "devDependencies": {
     "chai": "^4.2.0",
