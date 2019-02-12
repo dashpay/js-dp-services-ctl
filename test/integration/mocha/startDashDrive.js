@@ -43,7 +43,7 @@ describe('startDashDrive', () => {
     });
 
     it('should have DashCore containers running', async () => {
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].dashCore.container.inspect();
 
         expect(State.Status).to.be.equal('running');
