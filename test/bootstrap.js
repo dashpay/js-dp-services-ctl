@@ -28,9 +28,7 @@ if (process.env.SERVICE_IMAGE_DRIVE) {
       image: process.env.SERVICE_IMAGE_DRIVE,
     },
   });
-}
 
-if (process.env.SERVICE_IMAGE_DRIVE) {
   DashSyncOptions.setDefaultCustomOptions({
     container: {
       image: process.env.SERVICE_IMAGE_DRIVE,
