@@ -10,75 +10,78 @@ describe('createMongoDb', function main() {
   before(removeContainers);
 
   describe('usage', () => {
-    let instance;
+    let mongoDbService;
 
     before(async () => {
-      instance = await createMongoDb();
+      mongoDbService = await createMongoDb();
     });
-    after(async () => instance.remove());
+
+    after(async () => mongoDbService.remove());
 
     it('should start an instance with a bridge dash_test_network', async () => {
-      await instance.start();
+      await mongoDbService.start();
+
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.inspect();
+      const { NetworkSettings: { Networks } } = await mongoDbService.container.inspect();
       const networks = Object.keys(Networks);
-      expect(Driver).to.equal('bridge');
-      expect(networks.length).to.equal(1);
-      expect(networks[0]).to.equal('dash_test_network');
+
+      expect(Driver).to.be.equal('bridge');
+      expect(networks.length).to.be.equal(1);
+      expect(networks[0]).to.be.equal('dash_test_network');
     });
 
     it('should start an instance with the default options', async () => {
-      await instance.start();
-      const { Args } = await instance.container.inspect();
-      expect(Args).to.deep.equal([
-        'mongod',
-      ]);
+      await mongoDbService.start();
+
+      const { Args } = await mongoDbService.container.inspect();
+
+      expect(Args).to.be.deep.equal(['mongod']);
     });
 
     it('should get Mongo db', async () => {
-      await instance.start();
+      await mongoDbService.start();
 
-      const db = await instance.getDb();
+      const db = await mongoDbService.getDb();
       const collection = db.collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.equal(0);
+      expect(count).to.be.equal(0);
     });
 
     it('should get Mongo client', async () => {
-      await instance.start();
+      await mongoDbService.start();
 
-      const client = await instance.getClient();
+      const client = await mongoDbService.getClient();
       const collection = client.db('test').collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.equal(0);
+      expect(count).to.be.equal(0);
     });
 
     it('should clean Mongo database', async () => {
-      await instance.start();
+      await mongoDbService.start();
 
-      const client = await instance.getClient();
+      const client = await mongoDbService.getClient();
       await client.db('other-db').createCollection('some-collection');
 
-      const adminDb = await instance.getDb().admin();
+      const adminDb = await mongoDbService.getDb().admin();
       let dbList = await adminDb.listDatabases({ onlyNames: true });
       dbList = dbList.databases.map(db => db.name);
 
-      expect(dbList).to.deep.equal([
+      expect(dbList).to.be.deep.equal([
         'admin',
         'config',
         'local',
         'other-db',
       ]);
 
-      await instance.clean();
+      await mongoDbService.clean();
 
       dbList = await adminDb.listDatabases({ onlyNames: true });
       dbList = dbList.databases.map(db => db.name);
 
-      expect(dbList).to.deep.equal([
+      expect(dbList).to.be.deep.equal([
         'admin',
         'config',
         'local',
@@ -87,28 +90,29 @@ describe('createMongoDb', function main() {
   });
 
   describe('Mongo client', () => {
-    let instance;
+    let mongoDbService;
 
     before(async () => {
-      instance = await createMongoDb();
+      mongoDbService = await createMongoDb();
     });
-    after(async () => instance.remove());
+
+    after(async () => mongoDbService.remove());
 
     it('should not fail if mongod is not running yet (MongoNetworkError)', async () => {
-      await instance.start();
+      await mongoDbService.start();
 
-      const db = await instance.getDb();
+      const db = await mongoDbService.getDb();
       const collection = db.collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.equal(0);
+      expect(count).to.be.equal(0);
     });
   });
 
   describe('options', async () => {
-    let instance;
+    let mongoDbService;
 
-    afterEach(async () => instance.remove());
+    afterEach(async () => mongoDbService.remove());
 
     it('should start an instance with plain object options', async () => {
       const rootPath = process.cwd();
@@ -120,10 +124,14 @@ describe('createMongoDb', function main() {
           ],
         },
       };
-      instance = await createMongoDb(options);
-      await instance.start();
-      const { Mounts } = await instance.container.inspect();
+
+      mongoDbService = await createMongoDb(options);
+
+      await mongoDbService.start();
+
+      const { Mounts } = await mongoDbService.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
+
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
@@ -137,10 +145,14 @@ describe('createMongoDb', function main() {
           ],
         },
       });
-      instance = await createMongoDb(options);
-      await instance.start();
-      const { Mounts } = await instance.container.inspect();
+
+      mongoDbService = await createMongoDb(options);
+
+      await mongoDbService.start();
+
+      const { Mounts } = await mongoDbService.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
+
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
@@ -154,11 +166,15 @@ describe('createMongoDb', function main() {
           ],
         },
       };
+
       MongoDbOptions.setDefaultCustomOptions(options);
-      instance = await createMongoDb();
-      await instance.start();
-      const { Mounts } = await instance.container.inspect();
+      mongoDbService = await createMongoDb();
+
+      await mongoDbService.start();
+
+      const { Mounts } = await mongoDbService.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
+
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });

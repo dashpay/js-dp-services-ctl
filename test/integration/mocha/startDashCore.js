@@ -1,28 +1,34 @@
 const startDashCore = require('../../../lib/mocha/startDashCore');
 
 describe('startDashCore', () => {
-  describe('One instance', () => {
-    let instance;
-    startDashCore().then((_instance) => {
-      instance = _instance;
+  describe('One node', () => {
+    let dashCoreNode;
+
+    startDashCore().then((instance) => {
+      dashCoreNode = instance;
     });
 
     it('should has container running', async () => {
-      const { State } = await instance.container.inspect();
-      expect(State.Status).to.equal('running');
+      const { State } = await dashCoreNode.container.inspect();
+
+      expect(State.Status).to.be.equal('running');
     });
   });
 
-  describe('Three instances', () => {
-    let instances;
-    startDashCore.many(3).then((_instances) => {
-      instances = _instances;
+  describe('Many nodes', () => {
+    const nodesCount = 2;
+
+    let dashCoreNodes;
+
+    startDashCore.many(nodesCount).then((instances) => {
+      dashCoreNodes = instances;
     });
 
     it('should have containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].container.inspect();
-        expect(State.Status).to.equal('running');
+      for (let i = 0; i < nodesCount; i++) {
+        const { State } = await dashCoreNodes[i].container.inspect();
+
+        expect(State.Status).to.be.equal('running');
       }
     });
   });

@@ -16,6 +16,7 @@ async function createInstance(options) {
   const authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());
   const image = new Image(imageName, authorizationToken);
   const container = new Container(networkName, imageName, containerOptions);
+
   return new DockerService(network, image, container, options);
 }
 
@@ -27,29 +28,33 @@ describe('DockerService', function main() {
   const options = new DashCoreOptions();
 
   describe('usage', () => {
-    let instance;
+    let dsahCore;
 
     before(async () => {
-      instance = await createInstance(options);
+      dsahCore = await createInstance(options);
     });
-    after(async () => instance.remove());
+
+    after(async () => dsahCore.remove());
 
     it('should start a DockerService with DashCoreOptions network options', async () => {
-      await instance.start();
+      await dsahCore.start();
       const { name, driver } = options.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
       const { Driver } = await dockerNetwork.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.inspect();
+      const { NetworkSettings: { Networks } } = await dsahCore.container.inspect();
       const networks = Object.keys(Networks);
-      expect(Driver).to.equal(driver);
-      expect(networks.length).to.equal(1);
-      expect(networks[0]).to.equal(name);
+
+      expect(Driver).to.be.equal(driver);
+      expect(networks.length).to.be.equal(1);
+      expect(networks[0]).to.be.equal(name);
     });
 
     it('should start an instance with the DashCoreOptions options', async () => {
-      await instance.start();
-      const { Args } = await instance.container.inspect();
-      expect(Args).to.deep.equal([
+      await dsahCore.start();
+
+      const { Args } = await dsahCore.container.inspect();
+
+      expect(Args).to.be.deep.equal([
         `-port=${options.getDashdPort()}`,
         `-rpcuser=${options.getRpcUser()}`,
         `-rpcpassword=${options.getRpcPassword()}`,
@@ -72,36 +77,40 @@ describe('DockerService', function main() {
     });
 
     it('should not crash if start is called multiple times', async () => {
-      await instance.start();
-      await instance.start();
+      await dsahCore.start();
+      await dsahCore.start();
     });
 
     it('should stop the instance', async () => {
-      await instance.stop();
-      const { State } = await instance.container.inspect();
-      expect(State.Status).to.equal('exited');
+      await dsahCore.stop();
+
+      const { State } = await dsahCore.container.inspect();
+
+      expect(State.Status).to.be.equal('exited');
     });
 
     it('should start after stop', async () => {
-      await instance.start();
-      const { State } = await instance.container.inspect();
-      expect(State.Status).to.equal('running');
+      await dsahCore.start();
+
+      const { State } = await dsahCore.container.inspect();
+
+      expect(State.Status).to.be.equal('running');
     });
 
     it('should return instance IP', () => {
-      expect(instance.getIp()).to.be.equal(instance.getIp());
+      expect(dsahCore.getIp()).to.be.equal(dsahCore.getIp());
     });
 
     it('should clean the instance', async () => {
-      await instance.remove();
+      await dsahCore.remove();
 
-      let error;
       try {
-        await instance.container.inspect();
-      } catch (err) {
-        error = err;
+        await dsahCore.container.inspect();
+
+        expect.fail('should throw error "Container not found"');
+      } catch (e) {
+        expect(e.message).to.be.equal('Container not found');
       }
-      expect(error.message).to.equal('Container not found');
     });
   });
 
@@ -116,9 +125,11 @@ describe('DockerService', function main() {
       instanceTwo = await createInstance(new DashCoreOptions());
       instanceThree = await createInstance(new DashCoreOptions());
     });
+
     beforeEach(function before() {
       sandbox = this.sinon;
     });
+
     after(async () => {
       await Promise.all([
         instanceOne.remove(),
@@ -131,6 +142,7 @@ describe('DockerService', function main() {
       instanceOne.container.ports = ['4444:4444'];
       instanceTwo.container.ports = ['4444:4444'];
       instanceThree.container.ports = ['4444:4444'];
+
       const instanceThreeSpy = sandbox.spy(instanceThree, 'start');
 
       await instanceOne.start();

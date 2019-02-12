@@ -8,9 +8,9 @@ describe('startDashCore', function main() {
 
   before(removeContainers);
 
-  describe('One instance', () => {
+  describe('One node', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let instance;
+    let dashCoreNode;
 
     before(async () => {
       const rootPath = process.cwd();
@@ -20,25 +20,31 @@ describe('startDashCore', function main() {
         ],
       };
       const options = { container };
-      instance = await startDashCore(options);
+
+      dashCoreNode = await startDashCore(options);
     });
-    after(async () => instance.remove());
+
+    after(async () => dashCoreNode.remove());
 
     it('should has container running', async () => {
-      const { State, Mounts } = await instance.container.inspect();
-      expect(State.Status).to.equal('running');
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const { State, Mounts } = await dashCoreNode.container.inspect();
+
+      expect(State.Status).to.be.equal('running');
+      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
     it('should has RPC connected', async () => {
-      const { result } = await instance.rpcClient.getInfo();
+      const { result } = await dashCoreNode.rpcClient.getInfo();
+
       expect(result).to.have.property('version');
     });
   });
 
-  describe('Three instances', () => {
+  describe('Many nodes', () => {
+    const nodesCount = 2;
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let instances;
+
+    let dashCoreNodes;
 
     before(async () => {
       const rootPath = process.cwd();
@@ -48,32 +54,39 @@ describe('startDashCore', function main() {
         ],
       };
       const options = { container };
-      instances = await startDashCore.many(3, options);
+
+      dashCoreNodes = await startDashCore.many(nodesCount, options);
     });
+
     after(async () => {
-      const promises = instances.map(instance => instance.remove());
-      await Promise.all(promises);
+      await Promise.all(
+        dashCoreNodes.map(instance => instance.remove()),
+      );
     });
 
     it('should have containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].container.inspect();
-        expect(State.Status).to.equal('running');
+      for (let i = 0; i < nodesCount; i++) {
+        const { State, Mounts } = await dashCoreNodes[i].container.inspect();
+
+        expect(State.Status).to.be.equal('running');
         expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
       }
     });
 
-    it('should propagate blocks between instances', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { result: blocks } = await instances[i].rpcClient.getBlockCount();
+    it('should propagate blocks between nodes', async () => {
+      for (let i = 0; i < nodesCount; i++) {
+        const { result: blocks } = await dashCoreNodes[i].rpcClient.getBlockCount();
+
         expect(blocks).to.be.equal(1);
       }
 
-      await instances[0].rpcClient.generate(2);
+      await dashCoreNodes[0].rpcClient.generate(2);
+
       await wait(5000);
 
-      for (let i = 0; i < 3; i++) {
-        const { result: blocks } = await instances[i].rpcClient.getBlockCount();
+      for (let i = 0; i < nodesCount; i++) {
+        const { result: blocks } = await dashCoreNodes[i].rpcClient.getBlockCount();
+
         expect(blocks).to.be.equal(3);
       }
     });

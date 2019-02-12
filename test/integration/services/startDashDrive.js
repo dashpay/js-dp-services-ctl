@@ -6,9 +6,9 @@ describe('startDashDrive', function main() {
 
   before(removeContainers);
 
-  describe('One instance', () => {
+  describe('One node', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let instance;
+    let driveNode;
 
     before(async () => {
       const rootPath = process.cwd();
@@ -21,85 +21,99 @@ describe('startDashDrive', function main() {
         dashCore: { container },
         dashDrive: { container },
       };
-      instance = await startDashDrive(options);
+
+      driveNode = await startDashDrive(options);
     });
-    after(async () => instance.remove());
+
+    after(async () => driveNode.remove());
 
     it('should has DashCore container running', async () => {
-      const { State } = await instance.dashCore.container.inspect();
-      expect(State.Status).to.equal('running');
+      const { State } = await driveNode.dashCore.container.inspect();
+
+      expect(State.Status).to.be.equal('running');
     });
 
     it('should has MongoDb container running', async () => {
-      const { State } = await instance.mongoDb.container.inspect();
-      expect(State.Status).to.equal('running');
+      const { State } = await driveNode.mongoDb.container.inspect();
+
+      expect(State.Status).to.be.equal('running');
     });
 
     it('should has Drive API container running', async () => {
-      const { State, Mounts } = await instance.driveApi.container.inspect();
-      expect(State.Status).to.equal('running');
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const { State, Mounts } = await driveNode.driveApi.container.inspect();
+
+      expect(State.Status).to.be.equal('running');
+      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
     it('should has Drive sync container running', async () => {
-      const { State, Mounts } = await instance.driveSync.container.inspect();
-      expect(State.Status).to.equal('running');
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      const { State, Mounts } = await driveNode.driveSync.container.inspect();
+
+      expect(State.Status).to.be.equal('running');
+      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
     it('should has IPFS container running', async () => {
-      const { State } = await instance.ipfs.container.inspect();
-      expect(State.Status).to.equal('running');
+      const { State } = await driveNode.ipfs.container.inspect();
+
+      expect(State.Status).to.be.equal('running');
     });
 
     it('should DashDrive container has the right env variables', async () => {
-      const { Config: { Env: ApiEnvs } } = await instance.driveApi.container.inspect();
-      const { Config: { Env: SyncEnvs } } = await instance.driveSync.container.inspect();
+      const { Config: { Env: ApiEnvs } } = await driveNode.driveApi.container.inspect();
+      const { Config: { Env: SyncEnvs } } = await driveNode.driveSync.container.inspect();
+
       const expectedEnv = [
-        `DASHCORE_ZMQ_PUB_HASHBLOCK=${instance.dashCore.getZmqSockets().hashblock}`,
-        `DASHCORE_JSON_RPC_HOST=${instance.dashCore.getIp()}`,
-        `DASHCORE_JSON_RPC_PORT=${instance.dashCore.options.getRpcPort()}`,
-        `DASHCORE_JSON_RPC_USER=${instance.dashCore.options.getRpcUser()}`,
-        `DASHCORE_JSON_RPC_PASS=${instance.dashCore.options.getRpcPassword()}`,
-        `STORAGE_IPFS_MULTIADDR=${instance.ipfs.getIpfsAddress()}`,
-        `STORAGE_MONGODB_URL=mongodb://${instance.mongoDb.getIp()}:27017`,
+        `DASHCORE_ZMQ_PUB_HASHBLOCK=${driveNode.dashCore.getZmqSockets().hashblock}`,
+        `DASHCORE_JSON_RPC_HOST=${driveNode.dashCore.getIp()}`,
+        `DASHCORE_JSON_RPC_PORT=${driveNode.dashCore.options.getRpcPort()}`,
+        `DASHCORE_JSON_RPC_USER=${driveNode.dashCore.options.getRpcUser()}`,
+        `DASHCORE_JSON_RPC_PASS=${driveNode.dashCore.options.getRpcPassword()}`,
+        `STORAGE_IPFS_MULTIADDR=${driveNode.ipfs.getIpfsAddress()}`,
+        `STORAGE_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:27017`,
       ];
 
       const apiEnvs = ApiEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
-      expect(apiEnvs.length).to.equal(expectedEnv.length);
-
       const syncEnvs = SyncEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
-      expect(syncEnvs.length).to.equal(expectedEnv.length);
+
+      expect(apiEnvs.length).to.be.equal(expectedEnv.length);
+      expect(syncEnvs.length).to.be.equal(expectedEnv.length);
     });
 
     it('should be on the same network (DashCore, DashDrive, IPFS, and MongoDb)', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
-      } = await instance.dashCore.container.inspect();
+      } = await driveNode.dashCore.container.inspect();
+
       const {
         NetworkSettings: driveApiNetworkSettings,
-      } = await instance.driveApi.container.inspect();
+      } = await driveNode.driveApi.container.inspect();
+
       const {
         NetworkSettings: driveSyncNetworkSettings,
-      } = await instance.driveSync.container.inspect();
+      } = await driveNode.driveSync.container.inspect();
+
       const {
         NetworkSettings: ipfsNetworkSettings,
-      } = await instance.ipfs.container.inspect();
+      } = await driveNode.ipfs.container.inspect();
+
       const {
         NetworkSettings: mongoDbNetworkSettings,
-      } = await instance.mongoDb.container.inspect();
+      } = await driveNode.mongoDb.container.inspect();
 
-      expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveApiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveSyncNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(ipfsNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(dashCoreNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveApiNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveSyncNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
+      expect(Object.keys(ipfsNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
+      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
     });
   });
 
-  describe('Three instance', () => {
+  describe('Many nodes', () => {
+    const nodesCount = 2;
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let instances;
+
+    let driveNodes;
 
     before(async () => {
       const rootPath = process.cwd();
@@ -112,47 +126,53 @@ describe('startDashDrive', function main() {
         dashCore: { container },
         dashDrive: { container },
       };
-      instances = await startDashDrive.many(3, options);
+
+      driveNodes = await startDashDrive.many(nodesCount, options);
     });
+
     after(async () => {
-      const promises = instances.map(instance => instance.remove());
-      await Promise.all(promises);
+      await Promise.all(driveNodes.map(instance => instance.remove()));
     });
 
     it('should have DashCore containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].dashCore.container.inspect();
-        expect(State.Status).to.equal('running');
+      for (let i = 0; i < nodesCount; i++) {
+        const { State } = await driveNodes[i].dashCore.container.inspect();
+
+        expect(State.Status).to.be.equal('running');
       }
     });
 
     it('should have MongoDb containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].mongoDb.container.inspect();
-        expect(State.Status).to.equal('running');
+      for (let i = 0; i < nodesCount; i++) {
+        const { State } = await driveNodes[i].mongoDb.container.inspect();
+
+        expect(State.Status).to.be.equal('running');
       }
     });
 
     it('should have Drive API containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].driveApi.container.inspect();
-        expect(State.Status).to.equal('running');
-        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      for (let i = 0; i < nodesCount; i++) {
+        const { State, Mounts } = await driveNodes[i].driveApi.container.inspect();
+
+        expect(State.Status).to.be.equal('running');
+        expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
       }
     });
 
     it('should have Drive sync containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].driveSync.container.inspect();
-        expect(State.Status).to.equal('running');
-        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      for (let i = 0; i < nodesCount; i++) {
+        const { State, Mounts } = await driveNodes[i].driveSync.container.inspect();
+
+        expect(State.Status).to.be.equal('running');
+        expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
       }
     });
 
     it('should have IPFS containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State } = await instances[i].ipfs.container.inspect();
-        expect(State.Status).to.equal('running');
+      for (let i = 0; i < nodesCount; i++) {
+        const { State } = await driveNodes[i].ipfs.container.inspect();
+
+        expect(State.Status).to.be.equal('running');
       }
     });
   });
