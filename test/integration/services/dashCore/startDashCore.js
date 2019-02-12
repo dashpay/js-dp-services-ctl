@@ -26,14 +26,14 @@ describe('startDashCore', function main() {
 
     after(async () => dashCoreNode.remove());
 
-    it('should has container running', async () => {
+    it('should have container running', async () => {
       const { State, Mounts } = await dashCoreNode.container.inspect();
 
       expect(State.Status).to.be.equal('running');
       expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
-    it('should has RPC connected', async () => {
+    it('should have RPC connected', async () => {
       const { result } = await dashCoreNode.rpcClient.getInfo();
 
       expect(result).to.have.property('version');

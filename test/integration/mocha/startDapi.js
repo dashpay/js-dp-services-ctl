@@ -8,7 +8,7 @@ describe.skip('startDapi', () => {
       dapiNode = instance;
     });
 
-    it('should has all Dapi containers running', async () => {
+    it('should have all Dapi containers running', async () => {
       const { State: stateDapi } = await dapiNode.dapi.container.inspect();
       expect(stateDapi.Status).to.be.equal('running');
 

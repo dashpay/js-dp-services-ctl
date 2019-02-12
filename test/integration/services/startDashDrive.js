@@ -27,33 +27,33 @@ describe('startDashDrive', function main() {
 
     after(async () => driveNode.remove());
 
-    it('should has DashCore container running', async () => {
+    it('should have DashCore container running', async () => {
       const { State } = await driveNode.dashCore.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has MongoDb container running', async () => {
+    it('should have MongoDb container running', async () => {
       const { State } = await driveNode.mongoDb.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has Drive API container running', async () => {
+    it('should have Drive API container running', async () => {
       const { State, Mounts } = await driveNode.driveApi.container.inspect();
 
       expect(State.Status).to.be.equal('running');
       expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
-    it('should has Drive sync container running', async () => {
+    it('should have Drive sync container running', async () => {
       const { State, Mounts } = await driveNode.driveSync.container.inspect();
 
       expect(State.Status).to.be.equal('running');
       expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
-    it('should has IPFS container running', async () => {
+    it('should have IPFS container running', async () => {
       const { State } = await driveNode.ipfs.container.inspect();
 
       expect(State.Status).to.be.equal('running');

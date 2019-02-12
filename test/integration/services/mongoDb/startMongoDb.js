@@ -24,7 +24,7 @@ describe('startMongoDb', function main() {
 
     after(async () => mongoDbNode.remove());
 
-    it('should has MongoDb container running', async () => {
+    it('should have MongoDb container running', async () => {
       const { State, Mounts } = await mongoDbNode.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
 

@@ -28,45 +28,45 @@ describe.skip('startDapi', function main() {
 
     after(async () => dapiNode.remove());
 
-    it('should has DashCore container running', async () => {
+    it('should have DashCore container running', async () => {
       const { State } = await dapiNode.dashCore.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has MongoDb container running', async () => {
+    it('should have MongoDb container running', async () => {
       const { State } = await dapiNode.mongoDb.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has Drive API container running', async () => {
+    it('should have Drive API container running', async () => {
       const { State, Mounts } = await dapiNode.driveApi.container.inspect();
 
       expect(State.Status).to.be.equal('running');
       expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
-    it('should has Drive sync container running', async () => {
+    it('should have Drive sync container running', async () => {
       const { State, Mounts } = await dapiNode.driveSync.container.inspect();
 
       expect(State.Status).to.be.equal('running');
       expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
     });
 
-    it('should has IPFS container running', async () => {
+    it('should have IPFS container running', async () => {
       const { State } = await dapiNode.ipfs.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has Insight container running', async () => {
+    it('should have Insight container running', async () => {
       const { State } = await dapiNode.insight.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has Dapi container running', async () => {
+    it('should have Dapi container running', async () => {
       const { State } = await dapiNode.dapi.container.inspect();
 
       expect(State.Status).to.be.equal('running');

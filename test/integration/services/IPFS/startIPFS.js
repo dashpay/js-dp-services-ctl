@@ -24,7 +24,7 @@ describe('startIPFS', function main() {
 
     after(async () => ipfsNode.remove());
 
-    it('should has container running', async () => {
+    it('should have container running', async () => {
       const { State, Mounts } = await ipfsNode.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
 

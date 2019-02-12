@@ -8,7 +8,7 @@ describe('startDashCore', () => {
       dashCoreNode = instance;
     });
 
-    it('should has container running', async () => {
+    it('should have container running', async () => {
       const { State } = await dashCoreNode.container.inspect();
 
       expect(State.Status).to.be.equal('running');

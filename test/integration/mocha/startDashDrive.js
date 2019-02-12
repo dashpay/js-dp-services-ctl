@@ -8,25 +8,25 @@ describe('startDashDrive', () => {
       driveNode = instance;
     });
 
-    it('should has DashCore container running', async () => {
+    it('should have DashCore container running', async () => {
       const { State } = await driveNode.dashCore.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has MongoDb container running', async () => {
+    it('should have MongoDb container running', async () => {
       const { State } = await driveNode.mongoDb.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has Drive API container running', async () => {
+    it('should have Drive API container running', async () => {
       const { State } = await driveNode.driveApi.container.inspect();
 
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should has Drive sync container running', async () => {
+    it('should have Drive sync container running', async () => {
       const { State } = await driveNode.driveSync.container.inspect();
 
       expect(State.Status).to.be.equal('running');
