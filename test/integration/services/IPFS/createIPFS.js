@@ -5,7 +5,7 @@ const { createIPFS } = require('../../../../lib');
 const IPFSOptions = require('../../../../lib/services/IPFS/IPFSOptions');
 
 describe('createIPFS', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   before(removeContainers);
 

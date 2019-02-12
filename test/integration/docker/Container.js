@@ -6,7 +6,7 @@ const Container = require('../../../lib/docker/Container');
 const Image = require('../../../lib/docker/Image');
 
 describe('Container', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   let container;
 

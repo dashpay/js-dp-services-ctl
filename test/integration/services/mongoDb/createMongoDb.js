@@ -5,7 +5,7 @@ const { createMongoDb } = require('../../../../lib');
 const MongoDbOptions = require('../../../../lib/services/mongoDb/MongoDbOptions');
 
 describe('createMongoDb', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   before(removeContainers);
 

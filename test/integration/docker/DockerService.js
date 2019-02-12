@@ -21,7 +21,7 @@ async function createInstance(options) {
 }
 
 describe('DockerService', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   before(removeContainers);
 

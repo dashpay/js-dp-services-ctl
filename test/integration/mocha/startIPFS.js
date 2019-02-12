@@ -9,7 +9,7 @@ describe('startIPFS', function main() {
   let jsonObject;
   let cid;
 
-  this.timeout(40000);
+  this.timeout(60000);
 
   beforeEach(() => {
     jsonObject = {

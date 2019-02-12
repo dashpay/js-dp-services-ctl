@@ -7,7 +7,7 @@ const DashCoreOptions = require('../../../../lib/services/dashCore/DashCoreOptio
 const wait = require('../../../../lib/util/wait');
 
 describe('createDashCore', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   before(removeContainers);
 

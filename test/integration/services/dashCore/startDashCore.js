@@ -4,7 +4,7 @@ const { startDashCore } = require('../../../../lib');
 const wait = require('../../../../lib/util/wait');
 
 describe('startDashCore', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   before(removeContainers);
 
