@@ -1,6 +1,6 @@
 {
   "name": "@dashevo/js-evo-services-ctl",
-  "version": "1.0.0-alpha.19",
+  "version": "0.2.0",
   "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
