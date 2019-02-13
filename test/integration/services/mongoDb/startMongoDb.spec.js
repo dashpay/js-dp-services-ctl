@@ -6,9 +6,9 @@ describe('startMongoDb', function main() {
 
   before(removeContainers);
 
-  describe('One instance', () => {
+  describe('One node', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let instance;
+    let mongoDbNode;
 
     before(async () => {
       const rootPath = process.cwd();
@@ -18,21 +18,26 @@ describe('startMongoDb', function main() {
         ],
       };
       const options = { container };
-      instance = await startMongoDb(options);
-    });
-    after(async () => instance.remove());
 
-    it('should has MongoDb container running', async () => {
-      const { State, Mounts } = await instance.container.inspect();
-      expect(State.Status).to.equal('running');
+      mongoDbNode = await startMongoDb(options);
+    });
+
+    after(async () => mongoDbNode.remove());
+
+    it('should have MongoDb container running', async () => {
+      const { State, Mounts } = await mongoDbNode.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
+
+      expect(State.Status).to.be.equal('running');
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });
 
-  describe('Three instance', () => {
+  describe('Many nodes', () => {
+    const nodesCount = 2;
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let instances;
+
+    let mongoDbNodes;
 
     before(async () => {
       const rootPath = process.cwd();
@@ -42,18 +47,22 @@ describe('startMongoDb', function main() {
         ],
       };
       const options = { container };
-      instances = await startMongoDb.many(3, options);
+
+      mongoDbNodes = await startMongoDb.many(nodesCount, options);
     });
+
     after(async () => {
-      const promises = instances.map(instance => instance.remove());
-      await Promise.all(promises);
+      await Promise.all(
+        mongoDbNodes.map(instance => instance.remove()),
+      );
     });
 
     it('should have MongoDb containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].container.inspect();
-        expect(State.Status).to.equal('running');
+      for (let i = 0; i < nodesCount; i++) {
+        const { State, Mounts } = await mongoDbNodes[i].container.inspect();
         const destinations = Mounts.map(volume => volume.Destination);
+
+        expect(State.Status).to.be.equal('running');
         expect(destinations).to.include(CONTAINER_VOLUME);
       }
     });
