@@ -5,40 +5,45 @@ const { createIPFS } = require('../../../../lib');
 const IPFSOptions = require('../../../../lib/services/IPFS/IPFSOptions');
 
 describe('createIPFS', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   before(removeContainers);
 
   describe('usage', () => {
-    let instance;
+    let ipfs;
 
     before(async () => {
-      instance = await createIPFS();
+      ipfs = await createIPFS();
     });
-    after(async () => instance.remove());
+
+    after(async () => ipfs.remove());
 
     it('should start an instance with a bridge dash_test_network', async () => {
-      await instance.start();
+      await ipfs.start();
+
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await instance.container.inspect();
+      const { NetworkSettings: { Networks } } = await ipfs.container.inspect();
       const networks = Object.keys(Networks);
-      expect(Driver).to.equal('bridge');
-      expect(networks.length).to.equal(1);
-      expect(networks[0]).to.equal('dash_test_network');
+
+      expect(Driver).to.be.equal('bridge');
+      expect(networks.length).to.be.equal(1);
+      expect(networks[0]).to.be.equal('dash_test_network');
     });
 
     it('should start an instance with the default options', async () => {
-      await instance.start();
-      const { Args } = await instance.container.inspect();
-      expect(Args).to.deep.equal([
+      await ipfs.start();
+
+      const { Args } = await ipfs.container.inspect();
+
+      expect(Args).to.be.deep.equal([
         '--',
         '/bin/sh', '-c',
         [
           'ipfs init',
           'ipfs config --json Bootstrap []',
           'ipfs config --json Discovery.MDNS.Enabled false',
-          `ipfs config Addresses.API /ip4/0.0.0.0/tcp/${instance.options.getIpfsInternalPort()}`,
+          `ipfs config Addresses.API /ip4/0.0.0.0/tcp/${ipfs.options.getIpfsInternalPort()}`,
           'ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/8080',
           'ipfs daemon',
         ].join(' && '),
@@ -46,18 +51,19 @@ describe('createIPFS', function main() {
     });
 
     it('should get IPFS address', async () => {
-      await instance.start();
+      await ipfs.start();
 
-      const address = instance.getIpfsAddress();
+      const address = ipfs.getIpfsAddress();
 
-      expect(address).to.equal(`/ip4/${instance.getIp()}/tcp/${instance.options.getIpfsInternalPort()}`);
+      expect(address).to.be.equal(`/ip4/${ipfs.getIp()}/tcp/${ipfs.options.getIpfsInternalPort()}`);
     });
 
     it('should get IPFS client', async () => {
-      await instance.start();
+      await ipfs.start();
 
-      const client = instance.getApi();
-      await client.repo.stat();
+      const ipfsApi = ipfs.getApi();
+
+      await ipfsApi.repo.stat();
     });
   });
 
@@ -69,12 +75,14 @@ describe('createIPFS', function main() {
       instanceOne = await createIPFS();
       instanceTwo = await createIPFS();
     });
+
     before(async () => {
       await Promise.all([
         instanceOne.start(),
         instanceTwo.start(),
       ]);
     });
+
     after(async () => {
       await Promise.all([
         instanceOne.remove(),
@@ -91,7 +99,7 @@ describe('createIPFS', function main() {
       const clientTwo = instanceTwo.getApi();
       const data = await clientTwo.dag.get(cid, 'name', { format: 'dag-cbor', hashAlg: 'sha2-256' });
 
-      expect(data.value).to.equal('world');
+      expect(data.value).to.be.equal('world');
     });
   });
 
@@ -110,10 +118,15 @@ describe('createIPFS', function main() {
           ],
         },
       };
+
       instance = await createIPFS(options);
+
       await instance.start();
+
       const { Mounts } = await instance.container.inspect();
+
       const destinations = Mounts.map(volume => volume.Destination);
+
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
@@ -127,10 +140,15 @@ describe('createIPFS', function main() {
           ],
         },
       });
+
       instance = await createIPFS(options);
+
       await instance.start();
+
       const { Mounts } = await instance.container.inspect();
+
       const destinations = Mounts.map(volume => volume.Destination);
+
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
@@ -144,11 +162,16 @@ describe('createIPFS', function main() {
           ],
         },
       };
+
       IPFSOptions.setDefaultCustomOptions(options);
       instance = await createIPFS();
+
       await instance.start();
+
       const { Mounts } = await instance.container.inspect();
+
       const destinations = Mounts.map(volume => volume.Destination);
+
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });
