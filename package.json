@@ -1,7 +1,7 @@
 {
   "name": "@dashevo/js-evo-services-ctl",
-  "version": "1.0.0-alpha.18",
-  "description": "Javascript library for manipulation of Evolution services using Docker",
+  "version": "0.2.0",
+  "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
   },
@@ -15,16 +15,30 @@
     "type": "git",
     "url": "git+https://github.com/dashevo/js-evo-services-ctl.git"
   },
-  "authors": [
-    "David Rey Acosta",
-    "Ivan Shumkov",
-    "Nathan Marley",
-    "Djavid Gabibiyan"
+  "contributors": [
+    {
+      "name": "David Rey Acosta",
+      "url": "https://github.com/dreyacosta"
+    },
+    {
+      "name": "Ivan Shumkov",
+      "url": "https://github.com/shumkov"
+    },
+    {
+      "name": "Djavid Gabibiyan",
+      "url": "https://github.com/jawid-h"
+    },
+    {
+      "name": "Andrei Abvgedeika",
+      "url": "https://github.com/abvgedeika"
+    }
   ],
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
+    "dotenv": "^6.2.0",
+    "dotenv-expand": "^4.2.0",
     "eslint": "^5.11.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
@@ -34,7 +48,7 @@
     "sinon-chai": "^3.3.0"
   },
   "dependencies": {
-    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client#develop",
+    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client#master",
     "@dashevo/dashd-rpc": "^1.2.1",
     "aws-sdk": "^2.382.0",
     "cbor": "^4.1.4",

@@ -6,9 +6,10 @@ const Container = require('../../../lib/docker/Container');
 const Image = require('../../../lib/docker/Image');
 
 describe('Container', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   let container;
+
   const mongoDbOptions = new MongoDbOptions();
   const imageName = mongoDbOptions.getContainerImageName();
   const { name: networkName } = mongoDbOptions.getContainerNetworkOptions();
@@ -18,6 +19,7 @@ describe('Container', function main() {
     await removeContainers();
     const mongoDbImage = new Image(imageName);
     await mongoDbImage.pull();
+
     container = new Container(networkName, imageName, containerOptions);
   });
 
@@ -32,6 +34,7 @@ describe('Container', function main() {
 
     it('should return null if getIp', () => {
       const ip = container.getIp();
+
       expect(ip).to.be.null();
     });
   });
@@ -46,6 +49,7 @@ describe('Container', function main() {
       const { Driver } = await dockerNetwork.inspect();
       const { NetworkSettings: { Networks } } = await container.inspect();
       const networks = Object.keys(Networks);
+
       expect(Driver).to.be.equal(driver);
       expect(networks.length).to.be.equal(1);
       expect(networks[0]).to.be.equal(name);
@@ -54,6 +58,7 @@ describe('Container', function main() {
     it('should start an instance with the MongoDbOptions ports', async () => {
       await container.start();
       const { NetworkSettings: { Ports } } = await container.inspect();
+
       expect(Ports).to.have.property('27017/tcp');
       expect(Ports['27017/tcp']).to.be.not.null();
     });
@@ -66,20 +71,23 @@ describe('Container', function main() {
     it('should stop the container', async () => {
       await container.stop();
       const { State } = await container.inspect();
-      expect(State.Status).to.equal('exited');
+
+      expect(State.Status).to.be.equal('exited');
     });
 
     it('should start after stop', async () => {
       await container.start();
       const { State } = await container.inspect();
-      expect(State.Status).to.equal('running');
+
+      expect(State.Status).to.be.equal('running');
     });
 
     it('should start after remove', async () => {
       await container.remove();
       await container.start();
       const { State } = await container.inspect();
-      expect(State.Status).to.equal('running');
+
+      expect(State.Status).to.be.equal('running');
     });
 
     it('should return container IP', () => {
@@ -89,13 +97,13 @@ describe('Container', function main() {
     it('should remove the container', async () => {
       await container.remove();
 
-      let error;
       try {
         await container.inspect();
-      } catch (err) {
-        error = err;
+
+        expect.fail('should throw error "Container not found"');
+      } catch (e) {
+        expect(e.message).to.be.equal('Container not found');
       }
-      expect(error.message).to.equal('Container not found');
     });
   });
 
@@ -110,6 +118,7 @@ describe('Container', function main() {
     beforeEach(function before() {
       sandbox = this.sinon;
     });
+
     after(async () => {
       await Promise.all([
         containerOne.remove(),
@@ -124,22 +133,22 @@ describe('Container', function main() {
       await containerOne.stop();
       await containerOne.start();
 
-      expect(createContainerSpy.callCount).to.equal(1);
+      expect(createContainerSpy.callCount).to.be.equal(1);
     });
 
     it('should remove container if port if busy', async () => {
       containerTwo.ports = containerOne.ports;
+
       const removeContainerSpy = sandbox.spy(containerTwo, 'removeContainer');
 
-      let error;
       try {
         await containerTwo.start();
-      } catch (err) {
-        error = err;
-      }
 
-      expect(error.statusCode).to.equal(500);
-      expect(removeContainerSpy.callCount).to.be.equal(1);
+        expect.fail('should throw error with status code 500');
+      } catch (e) {
+        expect(e.statusCode).to.be.equal(500);
+        expect(removeContainerSpy.callCount).to.be.equal(1);
+      }
     });
 
     it('should remove its volumes upon calling remove method', async () => {

@@ -15,6 +15,7 @@ describe('NodeJsService', function main() {
 
   let packageFilePath;
   let lockFilePath;
+
   before(() => {
     const packageFileContent = {
       name: 'test_node_project',
@@ -52,6 +53,7 @@ describe('NodeJsService', function main() {
   let docker;
   let service;
   let runOutputs;
+
   beforeEach(async function beforeEach() {
     docker = new Docker();
 
