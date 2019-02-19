@@ -7,6 +7,7 @@ describe('getAwsEcrAuthorizationToken', function main() {
   it('should get the authorization', async () => {
     const options = new DriveApiOptions();
     const authorization = await getAwsEcrAuthorizationToken(options.getAwsOptions());
+
     expect(authorization.username).to.exist();
     expect(authorization.password).to.exist();
     expect(authorization.serveraddress).to.exist();
