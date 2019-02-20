@@ -1,6 +1,6 @@
 const startDapi = require('../../../lib/mocha/startDapi');
 
-describe.skip('startDapi', () => {
+describe('startDapi', () => {
   describe('One node', () => {
     let dapiNode;
 

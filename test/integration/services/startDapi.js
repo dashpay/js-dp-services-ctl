@@ -2,7 +2,7 @@ const os = require('os');
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { startDapi } = require('../../../lib');
 
-describe.skip('startDapi', function main() {
+describe('startDapi', function main() {
   this.timeout(180000);
 
   before(removeContainers);
@@ -139,7 +139,7 @@ describe.skip('startDapi', function main() {
     });
   });
 
-  describe('Many nodes', () => {
+  describe.skip('Many nodes', () => {
     const nodesCount = 2;
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
 
