@@ -29,7 +29,7 @@ describe('startDapi', () => {
     });
   });
 
-  describe('Many nodes', () => {
+  describe.skip('Many nodes', () => {
     const nodesCount = 2;
 
     let dapiNodes;
