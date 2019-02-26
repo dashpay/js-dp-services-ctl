@@ -1,6 +1,6 @@
 {
   "name": "@dashevo/dp-services-ctl",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
@@ -37,6 +37,8 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "dirty-chai": "^2.0.1",
+    "dotenv": "^6.2.0",
+    "dotenv-expand": "^4.2.0",
     "eslint": "^5.11.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",

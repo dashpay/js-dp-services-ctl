@@ -14,6 +14,7 @@ describe('createDriveApi', function main() {
     let mongoDb;
     let envs;
     let driveApi;
+
     before(async () => {
       dashCore = await startDashCore();
       mongoDb = await startMongoDb();
@@ -24,13 +25,16 @@ describe('createDriveApi', function main() {
         `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
         `DASHCORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
       ];
+
       const options = {
         container: {
           envs,
         },
       };
+
       driveApi = await createDriveApi(options);
     });
+
     after(async () => {
       await Promise.all([
         dashCore.remove(),
@@ -45,9 +49,10 @@ describe('createDriveApi', function main() {
       const { Driver } = await network.inspect();
       const { NetworkSettings: { Networks } } = await driveApi.container.inspect();
       const networks = Object.keys(Networks);
-      expect(Driver).to.equal('bridge');
-      expect(networks.length).to.equal(1);
-      expect(networks[0]).to.equal('dash_test_network');
+
+      expect(Driver).to.be.equal('bridge');
+      expect(networks.length).to.be.equal(1);
+      expect(networks[0]).to.be.equal('dash_test_network');
     });
 
     it('should start an instance with custom environment variables', async () => {
@@ -55,19 +60,21 @@ describe('createDriveApi', function main() {
       const { Config: { Env } } = await driveApi.container.inspect();
 
       const instanceEnv = Env.filter(variable => envs.includes(variable));
-      expect(envs.length).to.equal(instanceEnv.length);
+
+      expect(envs.length).to.be.equal(instanceEnv.length);
     });
 
     it('should start an instance with the default options', async () => {
       await driveApi.start();
       const { Args } = await driveApi.container.inspect();
-      expect(Args).to.deep
-        .equal(['run', 'api']);
+
+      expect(Args).to.be.deep.equal(['run', 'api']);
     });
 
     it('should return Drive Api RPC port', async () => {
       await driveApi.start();
-      expect(driveApi.getRpcPort()).to.equal(driveApi.options.getRpcPort());
+
+      expect(driveApi.getRpcPort()).to.be.equal(driveApi.options.getRpcPort());
     });
   });
 
@@ -75,6 +82,7 @@ describe('createDriveApi', function main() {
     let dashCore;
     let mongoDb;
     let driveApi;
+
     before(async () => {
       dashCore = await startDashCore();
       mongoDb = await startMongoDb();
@@ -85,13 +93,16 @@ describe('createDriveApi', function main() {
         `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
         `DASHCORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
       ];
+
       const options = {
         container: {
           envs,
         },
       };
+
       driveApi = await createDriveApi(options);
     });
+
     after(async () => {
       await Promise.all([
         dashCore.remove(),
@@ -147,10 +158,15 @@ describe('createDriveApi', function main() {
           ],
         },
       };
+
       driveApi = await createDriveApi(options);
+
       await driveApi.start();
+
       const { Mounts } = await driveApi.container.inspect();
+
       const destinations = Mounts.map(m => m.Destination);
+
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
@@ -165,30 +181,32 @@ describe('createDriveApi', function main() {
           ],
         },
       });
+
       driveApi = await createDriveApi(options);
+
       await driveApi.start();
+
       const { Mounts } = await driveApi.container.inspect();
+
       const destinations = Mounts.map(m => m.Destination);
+
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
     it('should start an instance with custom default DriveApiOptions', async () => {
-      const rootPath = process.cwd();
-      const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = {
+      const options = new DriveApiOptions({
         container: {
           envs,
-          volumes: [
-            `${rootPath}/README.md:${CONTAINER_VOLUME}`,
-          ],
         },
-      };
-      DriveApiOptions.setDefaultCustomOptions(options);
-      driveApi = await createDriveApi();
+      });
+
+      driveApi = await createDriveApi(options);
+
       await driveApi.start();
-      const { Mounts } = await driveApi.container.inspect();
-      const destinations = Mounts.map(m => m.Destination);
-      expect(destinations).to.include(CONTAINER_VOLUME);
+
+      const { Config: { Image: imageName } } = await driveApi.container.inspect();
+
+      expect(imageName).to.contain('dashdrive');
     });
   });
 });
