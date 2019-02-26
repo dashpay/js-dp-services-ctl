@@ -31,7 +31,7 @@ describe('startIPFS', function main() {
       ipfsAPI = ipfs.getApi();
     });
 
-    it('should start one node', async () => {
+    it('should be able to start one node', async () => {
       const actualCid = await ipfsAPI.dag.put(jsonObject, { cid });
 
       expect(cid.equals(actualCid)).to.be.true();
@@ -41,7 +41,7 @@ describe('startIPFS', function main() {
       expect(expectedObject.value).to.deep.equal(jsonObject);
     });
 
-    it('should not have any of the previous data', async () => {
+    it('should not have any of the previously stored data', async () => {
       const result = await Promise.race([
         ipfsAPI.dag.get(cid),
         new Promise(resolve => setTimeout(() => resolve(false), 2000)),
@@ -59,7 +59,7 @@ describe('startIPFS', function main() {
       ipfsAPIs = ipfsNodes.map(ipfsNode => ipfsNode.getApi());
     });
 
-    it('should start many nodes', async () => {
+    it('should be able to start several nodes', async () => {
       const actualCid = await ipfsAPIs[0].dag.put(jsonObject, { cid });
 
       expect(cid.equals(actualCid)).to.be.true();
@@ -71,7 +71,7 @@ describe('startIPFS', function main() {
       }
     });
 
-    it('should not have any of the previous data', async () => {
+    it('should not have any of the previously stored data', async () => {
       for (let i = 1; i < nodesCount; i++) {
         const result = await Promise.race([
           ipfsAPIs[i].dag.get(cid),
@@ -82,7 +82,7 @@ describe('startIPFS', function main() {
       }
     });
 
-    it('should have nodes connected event after clean', async () => {
+    it('should have nodes connected after clean', async () => {
       const anotherObject = await ipfsAPIs[0].block.put(Buffer.from('{"true": true}'));
 
       for (let i = 1; i < nodesCount; i++) {

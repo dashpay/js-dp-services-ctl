@@ -18,7 +18,7 @@ describe('createIPFS', function main() {
 
     after(async () => ipfs.remove());
 
-    it('should start an instance with a bridge dash_test_network', async () => {
+    it('should start an instance with a bridge network called dash_test_network', async () => {
       await ipfs.start();
 
       const network = new Docker().getNetwork('dash_test_network');
@@ -31,7 +31,7 @@ describe('createIPFS', function main() {
       expect(networks[0]).to.equal('dash_test_network');
     });
 
-    it('should start an instance with the default options', async () => {
+    it('should start an instance with default options', async () => {
       await ipfs.start();
 
       const { Args } = await ipfs.container.inspect();
@@ -50,7 +50,7 @@ describe('createIPFS', function main() {
       ]);
     });
 
-    it('should get IPFS address', async () => {
+    it('should have an IPFS address as a result of calling getIpfsAddress', async () => {
       await ipfs.start();
 
       const address = ipfs.getIpfsAddress();
@@ -58,7 +58,7 @@ describe('createIPFS', function main() {
       expect(address).to.equal(`/ip4/${ipfs.getIp()}/tcp/${ipfs.options.getIpfsInternalPort()}`);
     });
 
-    it('should get IPFS client', async () => {
+    it('should have IPFS client as a result of calling getApi', async () => {
       await ipfs.start();
 
       const ipfsApi = ipfs.getApi();
@@ -108,7 +108,7 @@ describe('createIPFS', function main() {
 
     afterEach(async () => instance.remove());
 
-    it('should start an instance with plain object options', async () => {
+    it('should be able to start an instance with plain object options', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
@@ -130,7 +130,7 @@ describe('createIPFS', function main() {
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with instance of IPFSOptions', async () => {
+    it('should be able to start an instance with IPFSOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = new IPFSOptions({
@@ -152,7 +152,7 @@ describe('createIPFS', function main() {
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with custom default IPFSOptions', async () => {
+    it('should be able to start an instance with custom default IPFSOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {

@@ -32,7 +32,7 @@ describe('startIPFS', function main() {
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start one instance', async () => {
+    it('should have single instance running', async () => {
       const client = ipfsNode.getApi();
       const actualTrueObject = await client.block.put(Buffer.from('{"true": true}'));
       const expectedTrueObject = await client.block.get(actualTrueObject.cid);
@@ -75,7 +75,7 @@ describe('startIPFS', function main() {
       }
     });
 
-    it('should start many instances', async () => {
+    it('should have several instances running', async () => {
       const clientOne = await ipfsNodes[0].getApi();
       const actualTrueObject = await clientOne.block.put(Buffer.from('{"true": true}'));
 

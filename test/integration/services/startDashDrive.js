@@ -59,7 +59,7 @@ describe('startDashDrive', function main() {
       expect(State.Status).to.equal('running');
     });
 
-    it('should DashDrive container has the right env variables', async () => {
+    it('should have proper env variables set for DashDrive container', async () => {
       const { Config: { Env: ApiEnvs } } = await driveNode.driveApi.container.inspect();
       const { Config: { Env: SyncEnvs } } = await driveNode.driveSync.container.inspect();
 
@@ -80,7 +80,7 @@ describe('startDashDrive', function main() {
       expect(syncEnvs.length).to.equal(expectedEnv.length);
     });
 
-    it('should be on the same network (DashCore, DashDrive, IPFS, and MongoDb)', async () => {
+    it('should have all of the containers on the same network', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
       } = await driveNode.dashCore.container.inspect();

@@ -18,7 +18,7 @@ describe('createDashCore', function main() {
       dashCore = await createDashCore();
     });
 
-    it('should throw an error if connect', async () => {
+    it('should throw an error if trying to connect to a node that is not running', async () => {
       const instanceTwo = createDashCore();
 
       try {
@@ -30,7 +30,7 @@ describe('createDashCore', function main() {
       }
     });
 
-    it('should return empty object if getApi', () => {
+    it('should have an empty object as a result of calling getApi', () => {
       const api = dashCore.getApi();
 
       expect(api).to.deep.equal({});
@@ -46,7 +46,7 @@ describe('createDashCore', function main() {
 
     after(async () => dashCore.remove());
 
-    it('should start an instance with a bridge dash_test_network', async () => {
+    it('should have an instance running with a bridge network named dash_test_network', async () => {
       await dashCore.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
@@ -58,7 +58,7 @@ describe('createDashCore', function main() {
       expect(networks[0]).to.equal('dash_test_network');
     });
 
-    it('should start an instance with the default options', async () => {
+    it('should have an instance running with default options', async () => {
       await dashCore.start();
 
       const { Args } = await dashCore.container.inspect();
@@ -85,7 +85,7 @@ describe('createDashCore', function main() {
       ]);
     });
 
-    it('should return RPC client', () => {
+    it('should have an RPC client as a result of calling getApi', () => {
       const rpcPort = dashCore.options.getRpcPort();
       const rpcClient = dashCore.getApi();
 
@@ -117,7 +117,7 @@ describe('createDashCore', function main() {
       ]);
     });
 
-    it('should be connected each other', async () => {
+    it('should have several instances connected to each other', async () => {
       // Workaround for develop branch
       // We should generate genesis block before we connect instances
       await instanceOne.getApi().generate(1);
@@ -153,7 +153,7 @@ describe('createDashCore', function main() {
       expect(blocksTwo).to.equal(3);
     });
 
-    it('should disconnect from instance two', async () => {
+    it('should be able to disconnect from second instance', async () => {
       const peersBefore = await instanceOne.rpcClient.getPeerInfo();
       expect(peersBefore.result.length).to.equal(1);
 
@@ -174,7 +174,7 @@ describe('createDashCore', function main() {
 
     after(async () => dashCore.remove());
 
-    it('should work after starting the instance', async () => {
+    it('should be able to make RPC calls after starting the instance', async () => {
       await dashCore.start();
 
       const rpcClient = dashCore.getApi();
@@ -183,7 +183,7 @@ describe('createDashCore', function main() {
       expect(result).to.have.property('version');
     });
 
-    it('should work after restarting the instance', async () => {
+    it('should be able to make RPC calls after restarting the instance', async () => {
       await dashCore.start();
       await dashCore.stop();
       await dashCore.start();
@@ -200,7 +200,7 @@ describe('createDashCore', function main() {
 
     afterEach(async () => instance.remove());
 
-    it('should start an instance with plain object options', async () => {
+    it('should be able to start an instance with plain object options', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
@@ -220,7 +220,7 @@ describe('createDashCore', function main() {
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with instance of DashCoreOptions', async () => {
+    it('should be able to start an instance with DashCoreOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = new DashCoreOptions({
@@ -240,7 +240,7 @@ describe('createDashCore', function main() {
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with custom default DashCoreOptions', async () => {
+    it('should be able to start an instance with custom default DashCoreOptions', async () => {
       const options = new DashCoreOptions();
 
       instance = await createDashCore(options);

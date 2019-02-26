@@ -43,7 +43,7 @@ describe('createDriveSync', function main() {
       ]);
     });
 
-    it('should start an instance with a bridge dash_test_network', async () => {
+    it('should be able to start an instance with a bridge network named dash_test_network', async () => {
       await driveSync.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
@@ -55,7 +55,7 @@ describe('createDriveSync', function main() {
       expect(networks[0]).to.equal('dash_test_network');
     });
 
-    it('should start an instance with custom environment variables', async () => {
+    it('should be able to start an instance with a custom environment variables', async () => {
       await driveSync.start();
 
       const { Config: { Env } } = await driveSync.container.inspect();
@@ -65,7 +65,7 @@ describe('createDriveSync', function main() {
       expect(envs.length).to.equal(instanceEnv.length);
     });
 
-    it('should start an instance with the default options', async () => {
+    it('should be able to start an instance with the default options', async () => {
       await driveSync.start();
 
       const { Args } = await driveSync.container.inspect();
@@ -100,7 +100,7 @@ describe('createDriveSync', function main() {
       ]);
     });
 
-    it('should start an instance with plain object options', async () => {
+    it('should be able to start an instance with a plain object options', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
@@ -123,7 +123,7 @@ describe('createDriveSync', function main() {
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with instance of DriveSyncOptions', async () => {
+    it('should be able to start an instance with DriveSyncOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = new DriveSyncOptions({
@@ -146,7 +146,7 @@ describe('createDriveSync', function main() {
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with custom default DriveSyncOptions', async () => {
+    it('should be able to start an instance with custom default DriveSyncOptions', async () => {
       const options = new DriveSyncOptions({
         container: {
           envs,

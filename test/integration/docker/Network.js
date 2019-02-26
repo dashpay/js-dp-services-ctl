@@ -4,7 +4,7 @@ const MongoDbOptions = require('../../../lib/services/mongoDb/MongoDbOptions');
 const Network = require('../../../lib/docker/Network');
 
 describe('Network', () => {
-  it('should create a network according to options', async () => {
+  it('should create a network according to the options', async () => {
     const options = new MongoDbOptions();
     const { name, driver } = options.getContainerNetworkOptions();
     const network = new Network(name, driver);
@@ -18,7 +18,7 @@ describe('Network', () => {
     expect(Driver).to.equal(driver);
   });
 
-  it('should not fail creating a network that already exists', async () => {
+  it('should not fail creating a network that is already exists', async () => {
     const options = new MongoDbOptions();
     const { name, driver } = options.getContainerNetworkOptions();
     const network = new Network(name, driver);
