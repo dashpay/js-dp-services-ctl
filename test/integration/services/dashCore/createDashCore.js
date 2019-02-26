@@ -26,14 +26,14 @@ describe('createDashCore', function main() {
 
         expect.fail('should throw error "Instance should be started before!"');
       } catch (e) {
-        expect(e.message).to.be.equal('Instance should be started before!');
+        expect(e.message).to.equal('Instance should be started before!');
       }
     });
 
     it('should return empty object if getApi', () => {
       const api = dashCore.getApi();
 
-      expect(api).to.be.deep.equal({});
+      expect(api).to.deep.equal({});
     });
   });
 
@@ -53,9 +53,9 @@ describe('createDashCore', function main() {
       const { NetworkSettings: { Networks } } = await dashCore.container.inspect();
       const networks = Object.keys(Networks);
 
-      expect(Driver).to.be.equal('bridge');
-      expect(networks.length).to.be.equal(1);
-      expect(networks[0]).to.be.equal('dash_test_network');
+      expect(Driver).to.equal('bridge');
+      expect(networks.length).to.equal(1);
+      expect(networks[0]).to.equal('dash_test_network');
     });
 
     it('should start an instance with the default options', async () => {
@@ -63,7 +63,7 @@ describe('createDashCore', function main() {
 
       const { Args } = await dashCore.container.inspect();
 
-      expect(Args).to.be.deep.equal([
+      expect(Args).to.deep.equal([
         `-port=${dashCore.options.getDashdPort()}`,
         `-rpcuser=${dashCore.options.getRpcUser()}`,
         `-rpcpassword=${dashCore.options.getRpcPassword()}`,
@@ -89,8 +89,8 @@ describe('createDashCore', function main() {
       const rpcPort = dashCore.options.getRpcPort();
       const rpcClient = dashCore.getApi();
 
-      expect(rpcClient.host).to.be.equal('127.0.0.1');
-      expect(rpcClient.port).to.be.equal(rpcPort);
+      expect(rpcClient.host).to.equal('127.0.0.1');
+      expect(rpcClient.port).to.equal(rpcPort);
     });
   });
 
@@ -130,18 +130,18 @@ describe('createDashCore', function main() {
       const peerInstanceOneIp = peersInstanceOne[0].addr.split(':')[0];
       const peerInstanceTwoIp = peersInstanceTwo[0].addr.split(':')[0];
 
-      expect(peersInstanceOne.length).to.be.equal(1);
-      expect(peersInstanceTwo.length).to.be.equal(1);
-      expect(peerInstanceOneIp).to.be.equal(instanceTwo.getIp());
-      expect(peerInstanceTwoIp).to.be.equal(instanceOne.getIp());
+      expect(peersInstanceOne.length).to.equal(1);
+      expect(peersInstanceTwo.length).to.equal(1);
+      expect(peerInstanceOneIp).to.equal(instanceTwo.getIp());
+      expect(peerInstanceTwoIp).to.equal(instanceOne.getIp());
     });
 
     it('should propagate blocks from one instance to the other', async () => {
       const { result: blocksInstanceOne } = await instanceOne.rpcClient.getBlockCount();
       const { result: blocksInstanceTwo } = await instanceTwo.rpcClient.getBlockCount();
 
-      expect(blocksInstanceOne).to.be.equal(1);
-      expect(blocksInstanceTwo).to.be.equal(1);
+      expect(blocksInstanceOne).to.equal(1);
+      expect(blocksInstanceTwo).to.equal(1);
 
       await instanceOne.rpcClient.generate(2);
       await wait(3000);
@@ -149,19 +149,19 @@ describe('createDashCore', function main() {
       const { result: blocksOne } = await instanceOne.rpcClient.getBlockCount();
       const { result: blocksTwo } = await instanceTwo.rpcClient.getBlockCount();
 
-      expect(blocksOne).to.be.equal(3);
-      expect(blocksTwo).to.be.equal(3);
+      expect(blocksOne).to.equal(3);
+      expect(blocksTwo).to.equal(3);
     });
 
     it('should disconnect from instance two', async () => {
       const peersBefore = await instanceOne.rpcClient.getPeerInfo();
-      expect(peersBefore.result.length).to.be.equal(1);
+      expect(peersBefore.result.length).to.equal(1);
 
       instanceOne.disconnect(instanceTwo);
       await wait(3000);
 
       const peersAfter = await instanceOne.rpcClient.getPeerInfo();
-      expect(peersAfter.result.length).to.be.equal(0);
+      expect(peersAfter.result.length).to.equal(0);
     });
   });
 
@@ -217,7 +217,7 @@ describe('createDashCore', function main() {
 
       const { Mounts } = await instance.container.inspect();
 
-      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should start an instance with instance of DashCoreOptions', async () => {
@@ -237,7 +237,7 @@ describe('createDashCore', function main() {
 
       const { Mounts } = await instance.container.inspect();
 
-      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should start an instance with custom default DashCoreOptions', async () => {

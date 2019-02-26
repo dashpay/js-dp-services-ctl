@@ -66,6 +66,6 @@ describe('Image', function main() {
     await image.pull();
     await image.pull();
 
-    expect(docker.pull).to.be.calledOnce();
+    expect(docker.pull).to.have.been.calledOnce();
   });
 });

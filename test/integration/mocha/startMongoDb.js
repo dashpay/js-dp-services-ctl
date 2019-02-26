@@ -18,7 +18,7 @@ describe('startMongoDb', () => {
 
       const countBefore = await collection.countDocuments({});
 
-      expect(countBefore).to.be.equal(1);
+      expect(countBefore).to.equal(1);
     });
 
     it('should insert with MongoClient to test db', async () => {
@@ -31,7 +31,7 @@ describe('startMongoDb', () => {
 
       const countBefore = await collection.countDocuments({});
 
-      expect(countBefore).to.be.equal(1);
+      expect(countBefore).to.equal(1);
     });
 
     it('should drop MongoDb after last test', async () => {
@@ -40,7 +40,7 @@ describe('startMongoDb', () => {
 
       const countBefore = await collection.countDocuments({});
 
-      expect(countBefore).to.be.equal(0);
+      expect(countBefore).to.equal(0);
     });
   });
 
@@ -57,7 +57,7 @@ describe('startMongoDb', () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await mongoDbNodes[i].container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
   });

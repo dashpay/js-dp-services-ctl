@@ -50,9 +50,9 @@ describe('createDriveSync', function main() {
       const { NetworkSettings: { Networks } } = await driveSync.container.inspect();
       const networks = Object.keys(Networks);
 
-      expect(Driver).to.be.equal('bridge');
-      expect(networks.length).to.be.equal(1);
-      expect(networks[0]).to.be.equal('dash_test_network');
+      expect(Driver).to.equal('bridge');
+      expect(networks.length).to.equal(1);
+      expect(networks[0]).to.equal('dash_test_network');
     });
 
     it('should start an instance with custom environment variables', async () => {
@@ -62,7 +62,7 @@ describe('createDriveSync', function main() {
 
       const instanceEnv = Env.filter(variable => envs.includes(variable));
 
-      expect(envs.length).to.be.equal(instanceEnv.length);
+      expect(envs.length).to.equal(instanceEnv.length);
     });
 
     it('should start an instance with the default options', async () => {
@@ -70,7 +70,7 @@ describe('createDriveSync', function main() {
 
       const { Args } = await driveSync.container.inspect();
 
-      expect(Args).to.be.deep.equal(['run', 'sync']);
+      expect(Args).to.deep.equal(['run', 'sync']);
     });
   });
 

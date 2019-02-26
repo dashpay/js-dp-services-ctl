@@ -50,9 +50,9 @@ describe('Container', function main() {
       const { NetworkSettings: { Networks } } = await container.inspect();
       const networks = Object.keys(Networks);
 
-      expect(Driver).to.be.equal(driver);
-      expect(networks.length).to.be.equal(1);
-      expect(networks[0]).to.be.equal(name);
+      expect(Driver).to.equal(driver);
+      expect(networks.length).to.equal(1);
+      expect(networks[0]).to.equal(name);
     });
 
     it('should start an instance with the MongoDbOptions ports', async () => {
@@ -72,14 +72,14 @@ describe('Container', function main() {
       await container.stop();
       const { State } = await container.inspect();
 
-      expect(State.Status).to.be.equal('exited');
+      expect(State.Status).to.equal('exited');
     });
 
     it('should start after stop', async () => {
       await container.start();
       const { State } = await container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should start after remove', async () => {
@@ -87,11 +87,11 @@ describe('Container', function main() {
       await container.start();
       const { State } = await container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should return container IP', () => {
-      expect(container.getIp()).to.be.equal(container.getIp());
+      expect(container.getIp()).to.equal(container.getIp());
     });
 
     it('should remove the container', async () => {
@@ -102,7 +102,7 @@ describe('Container', function main() {
 
         expect.fail('should throw error "Container not found"');
       } catch (e) {
-        expect(e.message).to.be.equal('Container not found');
+        expect(e.message).to.equal('Container not found');
       }
     });
   });
@@ -133,7 +133,7 @@ describe('Container', function main() {
       await containerOne.stop();
       await containerOne.start();
 
-      expect(createContainerSpy.callCount).to.be.equal(1);
+      expect(createContainerSpy.callCount).to.equal(1);
     });
 
     it('should remove container if port if busy', async () => {
@@ -146,8 +146,8 @@ describe('Container', function main() {
 
         expect.fail('should throw error with status code 500');
       } catch (e) {
-        expect(e.statusCode).to.be.equal(500);
-        expect(removeContainerSpy.callCount).to.be.equal(1);
+        expect(e.statusCode).to.equal(500);
+        expect(removeContainerSpy.callCount).to.equal(1);
       }
     });
 

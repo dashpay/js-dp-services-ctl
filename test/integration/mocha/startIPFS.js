@@ -38,7 +38,7 @@ describe('startIPFS', function main() {
 
       const expectedObject = await ipfsAPI.dag.get(cid);
 
-      expect(expectedObject.value).to.be.deep.equal(jsonObject);
+      expect(expectedObject.value).to.deep.equal(jsonObject);
     });
 
     it('should not have any of the previous data', async () => {
@@ -46,7 +46,7 @@ describe('startIPFS', function main() {
         ipfsAPI.dag.get(cid),
         new Promise(resolve => setTimeout(() => resolve(false), 2000)),
       ]);
-      expect(result).to.be.equal(false);
+      expect(result).to.equal(false);
     });
   });
 
@@ -67,7 +67,7 @@ describe('startIPFS', function main() {
       for (let i = 1; i < nodesCount; i++) {
         const expectedTrueObject = await ipfsAPIs[i].dag.get(cid);
 
-        expect(expectedTrueObject.value).to.be.deep.equal(jsonObject);
+        expect(expectedTrueObject.value).to.deep.equal(jsonObject);
       }
     });
 
@@ -78,7 +78,7 @@ describe('startIPFS', function main() {
           new Promise(resolve => setTimeout(() => resolve(false), 2000)),
         ]);
 
-        expect(result).to.be.equal(false);
+        expect(result).to.equal(false);
       }
     });
 
@@ -88,7 +88,7 @@ describe('startIPFS', function main() {
       for (let i = 1; i < nodesCount; i++) {
         const expectedObject = await ipfsAPIs[i].block.get(anotherObject.cid);
 
-        expect(expectedObject.data).to.be.deep.equal(anotherObject.data);
+        expect(expectedObject.data).to.deep.equal(anotherObject.data);
       }
     });
   });

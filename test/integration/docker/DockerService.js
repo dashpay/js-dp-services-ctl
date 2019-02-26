@@ -44,9 +44,9 @@ describe('DockerService', function main() {
       const { NetworkSettings: { Networks } } = await dsahCore.container.inspect();
       const networks = Object.keys(Networks);
 
-      expect(Driver).to.be.equal(driver);
-      expect(networks.length).to.be.equal(1);
-      expect(networks[0]).to.be.equal(name);
+      expect(Driver).to.equal(driver);
+      expect(networks.length).to.equal(1);
+      expect(networks[0]).to.equal(name);
     });
 
     it('should start an instance with the DashCoreOptions options', async () => {
@@ -54,7 +54,7 @@ describe('DockerService', function main() {
 
       const { Args } = await dsahCore.container.inspect();
 
-      expect(Args).to.be.deep.equal([
+      expect(Args).to.deep.equal([
         `-port=${options.getDashdPort()}`,
         `-rpcuser=${options.getRpcUser()}`,
         `-rpcpassword=${options.getRpcPassword()}`,
@@ -86,7 +86,7 @@ describe('DockerService', function main() {
 
       const { State } = await dsahCore.container.inspect();
 
-      expect(State.Status).to.be.equal('exited');
+      expect(State.Status).to.equal('exited');
     });
 
     it('should start after stop', async () => {
@@ -94,11 +94,11 @@ describe('DockerService', function main() {
 
       const { State } = await dsahCore.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should return instance IP', () => {
-      expect(dsahCore.getIp()).to.be.equal(dsahCore.getIp());
+      expect(dsahCore.getIp()).to.equal(dsahCore.getIp());
     });
 
     it('should clean the instance', async () => {
@@ -109,7 +109,7 @@ describe('DockerService', function main() {
 
         expect.fail('should throw error "Container not found"');
       } catch (e) {
-        expect(e.message).to.be.equal('Container not found');
+        expect(e.message).to.equal('Container not found');
       }
     });
   });

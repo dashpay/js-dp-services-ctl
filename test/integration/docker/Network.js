@@ -14,8 +14,8 @@ describe('Network', () => {
     const dockerNetwork = new Docker().getNetwork(name);
     const { Name, Driver } = await dockerNetwork.inspect();
 
-    expect(Name).to.be.equal(name);
-    expect(Driver).to.be.equal(driver);
+    expect(Name).to.equal(name);
+    expect(Driver).to.equal(driver);
   });
 
   it('should not fail creating a network that already exists', async () => {
@@ -28,7 +28,7 @@ describe('Network', () => {
     const dockerNetwork = new Docker().getNetwork(name);
     const { Name, Driver } = await dockerNetwork.inspect();
 
-    expect(Name).to.be.equal(name);
-    expect(Driver).to.be.equal(driver);
+    expect(Name).to.equal(name);
+    expect(Driver).to.equal(driver);
   });
 });

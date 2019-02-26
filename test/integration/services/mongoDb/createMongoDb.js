@@ -26,9 +26,9 @@ describe('createMongoDb', function main() {
       const { NetworkSettings: { Networks } } = await mongoDbService.container.inspect();
       const networks = Object.keys(Networks);
 
-      expect(Driver).to.be.equal('bridge');
-      expect(networks.length).to.be.equal(1);
-      expect(networks[0]).to.be.equal('dash_test_network');
+      expect(Driver).to.equal('bridge');
+      expect(networks.length).to.equal(1);
+      expect(networks[0]).to.equal('dash_test_network');
     });
 
     it('should start an instance with the default options', async () => {
@@ -36,7 +36,7 @@ describe('createMongoDb', function main() {
 
       const { Args } = await mongoDbService.container.inspect();
 
-      expect(Args).to.be.deep.equal(['mongod']);
+      expect(Args).to.deep.equal(['mongod']);
     });
 
     it('should get Mongo db', async () => {
@@ -46,7 +46,7 @@ describe('createMongoDb', function main() {
       const collection = db.collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.be.equal(0);
+      expect(count).to.equal(0);
     });
 
     it('should get Mongo client', async () => {
@@ -56,7 +56,7 @@ describe('createMongoDb', function main() {
       const collection = client.db('test').collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.be.equal(0);
+      expect(count).to.equal(0);
     });
 
     it('should clean Mongo database', async () => {
@@ -69,7 +69,7 @@ describe('createMongoDb', function main() {
       let dbList = await adminDb.listDatabases({ onlyNames: true });
       dbList = dbList.databases.map(db => db.name);
 
-      expect(dbList).to.be.deep.equal([
+      expect(dbList).to.deep.equal([
         'admin',
         'config',
         'local',
@@ -81,7 +81,7 @@ describe('createMongoDb', function main() {
       dbList = await adminDb.listDatabases({ onlyNames: true });
       dbList = dbList.databases.map(db => db.name);
 
-      expect(dbList).to.be.deep.equal([
+      expect(dbList).to.deep.equal([
         'admin',
         'config',
         'local',
@@ -105,7 +105,7 @@ describe('createMongoDb', function main() {
       const collection = db.collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.be.equal(0);
+      expect(count).to.equal(0);
     });
   });
 

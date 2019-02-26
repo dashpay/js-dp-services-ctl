@@ -8,7 +8,7 @@ describe('NodeJsServiceOptions', () => {
 
     const cmd = options.getNpmInstallCmd();
 
-    expect(cmd).to.be
+    expect(cmd).to
       .deep
       .equal([
         'sh',
@@ -25,7 +25,7 @@ describe('NodeJsServiceOptions', () => {
     const options = new SomeOptions();
     const volumeName = options.getNodeModulesVolumeName();
 
-    expect(volumeName).to.be
+    expect(volumeName).to
       .equal('Evo.DockerService.SomeOptions.NodeModules');
   });
 });

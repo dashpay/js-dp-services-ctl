@@ -28,7 +28,7 @@ describe('startIPFS', function main() {
       const { State, Mounts } = await ipfsNode.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
@@ -37,7 +37,7 @@ describe('startIPFS', function main() {
       const actualTrueObject = await client.block.put(Buffer.from('{"true": true}'));
       const expectedTrueObject = await client.block.get(actualTrueObject.cid);
 
-      expect(expectedTrueObject.data).to.be.deep.equal(actualTrueObject.data);
+      expect(expectedTrueObject.data).to.deep.equal(actualTrueObject.data);
     });
   });
 
@@ -70,7 +70,7 @@ describe('startIPFS', function main() {
         const { State, Mounts } = await ipfsNodes[i].container.inspect();
         const destinations = Mounts.map(volume => volume.Destination);
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
         expect(destinations).to.include(CONTAINER_VOLUME);
       }
     });
@@ -83,7 +83,7 @@ describe('startIPFS', function main() {
         const client = await ipfsNodes[i].getApi();
         const expectedTrueObject = await client.block.get(actualTrueObject.cid);
 
-        expect(expectedTrueObject.data).to.be.deep.equal(actualTrueObject.data);
+        expect(expectedTrueObject.data).to.deep.equal(actualTrueObject.data);
       }
     });
 
@@ -95,7 +95,7 @@ describe('startIPFS', function main() {
         const ipfs = ipfsNodes[i].getApi();
         const data = await ipfs.dag.get(cid, 'name', { format: 'dag-cbor', hashAlg: 'sha2-256' });
 
-        expect(data.value).to.be.equal('world');
+        expect(data.value).to.equal('world');
       }
     });
   });
