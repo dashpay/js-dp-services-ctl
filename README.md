@@ -94,7 +94,7 @@ const options = {
 };
 
 // Start service
-const ipfs = await startIPFS();
+const ipfs = await startIPFS(options);
 
 // Get peer ID
 const peerId = await ipfs.getApi().id();
@@ -129,14 +129,14 @@ await Promise.all(
 
 ### Services configuration
 
-Each service has default options which can be overwrited in three ways:
+Each service has default options which can be overwritten in three ways:
 1. Pass options as plain JS object to `start[service]` or `create[service]` methods
 2. Pass instance of options class to `start[service]` or `create[service]` methods
 3. Pass default options as plain JS object to `setDefaultCustomOptions` method of options class
 
 ### Integration with Mocha
 
-Services [Mocha](https://mochajs.org/) hooks provide automatization for your mocha tests:
+Services [Mocha](https://mochajs.org/) hooks provide automation for your mocha tests:
 - Removing obsolete related Docker containers (`before`)
 - Cleaning a service state between tests (`beforeEach`, `afterEach`)
 - Stopping service after tests (`after`)

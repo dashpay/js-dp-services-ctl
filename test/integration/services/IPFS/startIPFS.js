@@ -2,13 +2,14 @@ const removeContainers = require('../../../../lib/docker/removeContainers');
 const { startIPFS } = require('../../../../lib');
 
 describe('startIPFS', function main() {
-  this.timeout(40000);
+  this.timeout(60000);
 
   before(removeContainers);
 
-  describe('One instance', () => {
+  describe('One node', () => {
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let instance;
+    let ipfsNode;
+
     before(async () => {
       const rootPath = process.cwd();
       const container = {
@@ -17,28 +18,35 @@ describe('startIPFS', function main() {
         ],
       };
       const options = { container };
-      instance = await startIPFS(options);
-    });
-    after(async () => instance.remove());
 
-    it('should has container running', async () => {
-      const { State, Mounts } = await instance.container.inspect();
-      expect(State.Status).to.equal('running');
+      ipfsNode = await startIPFS(options);
+    });
+
+    after(async () => ipfsNode.remove());
+
+    it('should have container running', async () => {
+      const { State, Mounts } = await ipfsNode.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
+
+      expect(State.Status).to.be.equal('running');
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
     it('should start one instance', async () => {
-      const client = instance.getApi();
+      const client = ipfsNode.getApi();
       const actualTrueObject = await client.block.put(Buffer.from('{"true": true}'));
       const expectedTrueObject = await client.block.get(actualTrueObject.cid);
+
       expect(expectedTrueObject.data).to.be.deep.equal(actualTrueObject.data);
     });
   });
 
-  describe('Three instances', () => {
+  describe('Many nodes', () => {
+    const nodesCount = 2;
     const CONTAINER_VOLUME = '/usr/src/app/README.md';
-    let instances;
+
+    let ipfsNodes;
+
     before(async () => {
       const rootPath = process.cwd();
       const container = {
@@ -47,41 +55,47 @@ describe('startIPFS', function main() {
         ],
       };
       const options = { container };
-      instances = await startIPFS.many(3, options);
+
+      ipfsNodes = await startIPFS.many(nodesCount, options);
     });
+
     after(async () => {
-      const promises = instances.map(instance => instance.remove());
-      await Promise.all(promises);
+      await Promise.all(
+        ipfsNodes.map(instance => instance.remove()),
+      );
     });
 
     it('should have containers running', async () => {
-      for (let i = 0; i < 3; i++) {
-        const { State, Mounts } = await instances[i].container.inspect();
-        expect(State.Status).to.equal('running');
+      for (let i = 0; i < nodesCount; i++) {
+        const { State, Mounts } = await ipfsNodes[i].container.inspect();
         const destinations = Mounts.map(volume => volume.Destination);
+
+        expect(State.Status).to.be.equal('running');
         expect(destinations).to.include(CONTAINER_VOLUME);
       }
     });
 
     it('should start many instances', async () => {
-      const clientOne = await instances[0].getApi();
+      const clientOne = await ipfsNodes[0].getApi();
       const actualTrueObject = await clientOne.block.put(Buffer.from('{"true": true}'));
 
-      for (let i = 1; i < 3; i++) {
-        const client = await instances[i].getApi();
+      for (let i = 1; i < nodesCount; i++) {
+        const client = await ipfsNodes[i].getApi();
         const expectedTrueObject = await client.block.get(actualTrueObject.cid);
+
         expect(expectedTrueObject.data).to.be.deep.equal(actualTrueObject.data);
       }
     });
 
     it('should propagate data between instances', async () => {
-      const clientOne = instances[0].getApi();
+      const clientOne = ipfsNodes[0].getApi();
       const cid = await clientOne.dag.put({ name: 'world' }, { format: 'dag-cbor', hashAlg: 'sha2-256' });
 
-      for (let i = 0; i < 3; i++) {
-        const ipfs = instances[i].getApi();
+      for (let i = 0; i < nodesCount; i++) {
+        const ipfs = ipfsNodes[i].getApi();
         const data = await ipfs.dag.get(cid, 'name', { format: 'dag-cbor', hashAlg: 'sha2-256' });
-        expect(data.value).to.equal('world');
+
+        expect(data.value).to.be.equal('world');
       }
     });
   });
