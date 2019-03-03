@@ -18,7 +18,7 @@ describe('Network', () => {
     expect(Driver).to.equal(driver);
   });
 
-  it('should not fail creating a network that is already exists', async () => {
+  it('should not fail creating a network that already exists', async () => {
     const options = new MongoDbOptions();
     const { name, driver } = options.getContainerNetworkOptions();
     const network = new Network(name, driver);

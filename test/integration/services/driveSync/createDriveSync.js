@@ -55,7 +55,7 @@ describe('createDriveSync', function main() {
       expect(networks[0]).to.equal('dash_test_network');
     });
 
-    it('should be able to start an instance with a custom environment variables', async () => {
+    it('should be able to start an instance with custom environment variables', async () => {
       await driveSync.start();
 
       const { Config: { Env } } = await driveSync.container.inspect();
@@ -100,7 +100,7 @@ describe('createDriveSync', function main() {
       ]);
     });
 
-    it('should be able to start an instance with a plain object options', async () => {
+    it('should be able to start an instance with plain object options', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {

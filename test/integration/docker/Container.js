@@ -126,7 +126,7 @@ describe('Container', function main() {
       ]);
     });
 
-    it('should call createContainer method only once when calling any of the start/stop/start method', async () => {
+    it('should call createContainer method only once when calling any of the start/stop/start methods', async () => {
       const createContainerSpy = sandbox.spy(containerOne, 'create');
 
       await containerOne.start();
@@ -151,7 +151,7 @@ describe('Container', function main() {
       }
     });
 
-    it('should remove it\'s volumes upon calling remove method', async () => {
+    it('should remove its volumes upon calling remove method', async () => {
       const docker = new Docker();
 
       await container.start();

@@ -114,7 +114,7 @@ describe('createMongoDb', function main() {
 
     afterEach(async () => mongoDbService.remove());
 
-    it('should be able to start an instance with a plain object options', async () => {
+    it('should be able to start an instance with plain object options', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {

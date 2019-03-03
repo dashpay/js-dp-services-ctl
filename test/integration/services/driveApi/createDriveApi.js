@@ -71,7 +71,7 @@ describe('createDriveApi', function main() {
       expect(Args).to.deep.equal(['run', 'api']);
     });
 
-    it('should have a correct Drive API RPC port as a result of calling getRpcPort', async () => {
+    it('should return correct Drive API RPC port as a result of calling getRpcPort', async () => {
       await driveApi.start();
 
       expect(driveApi.getRpcPort()).to.equal(driveApi.options.getRpcPort());
@@ -111,7 +111,7 @@ describe('createDriveApi', function main() {
       ]);
     });
 
-    it('should have an error as result of an API call if initial sync is in progress', async () => {
+    it('should return error as result of an API call if initial sync is in progress', async () => {
       await driveApi.start();
 
       const rpc = driveApi.getApi();
