@@ -48,7 +48,7 @@
     "sinon-chai": "^3.3.0"
   },
   "dependencies": {
-    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client.git#master",
+    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client.git#v0.2.0",
     "@dashevo/dashd-rpc": "^1.2.1",
     "aws-sdk": "^2.382.0",
     "cbor": "^4.1.4",
