@@ -5,7 +5,7 @@ describe('Services', () => {
   require('./driveSync');
   require('./IPFS');
   require('./mongoDb');
-  require('./startDashDrive');
+  require('./startDrive');
   require('./startDapi');
   require('./node');
 });

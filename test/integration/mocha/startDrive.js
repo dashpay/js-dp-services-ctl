@@ -1,10 +1,10 @@
-const startDashDrive = require('../../../lib/mocha/startDashDrive');
+const startDrive = require('../../../lib/mocha/startDrive');
 
-describe('startDashDrive', () => {
+describe('startDrive', () => {
   describe('One node', () => {
     let driveNode;
 
-    startDashDrive().then((instance) => {
+    startDrive().then((instance) => {
       driveNode = instance;
     });
 
@@ -38,7 +38,7 @@ describe('startDashDrive', () => {
 
     let driveNodes;
 
-    startDashDrive.many(nodesCount).then((instances) => {
+    startDrive.many(nodesCount).then((instances) => {
       driveNodes = instances;
     });
 

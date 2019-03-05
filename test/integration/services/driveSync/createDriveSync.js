@@ -159,7 +159,7 @@ describe('createDriveSync', function main() {
 
       const { Config: { Image: imageName } } = await driveSync.container.inspect();
 
-      expect(imageName).to.contain('dashdrive');
+      expect(imageName).to.contain('drive');
     });
   });
 });

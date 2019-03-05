@@ -20,7 +20,7 @@ describe.skip('startDapi', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
       dapiNode = await startDapi(options);
@@ -100,7 +100,7 @@ describe.skip('startDapi', function main() {
       expect(dapiEnvs.length).to.be.equal(expectedEnv.length);
     });
 
-    it('should be on the same network (DashCore, DashDrive, IPFS, and MongoDb, Insight)', async () => {
+    it('should be on the same network (DashCore, Drive, IPFS, and MongoDb, Insight)', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
       } = await dapiNode.dashCore.container.inspect();
@@ -154,7 +154,7 @@ describe.skip('startDapi', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
       dapiNodes = await startDapi.many(nodesCount, options);

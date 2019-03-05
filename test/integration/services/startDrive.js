@@ -1,7 +1,7 @@
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { startDashDrive } = require('../../../lib');
+const { startDrive } = require('../../../lib');
 
-describe('startDashDrive', function main() {
+describe('startDrive', function main() {
   this.timeout(180000);
 
   before(removeContainers);
@@ -19,10 +19,10 @@ describe('startDashDrive', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
-      driveNode = await startDashDrive(options);
+      driveNode = await startDrive(options);
     });
 
     after(async () => driveNode.remove());
@@ -59,7 +59,7 @@ describe('startDashDrive', function main() {
       expect(State.Status).to.be.equal('running');
     });
 
-    it('should DashDrive container has the right env variables', async () => {
+    it('should Drive container has the right env variables', async () => {
       const { Config: { Env: ApiEnvs } } = await driveNode.driveApi.container.inspect();
       const { Config: { Env: SyncEnvs } } = await driveNode.driveSync.container.inspect();
 
@@ -80,7 +80,7 @@ describe('startDashDrive', function main() {
       expect(syncEnvs.length).to.be.equal(expectedEnv.length);
     });
 
-    it('should be on the same network (DashCore, DashDrive, IPFS, and MongoDb)', async () => {
+    it('should be on the same network (DashCore, Drive, IPFS, and MongoDb)', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
       } = await driveNode.dashCore.container.inspect();
@@ -124,10 +124,10 @@ describe('startDashDrive', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
-      driveNodes = await startDashDrive.many(nodesCount, options);
+      driveNodes = await startDrive.many(nodesCount, options);
     });
 
     after(async () => {
