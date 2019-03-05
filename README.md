@@ -1,4 +1,4 @@
-# Dash Platform services ctl 
+# Dash Platform services ctl
 
 [![Build Status](https://travis-ci.com/dashevo/js-dp-services-ctl.svg?branch=master)](https://travis-ci.com/dashevo/js-dp-services-ctl)
 [![NPM version](https://img.shields.io/npm/v/@dashevo/js-dp-services-ctl.svg)](https://npmjs.org/package/@dashevo/js-dp-services-ctl)
@@ -34,7 +34,7 @@
 
 #### Drive
 
-[Drive](https://github.com/dashevo/dashdrive) service starts a bunch of related services:
+[Drive](https://github.com/dashevo/drive) service starts a bunch of related services:
 - Drive Api
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApi.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApiOptions.js)
@@ -45,7 +45,7 @@
 - [MongoDB](#mongodb)
 - [Dash Core](#dash-core)
 
-#### DAPI 
+#### DAPI
 
 [DAPI](https://github.com/dashevo/dapi) service starts all DP services:
 - DAPI
