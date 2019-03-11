@@ -1,7 +1,7 @@
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { startDashDrive } = require('../../../lib');
+const { startDrive } = require('../../../lib');
 
-describe('startDashDrive', function main() {
+describe('startDrive', function main() {
   this.timeout(180000);
 
   before(removeContainers);
@@ -19,10 +19,10 @@ describe('startDashDrive', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
-      driveNode = await startDashDrive(options);
+      driveNode = await startDrive(options);
     });
 
     after(async () => driveNode.remove());
@@ -59,7 +59,7 @@ describe('startDashDrive', function main() {
       expect(State.Status).to.equal('running');
     });
 
-    it('should have proper env variables set for DashDrive container', async () => {
+    it('should have proper env variables set for Drive container', async () => {
       const { Config: { Env: ApiEnvs } } = await driveNode.driveApi.container.inspect();
       const { Config: { Env: SyncEnvs } } = await driveNode.driveSync.container.inspect();
 
@@ -124,10 +124,10 @@ describe('startDashDrive', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
-      driveNodes = await startDashDrive.many(nodesCount, options);
+      driveNodes = await startDrive.many(nodesCount, options);
     });
 
     after(async () => {

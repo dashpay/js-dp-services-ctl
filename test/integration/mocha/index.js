@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 describe('Mocha', () => {
   require('./startDashCore');
-  require('./startDashDrive');
+  require('./startDrive');
   require('./startIPFS');
   require('./startMongoDb');
   require('./startDapi');
