@@ -30,7 +30,7 @@ describe('createDashCore', function main() {
       }
     });
 
-    it('should have an empty object as a result of calling getApi', () => {
+    it('should return an empty object as a result of calling getApi', () => {
       const api = dashCore.getApi();
 
       expect(api).to.deep.equal({});
@@ -85,7 +85,7 @@ describe('createDashCore', function main() {
       ]);
     });
 
-    it('should have an RPC client as a result of calling getApi', () => {
+    it('should return an RPC client as a result of calling getApi', () => {
       const rpcPort = dashCore.options.getRpcPort();
       const rpcClient = dashCore.getApi();
 

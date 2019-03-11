@@ -32,7 +32,7 @@ describe('Container', function main() {
       await container.remove();
     });
 
-    it('should have null as a result of calling getIp method', () => {
+    it('should return null as a result of calling getIp method', () => {
       const ip = container.getIp();
 
       expect(ip).to.be.null();
@@ -136,7 +136,7 @@ describe('Container', function main() {
       expect(createContainerSpy.callCount).to.equal(1);
     });
 
-    it('should remove container if port was already taken', async () => {
+    it('should remove container if port is already taken', async () => {
       containerTwo.ports = containerOne.ports;
 
       const removeContainerSpy = sandbox.spy(containerTwo, 'removeContainer');

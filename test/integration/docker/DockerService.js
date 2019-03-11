@@ -97,7 +97,7 @@ describe('DockerService', function main() {
       expect(State.Status).to.equal('running');
     });
 
-    it('should have instance IP address as a result of calling getIp method', () => {
+    it('should return instance IP address as a result of calling getIp method', () => {
       expect(dashCore.getIp()).to.equal(dashCore.getIp());
     });
 

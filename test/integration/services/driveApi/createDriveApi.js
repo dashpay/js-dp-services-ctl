@@ -111,7 +111,7 @@ describe('createDriveApi', function main() {
       ]);
     });
 
-    it('should return error as result of an API call if initial sync is in progress', async () => {
+    it('should return an error as result of an API call if initial sync is in progress', async () => {
       await driveApi.start();
 
       const rpc = driveApi.getApi();
@@ -147,7 +147,7 @@ describe('createDriveApi', function main() {
       ]);
     });
 
-    it('should be able to start an instance with a plain object options', async () => {
+    it('should be able to start an instance with options passed as a plain object', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {

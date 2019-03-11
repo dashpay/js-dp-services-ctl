@@ -39,7 +39,7 @@ describe('createMongoDb', function main() {
       expect(Args).to.deep.equal(['mongod']);
     });
 
-    it('should have a Mongo db as a result of calling getDb', async () => {
+    it('should return a MongoDB database as a result of calling getDb', async () => {
       await mongoDbService.start();
 
       const db = await mongoDbService.getDb();
@@ -49,7 +49,7 @@ describe('createMongoDb', function main() {
       expect(count).to.equal(0);
     });
 
-    it('should have a Mongo client as a result of calling getClient', async () => {
+    it('should return a Mongo client as a result of calling getClient', async () => {
       await mongoDbService.start();
 
       const client = await mongoDbService.getClient();

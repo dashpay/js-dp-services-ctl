@@ -50,7 +50,7 @@ describe('createIPFS', function main() {
       ]);
     });
 
-    it('should have an IPFS address as a result of calling getIpfsAddress', async () => {
+    it('should return an IPFS address as a result of calling getIpfsAddress', async () => {
       await ipfs.start();
 
       const address = ipfs.getIpfsAddress();
@@ -58,7 +58,7 @@ describe('createIPFS', function main() {
       expect(address).to.equal(`/ip4/${ipfs.getIp()}/tcp/${ipfs.options.getIpfsInternalPort()}`);
     });
 
-    it('should have IPFS client as a result of calling getApi', async () => {
+    it('should return IPFS client as a result of calling getApi', async () => {
       await ipfs.start();
 
       const ipfsApi = ipfs.getApi();
