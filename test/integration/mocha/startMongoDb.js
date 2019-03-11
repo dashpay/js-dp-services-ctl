@@ -8,7 +8,7 @@ describe('startMongoDb', () => {
       mongoDbNode = instance;
     });
 
-    it('should start one node and insert with MongoDb', async () => {
+    it('should be able to start one node and insert a single document', async () => {
       const db = await mongoDbNode.getDb();
       const collection = db.collection('syncState');
       await collection.insertOne({
@@ -18,10 +18,10 @@ describe('startMongoDb', () => {
 
       const countBefore = await collection.countDocuments({});
 
-      expect(countBefore).to.be.equal(1);
+      expect(countBefore).to.equal(1);
     });
 
-    it('should insert with MongoClient to test db', async () => {
+    it('should be able to insert a document to test db', async () => {
       const client = await mongoDbNode.getClient();
       const collection = client.db('test').collection('syncState');
       await collection.insertOne({
@@ -31,16 +31,16 @@ describe('startMongoDb', () => {
 
       const countBefore = await collection.countDocuments({});
 
-      expect(countBefore).to.be.equal(1);
+      expect(countBefore).to.equal(1);
     });
 
-    it('should drop MongoDb after last test', async () => {
+    it('should drop the database after the last test', async () => {
       const db = await mongoDbNode.getDb();
       const collection = db.collection('syncState');
 
       const countBefore = await collection.countDocuments({});
 
-      expect(countBefore).to.be.equal(0);
+      expect(countBefore).to.equal(0);
     });
   });
 
@@ -57,7 +57,7 @@ describe('startMongoDb', () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await mongoDbNodes[i].container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
   });

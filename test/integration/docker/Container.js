@@ -24,15 +24,15 @@ describe('Container', function main() {
   });
 
   describe('before start', () => {
-    it('should not crash if stop', async () => {
+    it('should not crash if stop method is called', async () => {
       await container.stop();
     });
 
-    it('should not crash if remove', async () => {
+    it('should not crash if remove method is called', async () => {
       await container.remove();
     });
 
-    it('should return null if getIp', () => {
+    it('should return null as a result of calling getIp method', () => {
       const ip = container.getIp();
 
       expect(ip).to.be.null();
@@ -42,7 +42,7 @@ describe('Container', function main() {
   describe('usage', () => {
     after(async () => container.remove());
 
-    it('should start a BaseInstance with MongoDbOptions network options', async () => {
+    it('should be able to start a BaseInstance with MongoDbOptions network options', async () => {
       await container.start();
       const { name, driver } = mongoDbOptions.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
@@ -50,12 +50,12 @@ describe('Container', function main() {
       const { NetworkSettings: { Networks } } = await container.inspect();
       const networks = Object.keys(Networks);
 
-      expect(Driver).to.be.equal(driver);
-      expect(networks.length).to.be.equal(1);
-      expect(networks[0]).to.be.equal(name);
+      expect(Driver).to.equal(driver);
+      expect(networks.length).to.equal(1);
+      expect(networks[0]).to.equal(name);
     });
 
-    it('should start an instance with the MongoDbOptions ports', async () => {
+    it('should be able to start an instance with the MongoDbOptions ports', async () => {
       await container.start();
       const { NetworkSettings: { Ports } } = await container.inspect();
 
@@ -63,38 +63,38 @@ describe('Container', function main() {
       expect(Ports['27017/tcp']).to.be.not.null();
     });
 
-    it('should not crash if start is called multiple times', async () => {
+    it('should not crash if start method is called multiple times', async () => {
       await container.start();
       await container.start();
     });
 
-    it('should stop the container', async () => {
+    it('should be able to stop the container', async () => {
       await container.stop();
       const { State } = await container.inspect();
 
-      expect(State.Status).to.be.equal('exited');
+      expect(State.Status).to.equal('exited');
     });
 
-    it('should start after stop', async () => {
+    it('should be able to start the container after stopping it', async () => {
       await container.start();
       const { State } = await container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
-    it('should start after remove', async () => {
+    it('should be able to start the container after removing it', async () => {
       await container.remove();
       await container.start();
       const { State } = await container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
-    it('should return container IP', () => {
-      expect(container.getIp()).to.be.equal(container.getIp());
+    it('should be able to get container IP by calling getIp', () => {
+      expect(container.getIp()).to.equal(container.getIp());
     });
 
-    it('should remove the container', async () => {
+    it('should be able to remove the container', async () => {
       await container.remove();
 
       try {
@@ -102,7 +102,7 @@ describe('Container', function main() {
 
         expect.fail('should throw error "Container not found"');
       } catch (e) {
-        expect(e.message).to.be.equal('Container not found');
+        expect(e.message).to.equal('Container not found');
       }
     });
   });
@@ -126,17 +126,17 @@ describe('Container', function main() {
       ]);
     });
 
-    it('should call createContainer only once when start/stop/start', async () => {
+    it('should call createContainer method only once when calling any of the start/stop/start methods', async () => {
       const createContainerSpy = sandbox.spy(containerOne, 'create');
 
       await containerOne.start();
       await containerOne.stop();
       await containerOne.start();
 
-      expect(createContainerSpy.callCount).to.be.equal(1);
+      expect(createContainerSpy.callCount).to.equal(1);
     });
 
-    it('should remove container if port if busy', async () => {
+    it('should remove container if port is already taken', async () => {
       containerTwo.ports = containerOne.ports;
 
       const removeContainerSpy = sandbox.spy(containerTwo, 'removeContainer');
@@ -146,8 +146,8 @@ describe('Container', function main() {
 
         expect.fail('should throw error with status code 500');
       } catch (e) {
-        expect(e.statusCode).to.be.equal(500);
-        expect(removeContainerSpy.callCount).to.be.equal(1);
+        expect(e.statusCode).to.equal(500);
+        expect(removeContainerSpy.callCount).to.equal(1);
       }
     });
 

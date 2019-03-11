@@ -98,11 +98,11 @@ describe('NodeJsService', function main() {
 
   it('should create volume, copy and install packages there, if no volume present', async () => {
     await service.start();
-    expect(service.container.docker.run).to.be.calledTwice();
+    expect(service.container.docker.run).to.have.been.calledTwice();
 
     // TODO: check arguments of the calls
 
-    expect(runOutputs[1]).to.not.be.deep.equal('');
+    expect(runOutputs[1]).to.not.equal('');
   });
 
   it('should only run npm install once on subsequent starts if caching is enabled', async () => {
@@ -110,8 +110,8 @@ describe('NodeJsService', function main() {
     await service.stop();
     await service.start();
 
-    expect(service.container.docker.run).to.be.calledThrice();
-    expect(runOutputs[2]).to.be.deep.equal('');
+    expect(service.container.docker.run).to.have.been.calledThrice();
+    expect(runOutputs[2]).to.deep.equal('');
   });
 
   it('should run npm install once package lock file is changed', async () => {
@@ -153,8 +153,8 @@ describe('NodeJsService', function main() {
 
     await service.start();
 
-    expect(service.container.docker.run).to.be.calledThrice();
-    expect(runOutputs[2]).to.not.be.deep.equal('');
+    expect(service.container.docker.run).to.have.been.calledThrice();
+    expect(runOutputs[2]).to.not.equal('');
   });
 
   it('should do nothing if caching is disabled', async () => {

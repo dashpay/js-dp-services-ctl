@@ -11,25 +11,25 @@ describe('startDrive', () => {
     it('should have DashCore container running', async () => {
       const { State } = await driveNode.dashCore.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have MongoDb container running', async () => {
       const { State } = await driveNode.mongoDb.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have Drive API container running', async () => {
       const { State } = await driveNode.driveApi.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have Drive sync container running', async () => {
       const { State } = await driveNode.driveSync.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
   });
 
@@ -46,7 +46,7 @@ describe('startDrive', () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].dashCore.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -54,7 +54,7 @@ describe('startDrive', () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].mongoDb.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -62,7 +62,7 @@ describe('startDrive', () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].driveApi.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -70,7 +70,7 @@ describe('startDrive', () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].driveSync.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
   });

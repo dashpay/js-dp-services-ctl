@@ -4,7 +4,7 @@ const DriveApiOptions = require('../../../lib/services/driveApi/DriveApiOptions'
 describe('getAwsEcrAuthorizationToken', function main() {
   this.timeout(10000);
 
-  it('should get the authorization', async () => {
+  it('should be able to get the authorization token', async () => {
     const options = new DriveApiOptions();
     const authorization = await getAwsEcrAuthorizationToken(options.getAwsOptions());
 

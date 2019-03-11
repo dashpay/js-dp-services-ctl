@@ -28,7 +28,7 @@ describe('startMongoDb', function main() {
       const { State, Mounts } = await mongoDbNode.container.inspect();
       const destinations = Mounts.map(volume => volume.Destination);
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
   });
@@ -62,7 +62,7 @@ describe('startMongoDb', function main() {
         const { State, Mounts } = await mongoDbNodes[i].container.inspect();
         const destinations = Mounts.map(volume => volume.Destination);
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
         expect(destinations).to.include(CONTAINER_VOLUME);
       }
     });
