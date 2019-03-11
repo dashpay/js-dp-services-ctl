@@ -17,7 +17,7 @@ describe('Image', function main() {
     mockedStream._read = () => { /* stub */ };
   });
 
-  it('should pull image without authentication', async () => {
+  it('should pull an image without authentication', async () => {
     const imageName = 'alpine';
 
     const dockerImage = await docker.getImage(imageName);
@@ -31,7 +31,7 @@ describe('Image', function main() {
     await image.pull();
   });
 
-  it('should pull image with authentication', async function it() {
+  it('should pull an image with authentication', async function it() {
     const options = new DashCoreOptions();
     const imageName = 'private/image:name';
 
@@ -49,7 +49,7 @@ describe('Image', function main() {
     await image.pull();
   });
 
-  it('should pull image only if it is not present', async function it() {
+  it('should pull an image only if it is not present', async function it() {
     const imageName = 'alpine';
     const dockerImage = await docker.getImage(imageName);
     try {
@@ -66,6 +66,6 @@ describe('Image', function main() {
     await image.pull();
     await image.pull();
 
-    expect(docker.pull).to.be.calledOnce();
+    expect(docker.pull).to.have.been.calledOnce();
   });
 });

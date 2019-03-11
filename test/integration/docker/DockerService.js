@@ -28,33 +28,33 @@ describe('DockerService', function main() {
   const options = new DashCoreOptions();
 
   describe('usage', () => {
-    let dsahCore;
+    let dashCore;
 
     before(async () => {
-      dsahCore = await createInstance(options);
+      dashCore = await createInstance(options);
     });
 
-    after(async () => dsahCore.remove());
+    after(async () => dashCore.remove());
 
-    it('should start a DockerService with DashCoreOptions network options', async () => {
-      await dsahCore.start();
+    it('should be able to start a DockerService with DashCoreOptions network options', async () => {
+      await dashCore.start();
       const { name, driver } = options.getContainerNetworkOptions();
       const dockerNetwork = new Docker().getNetwork(name);
       const { Driver } = await dockerNetwork.inspect();
-      const { NetworkSettings: { Networks } } = await dsahCore.container.inspect();
+      const { NetworkSettings: { Networks } } = await dashCore.container.inspect();
       const networks = Object.keys(Networks);
 
-      expect(Driver).to.be.equal(driver);
-      expect(networks.length).to.be.equal(1);
-      expect(networks[0]).to.be.equal(name);
+      expect(Driver).to.equal(driver);
+      expect(networks.length).to.equal(1);
+      expect(networks[0]).to.equal(name);
     });
 
-    it('should start an instance with the DashCoreOptions options', async () => {
-      await dsahCore.start();
+    it('should be able to start an instance with the DashCoreOptions options', async () => {
+      await dashCore.start();
 
-      const { Args } = await dsahCore.container.inspect();
+      const { Args } = await dashCore.container.inspect();
 
-      expect(Args).to.be.deep.equal([
+      expect(Args).to.deep.equal([
         `-port=${options.getDashdPort()}`,
         `-rpcuser=${options.getRpcUser()}`,
         `-rpcpassword=${options.getRpcPassword()}`,
@@ -76,40 +76,40 @@ describe('DockerService', function main() {
       ]);
     });
 
-    it('should not crash if start is called multiple times', async () => {
-      await dsahCore.start();
-      await dsahCore.start();
+    it('should not crash if start method is called multiple times', async () => {
+      await dashCore.start();
+      await dashCore.start();
     });
 
-    it('should stop the instance', async () => {
-      await dsahCore.stop();
+    it('should be able to stop the instance', async () => {
+      await dashCore.stop();
 
-      const { State } = await dsahCore.container.inspect();
+      const { State } = await dashCore.container.inspect();
 
-      expect(State.Status).to.be.equal('exited');
+      expect(State.Status).to.equal('exited');
     });
 
-    it('should start after stop', async () => {
-      await dsahCore.start();
+    it('should be able to start the instance after stopping it', async () => {
+      await dashCore.start();
 
-      const { State } = await dsahCore.container.inspect();
+      const { State } = await dashCore.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
-    it('should return instance IP', () => {
-      expect(dsahCore.getIp()).to.be.equal(dsahCore.getIp());
+    it('should return instance IP address as a result of calling getIp method', () => {
+      expect(dashCore.getIp()).to.equal(dashCore.getIp());
     });
 
-    it('should clean the instance', async () => {
-      await dsahCore.remove();
+    it('should be able to remove the instance', async () => {
+      await dashCore.remove();
 
       try {
-        await dsahCore.container.inspect();
+        await dashCore.container.inspect();
 
         expect.fail('should throw error "Container not found"');
       } catch (e) {
-        expect(e.message).to.be.equal('Container not found');
+        expect(e.message).to.equal('Container not found');
       }
     });
   });
@@ -138,7 +138,7 @@ describe('DockerService', function main() {
       ]);
     });
 
-    it('should retry start container with another port if it is busy', async () => {
+    it('should retry starting a container with another port if latter was already taken', async () => {
       instanceOne.container.ports = ['4444:4444'];
       instanceTwo.container.ports = ['4444:4444'];
       instanceThree.container.ports = ['4444:4444'];
