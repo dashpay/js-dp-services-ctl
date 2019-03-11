@@ -1,6 +1,6 @@
 {
-  "name": "@dashevo/js-evo-services-ctl",
-  "version": "0.3.0",
+  "name": "@dashevo/dp-services-ctl",
+  "version": "0.4.0",
   "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dashevo/js-evo-services-ctl.git"
+    "url": "git+https://github.com/dashevo/js-dp-services-ctl.git"
   },
   "contributors": [
     {
@@ -48,7 +48,7 @@
     "sinon-chai": "^3.3.0"
   },
   "dependencies": {
-    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client#master",
+    "@dashevo/dapi-client": "git+ssh://git@github.com/dashevo/dapi-client.git#v0.2.0",
     "@dashevo/dashd-rpc": "^1.2.1",
     "aws-sdk": "^2.382.0",
     "cbor": "^4.1.4",
@@ -60,7 +60,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dashevo/js-evo-services-ctl/issues"
+    "url": "https://github.com/dashevo/js-dp-services-ctl/issues"
   },
-  "homepage": "https://github.com/dashevo/js-evo-services-ctl#readme"
+  "homepage": "https://github.com/dashevo/js-dp-services-ctl#readme"
 }
