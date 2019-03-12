@@ -25,7 +25,7 @@
 2. Install NPM package:
 
     ```sh
-    npm install @dashevo/js-dp-services-ctl
+    npm install @dashevo/dp-services-ctl
     ```
 
 ## Usage
@@ -86,7 +86,7 @@
 
 ```js
 // Export service(s)
-const { startIPFS } = require('@dashevo/js-dp-services-ctl');
+const { startIPFS } = require('@dashevo/dp-services-ctl');
 
 // This is optional. Default options listed in options class
 const options = {
@@ -106,7 +106,7 @@ await ipfs.remove();
 Use `many` method to start several instances:
 
 ```js
-const { startIPFS } = require('@dashevo/js-dp-services-ctl');
+const { startIPFS } = require('@dashevo/dp-services-ctl');
 
 // This is optional. Default options listed in options class
 const options = {
@@ -143,7 +143,7 @@ Services [Mocha](https://mochajs.org/) hooks provide automation for your mocha t
 
 ```js
 // Export service(s) with mocha hooks
-const { mocha: { startIPFS } } = require('@dashevo/js-dp-services-ctl');
+const { mocha: { startIPFS } } = require('@dashevo/dp-services-ctl');
 
 describe('Test suite', () => {
   let ipfsApi;
