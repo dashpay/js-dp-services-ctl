@@ -11,7 +11,7 @@ describe('startDashCore', () => {
     it('should have container running', async () => {
       const { State } = await dashCoreNode.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
   });
 
@@ -28,7 +28,7 @@ describe('startDashCore', () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await dashCoreNodes[i].container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
   });

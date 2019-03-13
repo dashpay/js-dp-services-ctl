@@ -1,7 +1,7 @@
 const removeContainers = require('../../../lib/docker/removeContainers');
-const { startDashDrive } = require('../../../lib');
+const { startDrive } = require('../../../lib');
 
-describe('startDashDrive', function main() {
+describe('startDrive', function main() {
   this.timeout(180000);
 
   before(removeContainers);
@@ -19,10 +19,10 @@ describe('startDashDrive', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
-      driveNode = await startDashDrive(options);
+      driveNode = await startDrive(options);
     });
 
     after(async () => driveNode.remove());
@@ -30,36 +30,36 @@ describe('startDashDrive', function main() {
     it('should have DashCore container running', async () => {
       const { State } = await driveNode.dashCore.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have MongoDb container running', async () => {
       const { State } = await driveNode.mongoDb.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have Drive API container running', async () => {
       const { State, Mounts } = await driveNode.driveApi.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
-      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+      expect(State.Status).to.equal('running');
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should have Drive sync container running', async () => {
       const { State, Mounts } = await driveNode.driveSync.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
-      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+      expect(State.Status).to.equal('running');
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should have IPFS container running', async () => {
       const { State } = await driveNode.ipfs.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
-    it('should DashDrive container has the right env variables', async () => {
+    it('should have proper env variables set for Drive container', async () => {
       const { Config: { Env: ApiEnvs } } = await driveNode.driveApi.container.inspect();
       const { Config: { Env: SyncEnvs } } = await driveNode.driveSync.container.inspect();
 
@@ -76,11 +76,11 @@ describe('startDashDrive', function main() {
       const apiEnvs = ApiEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
       const syncEnvs = SyncEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
 
-      expect(apiEnvs.length).to.be.equal(expectedEnv.length);
-      expect(syncEnvs.length).to.be.equal(expectedEnv.length);
+      expect(apiEnvs.length).to.equal(expectedEnv.length);
+      expect(syncEnvs.length).to.equal(expectedEnv.length);
     });
 
-    it('should be on the same network (DashCore, DashDrive, IPFS, and MongoDb)', async () => {
+    it('should have all of the containers on the same network', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
       } = await driveNode.dashCore.container.inspect();
@@ -101,11 +101,11 @@ describe('startDashDrive', function main() {
         NetworkSettings: mongoDbNetworkSettings,
       } = await driveNode.mongoDb.container.inspect();
 
-      expect(Object.keys(dashCoreNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveApiNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveSyncNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(ipfsNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
+      expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveApiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveSyncNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(ipfsNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
     });
   });
 
@@ -124,10 +124,10 @@ describe('startDashDrive', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
-      driveNodes = await startDashDrive.many(nodesCount, options);
+      driveNodes = await startDrive.many(nodesCount, options);
     });
 
     after(async () => {
@@ -138,7 +138,7 @@ describe('startDashDrive', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].dashCore.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -146,7 +146,7 @@ describe('startDashDrive', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].mongoDb.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -154,8 +154,8 @@ describe('startDashDrive', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State, Mounts } = await driveNodes[i].driveApi.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
-        expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+        expect(State.Status).to.equal('running');
+        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }
     });
 
@@ -163,8 +163,8 @@ describe('startDashDrive', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State, Mounts } = await driveNodes[i].driveSync.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
-        expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+        expect(State.Status).to.equal('running');
+        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }
     });
 
@@ -172,7 +172,7 @@ describe('startDashDrive', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].ipfs.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
   });

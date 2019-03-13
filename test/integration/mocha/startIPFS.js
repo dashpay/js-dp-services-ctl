@@ -31,22 +31,22 @@ describe('startIPFS', function main() {
       ipfsAPI = ipfs.getApi();
     });
 
-    it('should start one node', async () => {
+    it('should be able to start one node', async () => {
       const actualCid = await ipfsAPI.dag.put(jsonObject, { cid });
 
       expect(cid.equals(actualCid)).to.be.true();
 
       const expectedObject = await ipfsAPI.dag.get(cid);
 
-      expect(expectedObject.value).to.be.deep.equal(jsonObject);
+      expect(expectedObject.value).to.deep.equal(jsonObject);
     });
 
-    it('should not have any of the previous data', async () => {
+    it('should not have any of the previously stored data', async () => {
       const result = await Promise.race([
         ipfsAPI.dag.get(cid),
         new Promise(resolve => setTimeout(() => resolve(false), 2000)),
       ]);
-      expect(result).to.be.equal(false);
+      expect(result).to.equal(false);
     });
   });
 
@@ -59,7 +59,7 @@ describe('startIPFS', function main() {
       ipfsAPIs = ipfsNodes.map(ipfsNode => ipfsNode.getApi());
     });
 
-    it('should start many nodes', async () => {
+    it('should be able to start several nodes', async () => {
       const actualCid = await ipfsAPIs[0].dag.put(jsonObject, { cid });
 
       expect(cid.equals(actualCid)).to.be.true();
@@ -67,28 +67,28 @@ describe('startIPFS', function main() {
       for (let i = 1; i < nodesCount; i++) {
         const expectedTrueObject = await ipfsAPIs[i].dag.get(cid);
 
-        expect(expectedTrueObject.value).to.be.deep.equal(jsonObject);
+        expect(expectedTrueObject.value).to.deep.equal(jsonObject);
       }
     });
 
-    it('should not have any of the previous data', async () => {
+    it('should not have any of the previously stored data', async () => {
       for (let i = 1; i < nodesCount; i++) {
         const result = await Promise.race([
           ipfsAPIs[i].dag.get(cid),
           new Promise(resolve => setTimeout(() => resolve(false), 2000)),
         ]);
 
-        expect(result).to.be.equal(false);
+        expect(result).to.equal(false);
       }
     });
 
-    it('should have nodes connected event after clean', async () => {
+    it('should have nodes connected after clean', async () => {
       const anotherObject = await ipfsAPIs[0].block.put(Buffer.from('{"true": true}'));
 
       for (let i = 1; i < nodesCount; i++) {
         const expectedObject = await ipfsAPIs[i].block.get(anotherObject.cid);
 
-        expect(expectedObject.data).to.be.deep.equal(anotherObject.data);
+        expect(expectedObject.data).to.deep.equal(anotherObject.data);
       }
     });
   });

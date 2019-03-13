@@ -20,7 +20,7 @@ describe('startDapi', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
       dapiNode = await startDapi(options);
@@ -31,45 +31,45 @@ describe('startDapi', function main() {
     it('should have DashCore container running', async () => {
       const { State } = await dapiNode.dashCore.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have MongoDb container running', async () => {
       const { State } = await dapiNode.mongoDb.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have Drive API container running', async () => {
       const { State, Mounts } = await dapiNode.driveApi.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
-      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+      expect(State.Status).to.equal('running');
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should have Drive sync container running', async () => {
       const { State, Mounts } = await dapiNode.driveSync.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
-      expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+      expect(State.Status).to.equal('running');
+      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
     it('should have IPFS container running', async () => {
       const { State } = await dapiNode.ipfs.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have Insight container running', async () => {
       const { State } = await dapiNode.insight.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should have Dapi container running', async () => {
       const { State } = await dapiNode.dapi.container.inspect();
 
-      expect(State.Status).to.be.equal('running');
+      expect(State.Status).to.equal('running');
     });
 
     it('should Dapi container has the right env variables', async () => {
@@ -97,10 +97,10 @@ describe('startDapi', function main() {
 
       const dapiEnvs = DapiEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
 
-      expect(dapiEnvs.length).to.be.equal(expectedEnv.length);
+      expect(dapiEnvs.length).to.equal(expectedEnv.length);
     });
 
-    it('should be on the same network (DashCore, DashDrive, IPFS, and MongoDb, Insight)', async () => {
+    it('should be on the same network (DashCore, Drive, IPFS, and MongoDb, Insight)', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
       } = await dapiNode.dashCore.container.inspect();
@@ -129,13 +129,13 @@ describe('startDapi', function main() {
         NetworkSettings: dapiNetworkSettings,
       } = await dapiNode.dapi.container.inspect();
 
-      expect(Object.keys(dashCoreNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveApiNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveSyncNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(ipfsNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(insightNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
-      expect(Object.keys(dapiNetworkSettings.Networks)).to.be.deep.equal(['dash_test_network']);
+      expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveApiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveSyncNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(ipfsNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(insightNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(dapiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
     });
   });
 
@@ -154,7 +154,7 @@ describe('startDapi', function main() {
       };
       const options = {
         dashCore: { container },
-        dashDrive: { container },
+        drive: { container },
       };
 
       dapiNodes = await startDapi.many(nodesCount, options);
@@ -170,7 +170,7 @@ describe('startDapi', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await dapiNodes[i].dashCore.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -178,7 +178,7 @@ describe('startDapi', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await dapiNodes[i].mongoDb.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -186,8 +186,8 @@ describe('startDapi', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State, Mounts } = await dapiNodes[i].driveApi.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
-        expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+        expect(State.Status).to.equal('running');
+        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }
     });
 
@@ -195,8 +195,8 @@ describe('startDapi', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State, Mounts } = await dapiNodes[i].driveSync.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
-        expect(Mounts[0].Destination).to.be.equal(CONTAINER_VOLUME);
+        expect(State.Status).to.equal('running');
+        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
       }
     });
 
@@ -204,7 +204,7 @@ describe('startDapi', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await dapiNodes[i].ipfs.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -212,7 +212,7 @@ describe('startDapi', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await dapiNodes[i].insight.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
 
@@ -220,7 +220,7 @@ describe('startDapi', function main() {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await dapiNodes[i].dapi.container.inspect();
 
-        expect(State.Status).to.be.equal('running');
+        expect(State.Status).to.equal('running');
       }
     });
   });

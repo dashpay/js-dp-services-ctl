@@ -18,7 +18,7 @@ describe('createMongoDb', function main() {
 
     after(async () => mongoDbService.remove());
 
-    it('should start an instance with a bridge dash_test_network', async () => {
+    it('should be able to start an instance with a bridge network named dash_test_network', async () => {
       await mongoDbService.start();
 
       const network = new Docker().getNetwork('dash_test_network');
@@ -26,40 +26,40 @@ describe('createMongoDb', function main() {
       const { NetworkSettings: { Networks } } = await mongoDbService.container.inspect();
       const networks = Object.keys(Networks);
 
-      expect(Driver).to.be.equal('bridge');
-      expect(networks.length).to.be.equal(1);
-      expect(networks[0]).to.be.equal('dash_test_network');
+      expect(Driver).to.equal('bridge');
+      expect(networks.length).to.equal(1);
+      expect(networks[0]).to.equal('dash_test_network');
     });
 
-    it('should start an instance with the default options', async () => {
+    it('should be able to start an instance with the default options', async () => {
       await mongoDbService.start();
 
       const { Args } = await mongoDbService.container.inspect();
 
-      expect(Args).to.be.deep.equal(['mongod']);
+      expect(Args).to.deep.equal(['mongod']);
     });
 
-    it('should get Mongo db', async () => {
+    it('should return a MongoDB database as a result of calling getDb', async () => {
       await mongoDbService.start();
 
       const db = await mongoDbService.getDb();
       const collection = db.collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.be.equal(0);
+      expect(count).to.equal(0);
     });
 
-    it('should get Mongo client', async () => {
+    it('should return a Mongo client as a result of calling getClient', async () => {
       await mongoDbService.start();
 
       const client = await mongoDbService.getClient();
       const collection = client.db('test').collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.be.equal(0);
+      expect(count).to.equal(0);
     });
 
-    it('should clean Mongo database', async () => {
+    it('should be able to clean Mongo database', async () => {
       await mongoDbService.start();
 
       const client = await mongoDbService.getClient();
@@ -69,7 +69,7 @@ describe('createMongoDb', function main() {
       let dbList = await adminDb.listDatabases({ onlyNames: true });
       dbList = dbList.databases.map(db => db.name);
 
-      expect(dbList).to.be.deep.equal([
+      expect(dbList).to.deep.equal([
         'admin',
         'config',
         'local',
@@ -81,7 +81,7 @@ describe('createMongoDb', function main() {
       dbList = await adminDb.listDatabases({ onlyNames: true });
       dbList = dbList.databases.map(db => db.name);
 
-      expect(dbList).to.be.deep.equal([
+      expect(dbList).to.deep.equal([
         'admin',
         'config',
         'local',
@@ -105,7 +105,7 @@ describe('createMongoDb', function main() {
       const collection = db.collection('syncState');
       const count = await collection.countDocuments({});
 
-      expect(count).to.be.equal(0);
+      expect(count).to.equal(0);
     });
   });
 
@@ -114,7 +114,7 @@ describe('createMongoDb', function main() {
 
     afterEach(async () => mongoDbService.remove());
 
-    it('should start an instance with plain object options', async () => {
+    it('should be able to start an instance with plain object options', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {
@@ -135,7 +135,7 @@ describe('createMongoDb', function main() {
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with instance of MongoDbInstanceOptions', async () => {
+    it('should be able to start an instance with MongoDbInstanceOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = new MongoDbOptions({
@@ -156,7 +156,7 @@ describe('createMongoDb', function main() {
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should start an instance with custom default MongoDbInstanceOptions', async () => {
+    it('should be able to start an instance with custom default MongoDbInstanceOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
       const options = {

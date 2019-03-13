@@ -1,11 +1,12 @@
-# Dash Platform services ctl 
+# Dash Platform services ctl
 
-[![Build Status](https://travis-ci.com/dashevo/js-evo-services-ctl.svg?branch=master)](https://travis-ci.com/dashevo/js-evo-services-ctl)
-[![NPM version](https://img.shields.io/npm/v/@dashevo/js-evo-services-ctl.svg)](https://npmjs.org/package/@dashevo/js-evo-services-ctl)
+[![Build Status](https://travis-ci.com/dashevo/js-dp-services-ctl.svg?branch=master)](https://travis-ci.com/dashevo/js-dp-services-ctl)
+[![NPM version](https://img.shields.io/npm/v/@dashevo/js-dp-services-ctl.svg)](https://npmjs.org/package/@dashevo/js-dp-services-ctl)
 
-> Control Dash Platform services using JavaScript and Docker
+> Control Dash Platform services using JavaScript and Docker. The tool provides a convenient JavaScript
+  interface for configuration and interaction with Dash Platform services.
+  Services are started in Docker containers.
 
-The tool provides a convenient JavaScript interface for configuration and interaction with Dash Platform services. Services are started in Docker containers.
 
 ## Table of Contents
 
@@ -24,7 +25,7 @@ The tool provides a convenient JavaScript interface for configuration and intera
 2. Install NPM package:
 
     ```sh
-    npm install @dashevo/js-evo-services-ctl
+    npm install @dashevo/dp-services-ctl
     ```
 
 ## Usage
@@ -33,23 +34,23 @@ The tool provides a convenient JavaScript interface for configuration and intera
 
 #### Drive
 
-[Drive](https://github.com/dashevo/dashdrive) service starts a bunch of related services:
+[Drive](https://github.com/dashevo/drive) service starts a bunch of related services:
 - Drive Api
-    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/driveApi/DriveApi.js)
-    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/driveApi/DriveApiOptions.js)
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApi.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApiOptions.js)
 - Drive Sync
-    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/driveSync/DriveSync.js)
-    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/driveSync/DriveSyncOptions.js)
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveSync/DriveSync.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveSync/DriveSyncOptions.js)
 - [IPFS](#ipfs)
 - [MongoDB](#mongodb)
 - [Dash Core](#dash-core)
 
-#### DAPI 
+#### DAPI
 
 [DAPI](https://github.com/dashevo/dapi) service starts all DP services:
 - DAPI
-    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/dapi/Dapi.js)
-    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/dapi/DapiOptions.js)
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/Dapi.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/DapiOptions.js)
 - [Drive Api](#drive)
 - [Drive Sync](#drive)
 - [IPFS](#ipfs)
@@ -60,32 +61,32 @@ The tool provides a convenient JavaScript interface for configuration and intera
 #### Dash Core
 
 [Dash Core](https://github.com/dashpay/dash) service
-    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/dashCore/DashCore.js)
-    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/dashCore/DashCoreOptions.js)
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCore.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCoreOptions.js)
 
 #### Insight
 
 - [Insight](https://github.com/dashevo/insight-api) service
-    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/insight/Insight.js)
-    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/insight/InsightOptions.js)
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insight/Insight.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insight/InsightOptions.js)
 
 #### IPFS
 
 - [IPFS](https://github.com/ipfs/go-ipfs) service
-    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/IPFS/IPFS.js)
-    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/IPFS/IPFSOptions.js)
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/IPFS/IPFS.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/IPFS/IPFSOptions.js)
 
 #### MongoDB
 
 - [MongoDB](https://www.mongodb.com/) service
-    - [Methods](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/mongoDb/MongoDb.js)
-    - [Options](https://github.com/dashevo/js-evo-services-ctl/blob/master/lib/services/mongoDb/MongoDbOptions.js)
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/mongoDb/MongoDb.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/mongoDb/MongoDbOptions.js)
 
 ### Starting a service
 
 ```js
 // Export service(s)
-const { startIPFS } = require('@dashevo/js-evo-services-ctl');
+const { startIPFS } = require('@dashevo/dp-services-ctl');
 
 // This is optional. Default options listed in options class
 const options = {
@@ -105,7 +106,7 @@ await ipfs.remove();
 Use `many` method to start several instances:
 
 ```js
-const { startIPFS } = require('@dashevo/js-evo-services-ctl');
+const { startIPFS } = require('@dashevo/dp-services-ctl');
 
 // This is optional. Default options listed in options class
 const options = {
@@ -128,21 +129,21 @@ await Promise.all(
 
 ### Services configuration
 
-Each service has default options which can be overwrited in three ways:
+Each service has default options which can be overwritten in three ways:
 1. Pass options as plain JS object to `start[service]` or `create[service]` methods
 2. Pass instance of options class to `start[service]` or `create[service]` methods
 3. Pass default options as plain JS object to `setDefaultCustomOptions` method of options class
 
 ### Integration with Mocha
 
-Services [Mocha](https://mochajs.org/) hooks provide automatization for your mocha tests:
+Services [Mocha](https://mochajs.org/) hooks provide automation for your mocha tests:
 - Removing obsolete related Docker containers (`before`)
 - Cleaning a service state between tests (`beforeEach`, `afterEach`)
 - Stopping service after tests (`after`)
 
 ```js
 // Export service(s) with mocha hooks
-const { mocha: { startIPFS } } = require('@dashevo/js-evo-services-ctl');
+const { mocha: { startIPFS } } = require('@dashevo/dp-services-ctl');
 
 describe('Test suite', () => {
   let ipfsApi;
@@ -167,7 +168,7 @@ describe('Test suite', () => {
 
 ## Contributing
 
-Feel free to dive in! [Open an issue](https://github.com/dashevo/js-evo-services-ctl/issues/new) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/dashevo/js-dp-services-ctl/issues/new) or submit PRs.
 
 ## License
 

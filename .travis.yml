@@ -54,4 +54,4 @@ deploy:
   script: npm publish
   on:
     tags: true
-    repo: dashevo/js-evo-services-ctl
+    repo: dashevo/js-dp-services-ctl
