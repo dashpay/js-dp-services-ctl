@@ -11,9 +11,9 @@ The tool provides a convenient JavaScript interface for configuration and intera
 
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Available DP services](#available-dp-services)
-  - [Services configuration](#services-configuration)
-  - [Integration with Mocha](#integration-with-mocha)
+    - [Available DP services](#available-dp-services)
+    - [Services configuration](#services-configuration)
+    - [Integration with Mocha](#integration-with-mocha)
 - [Maintainers](#maintainers)
 - [Contributing](#contributing)
 - [License](#license)
@@ -23,9 +23,9 @@ The tool provides a convenient JavaScript interface for configuration and intera
 1. [Install Docker](https://docs.docker.com/install/)
 2. Install NPM package:
 
-```sh
-npm install @dashevo/dp-services-ctl
-```
+    ```sh
+    npm install @dashevo/dp-services-ctl
+    ```
 
 ## Usage
 
