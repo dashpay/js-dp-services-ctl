@@ -1,6 +1,6 @@
 const startDapi = require('../../../lib/mocha/startDapi');
 
-describe.skip('startDapi', () => {
+xdescribe('startDapi', () => {
   describe('One node', () => {
     let dapiNode;
 
@@ -29,7 +29,7 @@ describe.skip('startDapi', () => {
     });
   });
 
-  describe('Many nodes', () => {
+  describe.skip('Many nodes', () => {
     const nodesCount = 2;
 
     let dapiNodes;
