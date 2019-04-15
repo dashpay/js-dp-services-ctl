@@ -75,7 +75,7 @@ describe('startDapi', function main() {
     it('should Dapi container has the right env variables', async () => {
       const { Config: { Env: DapiEnvs } } = await dapiNode.dapi.container.inspect();
       const expectedEnv = [
-        `INSIGHT_URI=http://${dapiNode.insight.getIp()}:${dapiNode.insight.options.getApiPort()}/insight-api-dash`,
+        `INSIGHT_URI=http://${dapiNode.insight.getIp()}:${dapiNode.insight.options.getApiPort()}/insight-api`,
         `DASHCORE_RPC_HOST=${dapiNode.dashCore.getIp()}`,
         `DASHCORE_RPC_PORT=${dapiNode.dashCore.options.getRpcPort()}`,
         `DASHCORE_RPC_USER=${dapiNode.dashCore.options.getRpcUser()}`,
