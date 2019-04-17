@@ -10,8 +10,8 @@ const chaiAsPromised = require('chai-as-promised');
 const DashApiOptions = require('../lib/services/driveApi/DriveApiOptions');
 const DashSyncOptions = require('../lib/services/driveSync/DriveSyncOptions');
 const DashCoreOptions = require('../lib/services/dashCore/DashCoreOptions');
-const DapiOptions = require('../lib/services/dapi/DapiOptions');
-const InsightOptions = require('../lib/services/insight/InsightOptions');
+const DapiOptions = require('../lib/services/dapi/core/DapiCoreOptions');
+const InsightOptions = require('../lib/services/insightApi/InsightApiOptions');
 
 use(sinonChai);
 use(chaiAsPromised);

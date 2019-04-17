@@ -9,8 +9,13 @@ xdescribe('startDapi', () => {
     });
 
     it('should have all Dapi containers running', async () => {
-      const { State: stateDapi } = await dapiNode.dapi.container.inspect();
-      expect(stateDapi.Status).to.equal('running');
+      const { State: stateDapiCore } = await dapiNode.dapiCore.container.inspect();
+      expect(stateDapiCore.Status).to.equal('running');
+
+      const {
+        State: stateDapiTxFilterStream,
+      } = await dapiNode.dapiTxFilterStream.container.inspect();
+      expect(stateDapiTxFilterStream.Status).to.equal('running');
 
       const { State: stateDashCore } = await dapiNode.dashCore.container.inspect();
       expect(stateDashCore.Status).to.equal('running');
@@ -24,7 +29,7 @@ xdescribe('startDapi', () => {
       const { State: stateDriveSync } = await dapiNode.driveSync.container.inspect();
       expect(stateDriveSync.Status).to.equal('running');
 
-      const { State: stateInsight } = await dapiNode.insight.container.inspect();
+      const { State: stateInsight } = await dapiNode.insightApi.container.inspect();
       expect(stateInsight.Status).to.equal('running');
     });
   });
@@ -77,15 +82,23 @@ xdescribe('startDapi', () => {
 
     it('should have Insight containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await dapiNodes[i].insight.container.inspect();
+        const { State } = await dapiNodes[i].insightApi.container.inspect();
 
         expect(State.Status).to.equal('running');
       }
     });
 
-    it('should have Dapi containers running', async () => {
+    it('should have DAPI Core containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await dapiNodes[i].insight.container.inspect();
+        const { State } = await dapiNodes[i].dapiCore.container.inspect();
+
+        expect(State.Status).to.equal('running');
+      }
+    });
+
+    it('should have DAPI TxFilterStream containers running', async () => {
+      for (let i = 0; i < nodesCount; i++) {
+        const { State } = await dapiNodes[i].dapiTxFilterStream.container.inspect();
 
         expect(State.Status).to.equal('running');
       }

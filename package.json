@@ -1,6 +1,6 @@
 {
   "name": "@dashevo/dp-services-ctl",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
@@ -45,7 +45,9 @@
     "mocha": "^5.2.0",
     "mocha-sinon": "^2.1.0",
     "sinon": "^7.2.2",
-    "sinon-chai": "^3.3.0"
+    "sinon-chai": "^3.3.0",
+    "multihashes": "^0.4.14",
+    "cids": "^0.6.0"
   },
   "dependencies": {
     "@dashevo/dapi-client": "^v0.3.2",
