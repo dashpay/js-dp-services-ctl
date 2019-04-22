@@ -1,6 +1,6 @@
 {
   "name": "@dashevo/dp-services-ctl",
-  "version": "0.6.3",
+  "version": "0.6.2",
   "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
