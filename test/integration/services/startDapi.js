@@ -2,7 +2,7 @@ const os = require('os');
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { startDapi } = require('../../../lib');
 
-describe('startDapi', function main() {
+xdescribe('startDapi', function main() {
   this.timeout(180000);
 
   before(removeContainers);
