@@ -249,7 +249,7 @@ describe('createDashCore', function main() {
 
       const { Config: { Image: imageName } } = await instance.container.inspect();
 
-      expect(imageName).to.contain('dashcore');
+      expect(imageName).to.contain('dash');
     });
   });
 });
