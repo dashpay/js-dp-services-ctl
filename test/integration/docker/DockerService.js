@@ -13,7 +13,12 @@ async function createInstance(options) {
   const imageName = options.getContainerImageName();
   const containerOptions = options.getContainerOptions();
   const network = new Network(networkName, driver);
-  const authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());
+
+  let authorizationToken;
+  if (imageName.includes('amazonaws.com')) {
+    authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());
+  }
+
   const image = new Image(imageName, authorizationToken);
   const container = new Container(networkName, imageName, containerOptions);
 
