@@ -47,7 +47,8 @@
     "sinon": "^7.2.2",
     "sinon-chai": "^3.3.0",
     "multihashes": "^0.4.14",
-    "cids": "^0.6.0"
+    "cids": "^0.6.0",
+    "axios": "^0.18.0"
   },
   "dependencies": {
     "@dashevo/dapi-client": "^v0.3.2",
