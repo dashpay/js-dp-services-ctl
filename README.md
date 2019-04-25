@@ -47,9 +47,12 @@ The tool provides a convenient JavaScript interface for configuration and intera
 #### DAPI
 
 [DAPI](https://github.com/dashevo/dapi) service starts all DP services:
-- DAPI
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/Dapi.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/DapiOptions.js)
+- DAPI Core
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/core/DapiCore.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/core/DapiCoreOptions.js)
+- DAPI TxFilterStream
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStream.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions.js)
 - [Drive Api](#drive)
 - [Drive Sync](#drive)
 - [IPFS](#ipfs)
@@ -63,11 +66,11 @@ The tool provides a convenient JavaScript interface for configuration and intera
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCore.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCoreOptions.js)
 
-#### Insight
+#### Insight API
 
-- [Insight](https://github.com/dashevo/insight-api) service
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insight/Insight.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insight/InsightOptions.js)
+- [Insight API](https://github.com/dashevo/insight-api) service
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insightApi/InsightApi.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insightApi/InsightApiOptions.js)
 
 #### IPFS
 
@@ -162,7 +165,9 @@ describe('Test suite', () => {
 ## Maintainers
 
 [@shumkov](https://github.com/shumkov)
+
 [@jawid-h](https://github.com/jawid-h)
+
 [@abvgedeika](https://github.com/abvgedeika)
 
 ## Contributing

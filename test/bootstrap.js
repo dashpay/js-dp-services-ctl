@@ -7,11 +7,13 @@ const sinonChai = require('sinon-chai');
 const dirtyChai = require('dirty-chai');
 const chaiAsPromised = require('chai-as-promised');
 
-const DashApiOptions = require('../lib/services/driveApi/DriveApiOptions');
-const DashSyncOptions = require('../lib/services/driveSync/DriveSyncOptions');
 const DashCoreOptions = require('../lib/services/dashCore/DashCoreOptions');
-const DapiOptions = require('../lib/services/dapi/DapiOptions');
-const InsightOptions = require('../lib/services/insight/InsightOptions');
+const DriveApiOptions = require('../lib/services/driveApi/DriveApiOptions');
+const DriveSyncOptions = require('../lib/services/driveSync/DriveSyncOptions');
+const DapiCoreOptions = require('../lib/services/dapi/core/DapiCoreOptions');
+const DapiTxFilterStreamOptions = require('../lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions');
+
+const InsightApiOptions = require('../lib/services/insightApi/InsightApiOptions');
 
 use(sinonChai);
 use(chaiAsPromised);
@@ -23,13 +25,13 @@ const dotenvConfig = dotenv.config();
 dotenvExpand(dotenvConfig);
 
 if (process.env.SERVICE_IMAGE_DRIVE) {
-  DashApiOptions.setDefaultCustomOptions({
+  DriveApiOptions.setDefaultCustomOptions({
     container: {
       image: process.env.SERVICE_IMAGE_DRIVE,
     },
   });
 
-  DashSyncOptions.setDefaultCustomOptions({
+  DriveSyncOptions.setDefaultCustomOptions({
     container: {
       image: process.env.SERVICE_IMAGE_DRIVE,
     },
@@ -45,7 +47,13 @@ if (process.env.SERVICE_IMAGE_CORE) {
 }
 
 if (process.env.SERVICE_IMAGE_DAPI) {
-  DapiOptions.setDefaultCustomOptions({
+  DapiCoreOptions.setDefaultCustomOptions({
+    container: {
+      image: process.env.SERVICE_IMAGE_DAPI,
+    },
+  });
+
+  DapiTxFilterStreamOptions.setDefaultCustomOptions({
     container: {
       image: process.env.SERVICE_IMAGE_DAPI,
     },
@@ -53,7 +61,7 @@ if (process.env.SERVICE_IMAGE_DAPI) {
 }
 
 if (process.env.SERVICE_IMAGE_INSIGHT) {
-  InsightOptions.setDefaultCustomOptions({
+  InsightApiOptions.setDefaultCustomOptions({
     container: {
       image: process.env.SERVICE_IMAGE_INSIGHT,
     },
