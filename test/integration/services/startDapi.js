@@ -60,22 +60,28 @@ describe('startDapi', function main() {
       expect(State.Status).to.equal('running');
     });
 
-    it('should have Insight container running', async () => {
-      const { State } = await dapiNode.insight.container.inspect();
+    it('should have Insight API container running', async () => {
+      const { State } = await dapiNode.insightApi.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
 
-    it('should have Dapi container running', async () => {
-      const { State } = await dapiNode.dapi.container.inspect();
+    it('should have DAPI Core container running', async () => {
+      const { State } = await dapiNode.dapiCore.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
 
-    it('should Dapi container has the right env variables', async () => {
-      const { Config: { Env: DapiEnvs } } = await dapiNode.dapi.container.inspect();
+    it('should have DAPI TxFilterStream container running', async () => {
+      const { State } = await dapiNode.dapiTxFilterStream.container.inspect();
+
+      expect(State.Status).to.equal('running');
+    });
+
+    it('should DAPI Core container has the right env variables', async () => {
+      const { Config: { Env: envs } } = await dapiNode.dapiCore.container.inspect();
       const expectedEnv = [
-        `INSIGHT_URI=http://${dapiNode.insight.getIp()}:${dapiNode.insight.options.getApiPort()}/insight-api`,
+        `INSIGHT_URI=http://${dapiNode.insightApi.getIp()}:${dapiNode.insightApi.options.getApiPort()}/insight-api`,
         `DASHCORE_RPC_HOST=${dapiNode.dashCore.getIp()}`,
         `DASHCORE_RPC_PORT=${dapiNode.dashCore.options.getRpcPort()}`,
         `DASHCORE_RPC_USER=${dapiNode.dashCore.options.getRpcUser()}`,
@@ -95,12 +101,40 @@ describe('startDapi', function main() {
         expectedEnv.push(`DRIVE_RPC_HOST=${dapiNode.driveApi.getIp()}`);
       }
 
-      const dapiEnvs = DapiEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
+      const dapiEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
 
       expect(dapiEnvs.length).to.equal(expectedEnv.length);
     });
 
-    it('should be on the same network (DashCore, Drive, IPFS, and MongoDb, Insight)', async () => {
+    it('should DAPI TxFilterStream container has the right env variables', async () => {
+      const { Config: { Env: envs } } = await dapiNode.dapiTxFilterStream.container.inspect();
+      const expectedEnv = [
+        `INSIGHT_URI=http://${dapiNode.insightApi.getIp()}:${dapiNode.insightApi.options.getApiPort()}/insight-api`,
+        `DASHCORE_RPC_HOST=${dapiNode.dashCore.getIp()}`,
+        `DASHCORE_RPC_PORT=${dapiNode.dashCore.options.getRpcPort()}`,
+        `DASHCORE_RPC_USER=${dapiNode.dashCore.options.getRpcUser()}`,
+        `DASHCORE_RPC_PASS=${dapiNode.dashCore.options.getRpcPassword()}`,
+        `DASHCORE_ZMQ_HOST=${dapiNode.dashCore.getIp()}`,
+        `DASHCORE_ZMQ_PORT=${dapiNode.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
+        `DASHCORE_P2P_HOST=${dapiNode.dashCore.getIp()}`,
+        `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
+        `DRIVE_RPC_PORT=${dapiNode.driveApi.options.getRpcPort()}`,
+        'DASHCORE_P2P_NETWORK=regtest',
+        'NETWORK=regtest',
+      ];
+
+      if (os.platform() === 'darwin') {
+        expectedEnv.push('DRIVE_RPC_HOST=docker.for.mac.localhost');
+      } else {
+        expectedEnv.push(`DRIVE_RPC_HOST=${dapiNode.driveApi.getIp()}`);
+      }
+
+      const dapiEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
+
+      expect(dapiEnvs.length).to.equal(expectedEnv.length);
+    });
+
+    it('should be on the same network: DashCore, Drive, IPFS, MongoDb, and Insight API', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
       } = await dapiNode.dashCore.container.inspect();
@@ -123,11 +157,15 @@ describe('startDapi', function main() {
 
       const {
         NetworkSettings: insightNetworkSettings,
-      } = await dapiNode.insight.container.inspect();
+      } = await dapiNode.insightApi.container.inspect();
 
       const {
-        NetworkSettings: dapiNetworkSettings,
-      } = await dapiNode.dapi.container.inspect();
+        NetworkSettings: dapiCoreNetworkSettings,
+      } = await dapiNode.dapiCore.container.inspect();
+
+      const {
+        NetworkSettings: dapiTxFilterStreamNetworkSettings,
+      } = await dapiNode.dapiTxFilterStream.container.inspect();
 
       expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(driveApiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
@@ -135,7 +173,8 @@ describe('startDapi', function main() {
       expect(Object.keys(ipfsNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(insightNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(dapiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(dapiCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(dapiTxFilterStreamNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
     });
   });
 
@@ -210,15 +249,23 @@ describe('startDapi', function main() {
 
     it('should have Insight containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await dapiNodes[i].insight.container.inspect();
+        const { State } = await dapiNodes[i].insightApi.container.inspect();
 
         expect(State.Status).to.equal('running');
       }
     });
 
-    it('should have DAPI containers running', async () => {
+    it('should have DAPI Core containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await dapiNodes[i].dapi.container.inspect();
+        const { State } = await dapiNodes[i].dapiCore.container.inspect();
+
+        expect(State.Status).to.equal('running');
+      }
+    });
+
+    it('should have DAPI TxFilterStream containers running', async () => {
+      for (let i = 0; i < nodesCount; i++) {
+        const { State } = await dapiNodes[i].dapiTxFilterStream.container.inspect();
 
         expect(State.Status).to.equal('running');
       }
