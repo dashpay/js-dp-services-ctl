@@ -1,6 +1,6 @@
 {
   "name": "@dashevo/dp-services-ctl",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
@@ -50,9 +50,10 @@
     "cids": "^0.6.0"
   },
   "dependencies": {
-    "@dashevo/dapi-client": "^v0.3.2",
+    "@dashevo/dapi-client": "^0.4.3",
     "@dashevo/dashd-rpc": "^1.2.1",
     "aws-sdk": "^2.382.0",
+    "axios": "^0.18.0",
     "cbor": "^4.1.4",
     "dockerode": "^2.5.7",
     "grpc": "^1.20.0",
@@ -60,8 +61,7 @@
     "ipfs-http-client": "^29.0.1",
     "jayson": "^2.1.0",
     "lodash": "^4.17.11",
-    "mongodb": "^3.1.10",
-    "axios": "^0.18.0"
+    "mongodb": "^3.1.10"
   },
   "license": "MIT",
   "bugs": {
