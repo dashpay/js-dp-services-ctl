@@ -1,7 +1,7 @@
 # Dash Platform services ctl
 
 [![Build Status](https://travis-ci.com/dashevo/js-dp-services-ctl.svg?branch=master)](https://travis-ci.com/dashevo/js-dp-services-ctl)
-[![NPM version](https://img.shields.io/npm/v/@dashevo/js-dp-services-ctl.svg)](https://npmjs.org/package/@dashevo/dp-services-ctl)
+[![NPM version](https://img.shields.io/npm/v/@dashevo/dp-services-ctl.svg)](https://npmjs.org/package/@dashevo/dp-services-ctl)
 
 > Control Dash Platform services using JavaScript and Docker
 
