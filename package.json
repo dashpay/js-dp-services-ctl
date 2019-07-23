@@ -60,7 +60,7 @@
     "grpc-health-check": "^1.6.6",
     "ipfs-http-client": "^29.0.1",
     "jayson": "^2.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "mongodb": "^3.1.10"
   },
   "license": "MIT",
