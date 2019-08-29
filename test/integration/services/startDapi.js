@@ -47,19 +47,6 @@ describe('startDapi', function main() {
       expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
     });
 
-    it('should have Drive sync container running', async () => {
-      const { State, Mounts } = await dapiNode.driveSync.container.inspect();
-
-      expect(State.Status).to.equal('running');
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
-    });
-
-    it('should have IPFS container running', async () => {
-      const { State } = await dapiNode.ipfs.container.inspect();
-
-      expect(State.Status).to.equal('running');
-    });
-
     it('should have Insight API container running', async () => {
       const { State } = await dapiNode.insightApi.container.inspect();
 
@@ -134,7 +121,7 @@ describe('startDapi', function main() {
       expect(dapiEnvs.length).to.equal(expectedEnv.length);
     });
 
-    it('should be on the same network: DashCore, Drive, IPFS, MongoDb, and Insight API', async () => {
+    it('should be on the same network: DashCore, Drive, MongoDb, and Insight API', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
       } = await dapiNode.dashCore.container.inspect();
@@ -142,14 +129,6 @@ describe('startDapi', function main() {
       const {
         NetworkSettings: driveApiNetworkSettings,
       } = await dapiNode.driveApi.container.inspect();
-
-      const {
-        NetworkSettings: driveSyncNetworkSettings,
-      } = await dapiNode.driveSync.container.inspect();
-
-      const {
-        NetworkSettings: ipfsNetworkSettings,
-      } = await dapiNode.ipfs.container.inspect();
 
       const {
         NetworkSettings: mongoDbNetworkSettings,
@@ -169,8 +148,6 @@ describe('startDapi', function main() {
 
       expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(driveApiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveSyncNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(ipfsNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(insightNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(dapiCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
@@ -227,23 +204,6 @@ describe('startDapi', function main() {
 
         expect(State.Status).to.equal('running');
         expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
-      }
-    });
-
-    it('should have Drive sync containers running', async () => {
-      for (let i = 0; i < nodesCount; i++) {
-        const { State, Mounts } = await dapiNodes[i].driveSync.container.inspect();
-
-        expect(State.Status).to.equal('running');
-        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
-      }
-    });
-
-    it('should have IPFS containers running', async () => {
-      for (let i = 0; i < nodesCount; i++) {
-        const { State } = await dapiNodes[i].ipfs.container.inspect();
-
-        expect(State.Status).to.equal('running');
       }
     });
 
