@@ -60,7 +60,8 @@
     "grpc-health-check": "^1.7.0",
     "jayson": "^2.1.0",
     "lodash": "^4.17.15",
-    "mongodb": "^3.3.2"
+    "mongodb": "^3.3.2",
+    "tendermint": "^4.0.8"
   },
   "license": "MIT",
   "bugs": {
