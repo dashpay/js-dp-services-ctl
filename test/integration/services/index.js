@@ -6,4 +6,5 @@ describe('Services', () => {
   require('./startDrive');
   require('./startDapi');
   require('./node');
+  require('./tendermintCore');
 });
