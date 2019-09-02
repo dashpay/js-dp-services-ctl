@@ -36,7 +36,12 @@ describe('createMongoDb', function main() {
 
       const { Args } = await mongoDbService.container.inspect();
 
-      expect(Args).to.deep.equal(['mongod']);
+      expect(Args).to.deep.equal([
+        'mongod',
+        '--replSet',
+        mongoDbService.options.options.replicaSetName,
+        '--bind_ip_all',
+      ]);
     });
 
     it('should return a MongoDB database as a result of calling getDb', async () => {
