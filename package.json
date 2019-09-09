@@ -1,9 +1,12 @@
 {
   "name": "@dashevo/dp-services-ctl",
-  "version": "0.8.0",
+  "version": "0.8.0-dev.1",
   "description": "Control Dash Platform services using JavaScript and Docker",
   "engines": {
     "node": ">=8"
+  },
+  "publishConfig": {
+    "tag": "dev"
   },
   "scripts": {
     "lint": "eslint .",
