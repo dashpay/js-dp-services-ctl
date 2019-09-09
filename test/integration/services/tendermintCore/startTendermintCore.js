@@ -1,5 +1,6 @@
 const removeContainers = require('../../../../lib/docker/removeContainers');
 const { startTendermintCore } = require('../../../../lib');
+const wait = require('../../../../lib/util/wait');
 
 describe('startTendermintCore', function main() {
   this.timeout(90000);
@@ -37,9 +38,9 @@ describe('startTendermintCore', function main() {
   });
 
   describe('Many nodes', () => {
-    let tendermintCoreNodes;
+    const nodesCount = 4;
 
-    const nodesCount = 2;
+    let tendermintCoreNodes;
 
     before(async () => {
       tendermintCoreNodes = await startTendermintCore.many(nodesCount, { abciUrl: 'noop' });
@@ -65,6 +66,23 @@ describe('startTendermintCore', function main() {
         expect(mount).to.have.length(1);
         expect(mount[0].Destination).to.equal('/tendermint');
       }
+    });
+
+    it('should have containers with tendermint nodes connected in one network', async () => {
+      // wait for new blocks
+      await wait(3 * 1000);
+
+      const networks = [];
+
+      for (let i = 0; i < nodesCount; i++) {
+        const result = await tendermintCoreNodes[i].getClient().status();
+        networks.push(result.node_info.network);
+        // check if we started generating new blocks
+        expect(result.sync_info.latest_block_hash).to.be.not.equal('');
+      }
+
+      // check if all nodes use the same network
+      expect(networks).to.eql(Array(nodesCount).fill(networks[0]));
     });
   });
 });
