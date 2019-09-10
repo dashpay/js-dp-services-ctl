@@ -10,11 +10,11 @@ describe('startTendermintCore', function main() {
   describe('One node', () => {
     let tendermintCoreNode;
 
-    before(async () => {
+    beforeEach(async () => {
       tendermintCoreNode = await startTendermintCore({ abciUrl: 'noop' });
     });
 
-    after(async () => tendermintCoreNode.remove());
+    afterEach(async () => tendermintCoreNode.remove());
 
     it('should have container running', async () => {
       const { State, Mounts } = await tendermintCoreNode.container.inspect();
@@ -42,11 +42,11 @@ describe('startTendermintCore', function main() {
 
     let tendermintCoreNodes;
 
-    before(async () => {
+    beforeEach(async () => {
       tendermintCoreNodes = await startTendermintCore.many(nodesCount, { abciUrl: 'noop' });
     });
 
-    after(async () => {
+    afterEach(async () => {
       await Promise.all(
         tendermintCoreNodes.map(instance => instance.remove()),
       );
@@ -70,7 +70,7 @@ describe('startTendermintCore', function main() {
 
     it('should have containers with tendermint nodes connected in one network', async () => {
       // wait for new blocks
-      await wait(3 * 1000);
+      await wait(10 * 1000);
 
       const networks = [];
 

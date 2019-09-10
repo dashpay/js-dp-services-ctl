@@ -11,11 +11,11 @@ describe('createTendermintCore', function main() {
   describe('usage', () => {
     let tendermintCore;
 
-    before(async () => {
+    beforeEach(async () => {
       tendermintCore = await createTendermintCore({ abciUrl: 'noop' });
     });
 
-    after(async () => tendermintCore.remove());
+    afterEach(async () => tendermintCore.remove());
 
     it('should be able to start an instance with a bridge network named dash_test_network', async () => {
       await tendermintCore.start();
@@ -50,11 +50,11 @@ describe('createTendermintCore', function main() {
   describe('Tendermint client', () => {
     let tendermintCore;
 
-    before(async () => {
+    beforeEach(async () => {
       tendermintCore = await createTendermintCore({ abciUrl: 'noop' });
     });
 
-    after(async () => tendermintCore.remove());
+    afterEach(async () => tendermintCore.remove());
 
     it('should be able to make RPC calls after starting the instance', async () => {
       await tendermintCore.start();
