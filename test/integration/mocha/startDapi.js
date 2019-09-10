@@ -26,9 +26,6 @@ describe('startDapi', () => {
       const { State: stateDriveApi } = await dapiNode.driveApi.container.inspect();
       expect(stateDriveApi.Status).to.equal('running');
 
-      const { State: stateDriveSync } = await dapiNode.driveSync.container.inspect();
-      expect(stateDriveSync.Status).to.equal('running');
-
       const { State: stateInsight } = await dapiNode.insightApi.container.inspect();
       expect(stateInsight.Status).to.equal('running');
     });
@@ -67,14 +64,6 @@ describe('startDapi', () => {
       }
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await dapiNodes[i].driveApi.container.inspect();
-
-        expect(State.Status).to.equal('running');
-      }
-    });
-
-    it('should have Drive sync containers running', async () => {
-      for (let i = 0; i < nodesCount; i++) {
-        const { State } = await dapiNodes[i].driveSync.container.inspect();
 
         expect(State.Status).to.equal('running');
       }

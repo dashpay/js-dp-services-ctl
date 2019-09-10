@@ -36,7 +36,12 @@ describe('createMongoDb', function main() {
 
       const { Args } = await mongoDbService.container.inspect();
 
-      expect(Args).to.deep.equal(['mongod']);
+      expect(Args).to.deep.equal([
+        'mongod',
+        '--replSet',
+        mongoDbService.options.options.replicaSetName,
+        '--bind_ip_all',
+      ]);
     });
 
     it('should return a MongoDB database as a result of calling getDb', async () => {
@@ -176,6 +181,29 @@ describe('createMongoDb', function main() {
       const destinations = Mounts.map(volume => volume.Destination);
 
       expect(destinations).to.include(CONTAINER_VOLUME);
+    });
+  });
+
+  describe('replica set', () => {
+    let mongoDbService;
+
+    before(async () => {
+      mongoDbService = await createMongoDb();
+    });
+
+    after(async () => mongoDbService.remove());
+
+    it('should start Mongo DB instance as replica set', async () => {
+      await mongoDbService.start();
+
+      const db = await mongoDbService.getDb();
+
+      const status = await db.admin()
+        .command({ replSetGetStatus: 1 });
+
+      expect(status.set).to.equal(mongoDbService.options.options.replicaSetName);
+      expect(status.members[0].ip).to.equal(mongoDbService.getIp());
+      expect(status.members[0].stateStr).to.equal('PRIMARY');
     });
   });
 });

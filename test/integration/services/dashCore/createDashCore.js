@@ -19,7 +19,7 @@ describe('createDashCore', function main() {
     });
 
     it('should throw an error if trying to connect to a node that is not running', async () => {
-      const instanceTwo = createDashCore();
+      const instanceTwo = await createDashCore();
 
       try {
         await dashCore.connect(instanceTwo);

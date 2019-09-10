@@ -37,12 +37,9 @@ The tool provides a convenient JavaScript interface for configuration and intera
 - Drive Api
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApi.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApiOptions.js)
-- Drive Sync
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveSync/DriveSync.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveSync/DriveSyncOptions.js)
-- [IPFS](#ipfs)
 - [MongoDB](#mongodb)
 - [Dash Core](#dash-core)
+- [Tendermint Core](#tendermint-core)
 
 #### DAPI
 
@@ -54,29 +51,27 @@ The tool provides a convenient JavaScript interface for configuration and intera
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStream.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions.js)
 - [Drive Api](#drive)
-- [Drive Sync](#drive)
-- [IPFS](#ipfs)
 - [MongoDB](#mongodb)
 - [DashCore](#dash-core)
 - [Insight](#insight)
 
 #### Dash Core
 
-[Dash Core](https://github.com/dashpay/dash) service
+- [Dash Core](https://github.com/dashpay/dash) service
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCore.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCoreOptions.js)
+    
+#### Tendermint Core
+
+- [Tendermint Core](https://tendermint.com) service
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/tendermintCore/TendermintCore.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/tendermintCore/TendermintCoreOptions.js)
 
 #### Insight API
 
 - [Insight API](https://github.com/dashevo/insight-api) service
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insightApi/InsightApi.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/insightApi/InsightApiOptions.js)
-
-#### IPFS
-
-- [IPFS](https://github.com/ipfs/go-ipfs) service
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/IPFS/IPFS.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/IPFS/IPFSOptions.js)
 
 #### MongoDB
 
@@ -88,44 +83,43 @@ The tool provides a convenient JavaScript interface for configuration and intera
 
 ```js
 // Export service(s)
-const { startIPFS } = require('@dashevo/dp-services-ctl');
-
+const { startMongoDb } = require('@dashevo/dp-services-ctl');
 // This is optional. Default options listed in options class
 const options = {
-  port: 5001, // IPFS port
+  port: 27017, // mongoDB port
 };
 
 // Start service
-const ipfs = await startIPFS(options);
+const mongo = await startMongoDb(options);
 
-// Get peer ID
-const peerId = await ipfs.getApi().id();
+// Get mongo client
+const client = await mongo.getClient();
 
-// Stop IPFS
-await ipfs.remove();
+// Stop mongoDB
+await mongo.remove();
 ```
 
 Use `many` method to start several instances:
 
 ```js
-const { startIPFS } = require('@dashevo/dp-services-ctl');
+const { startMongoDb } = require('@dashevo/dp-services-ctl');
 
 // This is optional. Default options listed in options class
 const options = {
-  port: 5001, // IPFS port
+  port: 27017, // mongoDB port
 };
 
 // Start two services
-const ipfsNodes = await startIPFS.many(2, options);
+const mongoNodes = await startMongoDb.many(2,options);
 
 // Get peer IDs
-const [peerId1, peerId2] = await Promise.all(
-  ipfsNodes.map(ipfs => ipfs.getApi().id()),
+const [client1, client2] = await Promise.all(
+  mongoNodes.map(mongo => mongo.getClient()),
 );
 
-// Stop IPFS nodes
+// Stop mongoDB nodes
 await Promise.all(
-  ipfsNodes.map(ipfs => ipfs.remove()),
+  mongoNodes.map(mongo => mongo.remove()),
 );
 ```
 
@@ -145,19 +139,20 @@ Services [Mocha](https://mochajs.org/) hooks provide automation for your mocha t
 
 ```js
 // Export service(s) with mocha hooks
-const { mocha: { startIPFS } } = require('@dashevo/dp-services-ctl');
+const { mocha: { startMongoDb } } = require('@dashevo/dp-services-ctl');
 
 describe('Test suite', () => {
-  let ipfsApi;
+  let mongoClient;
 
-  startIPFS().then(ipfs => () => {
-    ipfsApi = ipfs.getApi();
+  startMongoDb().then(mongo => () => {
+    mongoClient = mongo.getClient();
   });
 
   it('should do something', async () => {
-    const peerId = await ipfsApi.id();
+    const collection = mongoClient.db('test').collection('syncState');
+    const count = await collection.countDocuments({});
 
-    expect(peerId).to.be.a('string');
+    expect(count).to.equal(0);
   });
 });
 ```

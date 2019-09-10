@@ -31,7 +31,7 @@ describe('Image', function main() {
     await image.pull();
   });
 
-  it('should pull an image with authentication', async function it() {
+  it.skip('should pull an image with authentication', async function it() {
     const options = new DashCoreOptions();
     const imageName = 'private/image:name';
 
