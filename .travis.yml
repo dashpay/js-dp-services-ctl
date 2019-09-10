@@ -5,6 +5,7 @@ language: node_js
 branches:
   only:
     - master
+    - /^v(0|[1-9]\d*)\.(0|[1-9]\d*)$/
     - /^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
 
 services:
@@ -52,7 +53,7 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: npm publish
+  script: bash scripts/travis-deploy.sh
   on:
     tags: true
     repo: dashevo/js-dp-services-ctl
