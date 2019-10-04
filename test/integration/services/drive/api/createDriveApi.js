@@ -1,8 +1,8 @@
 const Docker = require('dockerode');
 
-const removeContainers = require('../../../../lib/docker/removeContainers');
-const { startDashCore, startMongoDb, createDriveApi } = require('../../../../lib/index');
-const DriveApiOptions = require('../../../../lib/services/driveApi/DriveApiOptions');
+const removeContainers = require('../../../../../lib/docker/removeContainers');
+const { startDashCore, startMongoDb, createDriveApi } = require('../../../../../lib/index');
+const DriveApiOptions = require('../../../../../lib/services/drive/api/DriveApiOptions');
 
 describe('createDriveApi', function main() {
   this.timeout(90000);

@@ -1,5 +1,5 @@
 const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
-const DriveApiOptions = require('../../../lib/services/driveApi/DriveApiOptions');
+const DriveApiOptions = require('../../../lib/services/drive/api/DriveApiOptions');
 
 describe.skip('getAwsEcrAuthorizationToken', function main() {
   this.timeout(10000);

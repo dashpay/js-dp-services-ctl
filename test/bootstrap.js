@@ -8,7 +8,7 @@ const dirtyChai = require('dirty-chai');
 const chaiAsPromised = require('chai-as-promised');
 
 const DashCoreOptions = require('../lib/services/dashCore/DashCoreOptions');
-const DriveApiOptions = require('../lib/services/driveApi/DriveApiOptions');
+const DriveApiOptions = require('../lib/services/drive/api/DriveApiOptions');
 const DapiCoreOptions = require('../lib/services/dapi/core/DapiCoreOptions');
 const DapiTxFilterStreamOptions = require('../lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions');
 

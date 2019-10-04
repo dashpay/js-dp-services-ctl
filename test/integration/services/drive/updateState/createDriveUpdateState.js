@@ -3,12 +3,12 @@ const {
   StartTransactionRequest,
 } = require('@dashevo/drive-grpc');
 
-const removeContainers = require('../../../../lib/docker/removeContainers');
+const removeContainers = require('../../../../../lib/docker/removeContainers');
 
-const { startMongoDb, createDriveUpdateState } = require('../../../../lib/index');
+const { startMongoDb, createDriveUpdateState } = require('../../../../../lib/index');
 
 const DriveUpdateStateOptions = require(
-  '../../../../lib/services/driveUpdateState/DriveUpdateStateOptions',
+  '../../../../../lib/services/drive/updateState/DriveUpdateStateOptions',
 );
 
 describe('createDriveUpdateState', function main() {
