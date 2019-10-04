@@ -9,6 +9,9 @@ const chaiAsPromised = require('chai-as-promised');
 
 const DashCoreOptions = require('../lib/services/dashCore/DashCoreOptions');
 const DriveApiOptions = require('../lib/services/drive/api/DriveApiOptions');
+const DriveUpdateStateOptions = require(
+  '../lib/services/drive/updateState/DriveUpdateStateOptions',
+);
 const DapiCoreOptions = require('../lib/services/dapi/core/DapiCoreOptions');
 const DapiTxFilterStreamOptions = require('../lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions');
 
@@ -25,6 +28,12 @@ dotenvExpand(dotenvConfig);
 
 if (process.env.SERVICE_IMAGE_DRIVE) {
   DriveApiOptions.setDefaultCustomOptions({
+    container: {
+      image: process.env.SERVICE_IMAGE_DRIVE,
+    },
+  });
+
+  DriveUpdateStateOptions.setDefaultCustomOptions({
     container: {
       image: process.env.SERVICE_IMAGE_DRIVE,
     },
