@@ -4,10 +4,14 @@ const {
 } = require('@dashevo/drive-grpc');
 
 const removeContainers = require('../../../../lib/docker/removeContainers');
-const { startMongoDb, createDriveUpdateStateApi } = require('../../../../lib/index');
-const DriveUpdateStateApiOptions = require('../../../../lib/services/driveUpdateStateApi/DriveUpdateStateApiOptions');
 
-describe('createDriveUpdateStateApi', function main() {
+const { startMongoDb, createDriveUpdateState } = require('../../../../lib/index');
+
+const DriveUpdateStateOptions = require(
+  '../../../../lib/services/driveUpdateState/DriveUpdateStateOptions',
+);
+
+describe('createDriveUpdateState', function main() {
   this.timeout(90000);
 
   before(removeContainers);
@@ -15,7 +19,7 @@ describe('createDriveUpdateStateApi', function main() {
   describe('usage', () => {
     let envs;
     let mongoDb;
-    let driveUpdateStateApi;
+    let driveUpdateState;
 
     before(async () => {
       mongoDb = await startMongoDb();
@@ -29,21 +33,21 @@ describe('createDriveUpdateStateApi', function main() {
         },
       };
 
-      driveUpdateStateApi = await createDriveUpdateStateApi(options);
+      driveUpdateState = await createDriveUpdateState(options);
     });
 
     after(async () => {
       await Promise.all([
         mongoDb.remove(),
-        driveUpdateStateApi.remove(),
+        driveUpdateState.remove(),
       ]);
     });
 
     it('should be able to start an instance with a bridge network called dash_test_network', async () => {
-      await driveUpdateStateApi.start();
+      await driveUpdateState.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await driveUpdateStateApi.container.inspect();
+      const { NetworkSettings: { Networks } } = await driveUpdateState.container.inspect();
       const networks = Object.keys(Networks);
 
       expect(Driver).to.equal('bridge');
@@ -52,8 +56,8 @@ describe('createDriveUpdateStateApi', function main() {
     });
 
     it('should be able to start an instance with custom environment variables', async () => {
-      await driveUpdateStateApi.start();
-      const { Config: { Env } } = await driveUpdateStateApi.container.inspect();
+      await driveUpdateState.start();
+      const { Config: { Env } } = await driveUpdateState.container.inspect();
 
       const instanceEnv = Env.filter(variable => envs.includes(variable));
 
@@ -61,23 +65,23 @@ describe('createDriveUpdateStateApi', function main() {
     });
 
     it('should be able to start an instance with the default options', async () => {
-      await driveUpdateStateApi.start();
-      const { Args } = await driveUpdateStateApi.container.inspect();
+      await driveUpdateState.start();
+      const { Args } = await driveUpdateState.container.inspect();
 
-      expect(Args).to.deep.equal(['npm', 'run', 'updateStateApi']);
+      expect(Args).to.deep.equal(['npm', 'run', 'updateState']);
     });
 
     it('should return correct Drive API gRPC port as a result of calling getRpcPort', async () => {
-      await driveUpdateStateApi.start();
+      await driveUpdateState.start();
 
-      expect(driveUpdateStateApi.getGrpcPort()).to.equal(driveUpdateStateApi.options.getGrpcPort());
+      expect(driveUpdateState.getGrpcPort()).to.equal(driveUpdateState.options.getGrpcPort());
     });
   });
 
   describe('gRPC', () => {
     let envs;
     let mongoDb;
-    let driveUpdateStateApi;
+    let driveUpdateState;
 
     before(async () => {
       mongoDb = await startMongoDb();
@@ -91,20 +95,20 @@ describe('createDriveUpdateStateApi', function main() {
         },
       };
 
-      driveUpdateStateApi = await createDriveUpdateStateApi(options);
+      driveUpdateState = await createDriveUpdateState(options);
     });
 
     after(async () => {
       await Promise.all([
         mongoDb.remove(),
-        driveUpdateStateApi.remove(),
+        driveUpdateState.remove(),
       ]);
     });
 
     it('should return an error as result of an API call if initial sync is in progress', async () => {
-      await driveUpdateStateApi.start();
+      await driveUpdateState.start();
 
-      const grpc = driveUpdateStateApi.getApi();
+      const grpc = driveUpdateState.getApi();
       const startTransactionRequest = new StartTransactionRequest();
       const res = await grpc.startTransaction(startTransactionRequest);
 
@@ -115,7 +119,7 @@ describe('createDriveUpdateStateApi', function main() {
   describe('options', async () => {
     let envs;
     let mongoDb;
-    let driveUpdateStateApi;
+    let driveUpdateState;
 
     before(async () => {
       mongoDb = await startMongoDb();
@@ -127,7 +131,7 @@ describe('createDriveUpdateStateApi', function main() {
     after(async () => {
       await Promise.all([
         mongoDb.remove(),
-        driveUpdateStateApi.remove(),
+        driveUpdateState.remove(),
       ]);
     });
 
@@ -143,21 +147,21 @@ describe('createDriveUpdateStateApi', function main() {
         },
       };
 
-      driveUpdateStateApi = await createDriveUpdateStateApi(options);
+      driveUpdateState = await createDriveUpdateState(options);
 
-      await driveUpdateStateApi.start();
+      await driveUpdateState.start();
 
-      const { Mounts } = await driveUpdateStateApi.container.inspect();
+      const { Mounts } = await driveUpdateState.container.inspect();
 
       const destinations = Mounts.map(m => m.Destination);
 
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should be able to start an instance with DriveUpdateStateApiOptions', async () => {
+    it('should be able to start an instance with DriveUpdateStateOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = new DriveUpdateStateApiOptions({
+      const options = new DriveUpdateStateOptions({
         container: {
           envs,
           volumes: [
@@ -166,29 +170,29 @@ describe('createDriveUpdateStateApi', function main() {
         },
       });
 
-      driveUpdateStateApi = await createDriveUpdateStateApi(options);
+      driveUpdateState = await createDriveUpdateState(options);
 
-      await driveUpdateStateApi.start();
+      await driveUpdateState.start();
 
-      const { Mounts } = await driveUpdateStateApi.container.inspect();
+      const { Mounts } = await driveUpdateState.container.inspect();
 
       const destinations = Mounts.map(m => m.Destination);
 
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should be able to start an instance with custom default DriveUpdateStateApiOptions', async () => {
-      const options = new DriveUpdateStateApiOptions({
+    it('should be able to start an instance with custom default DriveUpdateStateOptions', async () => {
+      const options = new DriveUpdateStateOptions({
         container: {
           envs,
         },
       });
 
-      driveUpdateStateApi = await createDriveUpdateStateApi(options);
+      driveUpdateState = await createDriveUpdateState(options);
 
-      await driveUpdateStateApi.start();
+      await driveUpdateState.start();
 
-      const { Config: { Image: imageName } } = await driveUpdateStateApi.container.inspect();
+      const { Config: { Image: imageName } } = await driveUpdateState.container.inspect();
 
       expect(imageName).to.contain('drive');
     });
