@@ -1,6 +1,7 @@
 const Docker = require('dockerode');
 const {
   StartTransactionRequest,
+  StartTransactionResponse,
 } = require('@dashevo/drive-grpc');
 
 const removeContainers = require('../../../../../lib/docker/removeContainers');
@@ -105,14 +106,14 @@ describe('createDriveUpdateState', function main() {
       ]);
     });
 
-    it('should return an error as result of an API call if initial sync is in progress', async () => {
+    it('should return a response by calling a `startTransaction` endpoint', async () => {
       await driveUpdateState.start();
 
       const grpc = driveUpdateState.getApi();
       const startTransactionRequest = new StartTransactionRequest();
-      const res = await grpc.startTransaction(startTransactionRequest);
+      const response = await grpc.startTransaction(startTransactionRequest);
 
-      expect(res.error.code).to.equal(100);
+      expect(response).to.be.an.instanceOf(StartTransactionResponse);
     });
   });
 

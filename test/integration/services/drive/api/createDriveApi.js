@@ -68,7 +68,7 @@ describe('createDriveApi', function main() {
       await driveApi.start();
       const { Args } = await driveApi.container.inspect();
 
-      expect(Args).to.deep.equal(['run', 'api']);
+      expect(Args).to.deep.equal(['npm', 'run', 'api']);
     });
 
     it('should return correct Drive API RPC port as a result of calling getRpcPort', async () => {
