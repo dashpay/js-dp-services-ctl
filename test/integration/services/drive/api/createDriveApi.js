@@ -78,49 +78,6 @@ describe('createDriveApi', function main() {
     });
   });
 
-  describe('RPC', () => {
-    let dashCore;
-    let mongoDb;
-    let driveApi;
-
-    before(async () => {
-      dashCore = await startDashCore();
-      mongoDb = await startMongoDb();
-      const envs = [
-        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
-        `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
-        `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
-        `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
-        `DASHCORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
-      ];
-
-      const options = {
-        container: {
-          envs,
-        },
-      };
-
-      driveApi = await createDriveApi(options);
-    });
-
-    after(async () => {
-      await Promise.all([
-        dashCore.remove(),
-        mongoDb.remove(),
-        driveApi.remove(),
-      ]);
-    });
-
-    it('should return an error as result of an API call if initial sync is in progress', async () => {
-      await driveApi.start();
-
-      const rpc = driveApi.getApi();
-      const res = await rpc.request('addSTPacketMethod', {});
-
-      expect(res.error.code).to.equal(100);
-    });
-  });
-
   describe('options', async () => {
     let dashCore;
     let mongoDb;
