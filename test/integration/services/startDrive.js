@@ -55,7 +55,7 @@ describe('startDrive', function main() {
         `DASHCORE_JSON_RPC_PORT=${driveNode.dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${driveNode.dashCore.options.getRpcUser()}`,
         `DASHCORE_JSON_RPC_PASS=${driveNode.dashCore.options.getRpcPassword()}`,
-        `STORAGE_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:27017`,
+        `STATEVIEW_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:27017`,
       ];
 
       const apiEnvs = ApiEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);

@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 describe('Services', () => {
   require('./dashCore');
-  require('./driveApi');
+  require('./drive');
   require('./mongoDb');
   require('./startDrive');
   require('./startDapi');
