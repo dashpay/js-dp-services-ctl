@@ -65,6 +65,24 @@ describe('startDapi', function main() {
       expect(State.Status).to.equal('running');
     });
 
+    it('should have Machine container running', async () => {
+      const { State } = await dapiNode.machine.container.inspect();
+
+      expect(State.Status).to.equal('running');
+    });
+
+    it('should have Tendermint Core container running', async () => {
+      const { State } = await dapiNode.tendermintCore.container.inspect();
+
+      expect(State.Status).to.equal('running');
+    });
+
+    it('should have Drive Update State container running', async () => {
+      const { State } = await dapiNode.driveUpdateState.container.inspect();
+
+      expect(State.Status).to.equal('running');
+    });
+
     it('should DAPI Core container has the right env variables', async () => {
       const { Config: { Env: envs } } = await dapiNode.dapiCore.container.inspect();
       const expectedEnv = [
@@ -121,7 +139,21 @@ describe('startDapi', function main() {
       expect(dapiEnvs.length).to.equal(expectedEnv.length);
     });
 
-    it('should be on the same network: DashCore, Drive, MongoDb, and Insight API', async () => {
+    it('should Machine container has the right env variables', async () => {
+      const { Config: { Env: envs } } = await dapiNode.machine.container.inspect();
+      const expectedEnv = [
+        `DRIVE_UPDATE_STATE_HOST=${dapiNode.driveUpdateState.getIp()}`,
+        `DRIVE_UPDATE_STATE_PORT=${dapiNode.driveUpdateState.getGrpcPort()}`,
+        `DRIVE_API_HOST=${dapiNode.driveApi.getIp()}`,
+        `DRIVE_API_PORT=${dapiNode.driveApi.getRpcPort()}`,
+      ];
+
+      const machineEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
+
+      expect(machineEnvs.length).to.equal(expectedEnv.length);
+    });
+
+    it('should be on the same network: DashCore, Drive, MongoDb, Insight API, Machine, Tendermint Core and UpdateState', async () => {
       const {
         NetworkSettings: dashCoreNetworkSettings,
       } = await dapiNode.dashCore.container.inspect();
@@ -146,12 +178,27 @@ describe('startDapi', function main() {
         NetworkSettings: dapiTxFilterStreamNetworkSettings,
       } = await dapiNode.dapiTxFilterStream.container.inspect();
 
+      const {
+        NetworkSettings: machineNetworkSettings,
+      } = await dapiNode.dapiTxFilterStream.container.inspect();
+
+      const {
+        NetworkSettings: tendermintCoreNetworkSettings,
+      } = await dapiNode.dapiTxFilterStream.container.inspect();
+
+      const {
+        NetworkSettings: driveUpdateState,
+      } = await dapiNode.dapiTxFilterStream.container.inspect();
+
       expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(driveApiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(insightNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(dapiCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(dapiTxFilterStreamNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(machineNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(tendermintCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveUpdateState.Networks)).to.deep.equal(['dash_test_network']);
     });
   });
 

@@ -17,6 +17,8 @@ const DapiTxFilterStreamOptions = require('../lib/services/dapi/txFilterStream/D
 
 const InsightApiOptions = require('../lib/services/insightApi/InsightApiOptions');
 
+const MachineOptions = require('../lib/services/machine/MachineOptions');
+
 use(sinonChai);
 use(chaiAsPromised);
 use(dirtyChai);
@@ -66,6 +68,14 @@ if (process.env.SERVICE_IMAGE_INSIGHT) {
   InsightApiOptions.setDefaultCustomOptions({
     container: {
       image: process.env.SERVICE_IMAGE_INSIGHT,
+    },
+  });
+}
+
+if (process.env.SERVICE_IMAGE_MACHINE) {
+  MachineOptions.setDefaultCustomOptions({
+    container: {
+      image: process.env.SERVICE_IMAGE_MACHINE,
     },
   });
 }
