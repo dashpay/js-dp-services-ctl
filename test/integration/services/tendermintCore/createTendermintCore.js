@@ -35,7 +35,7 @@ describe('createTendermintCore', function main() {
 
       const { Args } = await tendermintCore.container.inspect();
 
-      expect(Args).to.deep.equal(['node', '--rpc.laddr=tcp://0.0.0.0:26657', '--proxy_app=noop']);
+      expect(Args).to.deep.equal(['node', `--rpc.laddr=tcp://0.0.0.0:${tendermintCore.options.getTendermintPort()}`, '--proxy_app=noop']);
     });
 
     it('should return a Tendermint client as a result of calling getClient', async () => {
