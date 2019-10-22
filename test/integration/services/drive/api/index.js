@@ -1,4 +1,4 @@
 /* eslint-disable global-require */
-describe('driveApi', () => {
+describe('api', () => {
   require('./createDriveApi');
 });

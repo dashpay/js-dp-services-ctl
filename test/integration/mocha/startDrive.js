@@ -25,12 +25,6 @@ describe('startDrive', () => {
 
       expect(State.Status).to.equal('running');
     });
-
-    it('should have Drive sync container running', async () => {
-      const { State } = await driveNode.driveSync.container.inspect();
-
-      expect(State.Status).to.equal('running');
-    });
   });
 
   describe('Many nodes', () => {
@@ -61,14 +55,6 @@ describe('startDrive', () => {
     it('should have Drive API containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await driveNodes[i].driveApi.container.inspect();
-
-        expect(State.Status).to.equal('running');
-      }
-    });
-
-    it('should have Drive sync containers running', async () => {
-      for (let i = 0; i < nodesCount; i++) {
-        const { State } = await driveNodes[i].driveSync.container.inspect();
 
         expect(State.Status).to.equal('running');
       }
