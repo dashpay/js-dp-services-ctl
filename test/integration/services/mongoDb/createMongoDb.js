@@ -14,13 +14,12 @@ describe('createMongoDb', function main() {
 
     before(async () => {
       mongoDbService = await createMongoDb();
+      await mongoDbService.start();
     });
 
     after(async () => mongoDbService.remove());
 
     it('should be able to start an instance with a bridge network named dash_test_network', async () => {
-      await mongoDbService.start();
-
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
       const { NetworkSettings: { Networks } } = await mongoDbService.container.inspect();
@@ -32,8 +31,6 @@ describe('createMongoDb', function main() {
     });
 
     it('should be able to start an instance with the default options', async () => {
-      await mongoDbService.start();
-
       const { Args } = await mongoDbService.container.inspect();
 
       expect(Args).to.deep.equal([
@@ -41,12 +38,12 @@ describe('createMongoDb', function main() {
         '--replSet',
         mongoDbService.options.options.replicaSetName,
         '--bind_ip_all',
+        '--port',
+        mongoDbService.options.getMongoPort().toString(),
       ]);
     });
 
     it('should return a MongoDB database as a result of calling getDb', async () => {
-      await mongoDbService.start();
-
       const db = await mongoDbService.getDb();
       const collection = db.collection('syncState');
       const count = await collection.countDocuments({});
@@ -55,8 +52,6 @@ describe('createMongoDb', function main() {
     });
 
     it('should return a Mongo client as a result of calling getClient', async () => {
-      await mongoDbService.start();
-
       const client = await mongoDbService.getClient();
       const collection = client.db('test').collection('syncState');
       const count = await collection.countDocuments({});
@@ -65,8 +60,6 @@ describe('createMongoDb', function main() {
     });
 
     it('should be able to clean Mongo database', async () => {
-      await mongoDbService.start();
-
       const client = await mongoDbService.getClient();
       await client.db('other-db').createCollection('some-collection');
 
@@ -99,13 +92,12 @@ describe('createMongoDb', function main() {
 
     before(async () => {
       mongoDbService = await createMongoDb();
+      await mongoDbService.start();
     });
 
     after(async () => mongoDbService.remove());
 
     it('should not fail if mongod is not running yet (MongoNetworkError)', async () => {
-      await mongoDbService.start();
-
       const db = await mongoDbService.getDb();
       const collection = db.collection('syncState');
       const count = await collection.countDocuments({});
@@ -189,13 +181,12 @@ describe('createMongoDb', function main() {
 
     before(async () => {
       mongoDbService = await createMongoDb();
+      await mongoDbService.start();
     });
 
     after(async () => mongoDbService.remove());
 
     it('should start Mongo DB instance as replica set', async () => {
-      await mongoDbService.start();
-
       const db = await mongoDbService.getDb();
 
       const status = await db.admin()
