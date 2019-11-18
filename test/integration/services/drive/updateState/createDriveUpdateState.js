@@ -25,7 +25,7 @@ describe('createDriveUpdateState', function main() {
     before(async () => {
       mongoDb = await startMongoDb();
       envs = [
-        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
+        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
       ];
 
       const options = {
@@ -87,7 +87,7 @@ describe('createDriveUpdateState', function main() {
     before(async () => {
       mongoDb = await startMongoDb();
       envs = [
-        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
+        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
       ];
 
       const options = {
@@ -125,7 +125,7 @@ describe('createDriveUpdateState', function main() {
     before(async () => {
       mongoDb = await startMongoDb();
       envs = [
-        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
+        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
       ];
     });
 

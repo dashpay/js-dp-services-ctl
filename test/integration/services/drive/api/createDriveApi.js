@@ -19,7 +19,7 @@ describe('createDriveApi', function main() {
       dashCore = await startDashCore();
       mongoDb = await startMongoDb();
       envs = [
-        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
+        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
         `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
         `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
@@ -88,7 +88,7 @@ describe('createDriveApi', function main() {
       dashCore = await startDashCore();
       mongoDb = await startMongoDb();
       envs = [
-        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:27017`,
+        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
         `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
         `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
