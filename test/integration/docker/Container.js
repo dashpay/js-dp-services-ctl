@@ -59,8 +59,8 @@ describe('Container', function main() {
       await container.start();
       const { NetworkSettings: { Ports } } = await container.inspect();
 
-      expect(Ports).to.have.property('27017/tcp');
-      expect(Ports['27017/tcp']).to.be.not.null();
+      expect(Ports).to.have.property(`${mongoDbOptions.getMongoPort()}/tcp`);
+      expect(Ports[`${mongoDbOptions.getMongoPort()}/tcp`]).to.be.not.null();
     });
 
     it('should not crash if start method is called multiple times', async () => {
