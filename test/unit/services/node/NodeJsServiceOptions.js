@@ -15,7 +15,7 @@ describe('NodeJsServiceOptions', () => {
         '-c',
         'cd /; if [ "$(md5sum /node_modules/package-lock.json | awk \'{print $1}\')" !='
           + ' "$(md5sum /package-lock.json | awk \'{print $1}\')" ]; then'
-          + ' npm ci --production; cp /package-lock.json /node_modules/; fi',
+          + ' npm i --production; cp /package-lock.json /node_modules/; fi',
       ]);
   });
 
