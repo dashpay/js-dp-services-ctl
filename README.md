@@ -60,7 +60,7 @@ The tool provides a convenient JavaScript interface for configuration and intera
 - [Dash Core](https://github.com/dashpay/dash) service
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCore.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dashCore/DashCoreOptions.js)
-    
+
 #### Tendermint Core
 
 - [Tendermint Core](https://tendermint.com) service
