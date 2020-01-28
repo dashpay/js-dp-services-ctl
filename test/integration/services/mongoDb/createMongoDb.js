@@ -191,7 +191,7 @@ describe('createMongoDb', function main() {
 
       const status = await db.admin()
         .command({ replSetGetStatus: 1 });
-
+console.log(status);
       expect(status.set).to.equal(mongoDbService.options.options.replicaSetName);
       expect(status.members[0].ip).to.equal('127.0.0.1');
       expect(status.members[0].stateStr).to.equal('PRIMARY');
