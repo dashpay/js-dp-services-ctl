@@ -80,7 +80,8 @@ describe('startDashCore', function main() {
         expect(blocks).to.equal(1);
       }
 
-      await dashCoreNodes[0].rpcClient.generate(2);
+      const { result: address } = await dashCoreNodes[0].rpcClient.getNewAddress();
+      await dashCoreNodes[0].rpcClient.generateToAddress(2, address);
 
       await wait(5000);
 
