@@ -219,7 +219,7 @@ describe('createDashCore', function main() {
 
       const { Mounts } = await instance.container.inspect();
 
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should be able to start an instance with DashCoreOptions', async () => {
@@ -239,7 +239,7 @@ describe('createDashCore', function main() {
 
       const { Mounts } = await instance.container.inspect();
 
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should be able to start an instance with custom default DashCoreOptions', async () => {

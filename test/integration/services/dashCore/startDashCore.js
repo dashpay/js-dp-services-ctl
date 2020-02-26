@@ -30,7 +30,7 @@ describe('startDashCore', function main() {
       const { State, Mounts } = await dashCoreNode.container.inspect();
 
       expect(State.Status).to.equal('running');
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should have RPC connected', async () => {
@@ -69,7 +69,7 @@ describe('startDashCore', function main() {
         const { State, Mounts } = await dashCoreNodes[i].container.inspect();
 
         expect(State.Status).to.equal('running');
-        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+        expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
       }
     });
 
