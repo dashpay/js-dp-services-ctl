@@ -120,7 +120,8 @@ describe('createDashCore', function main() {
     it('should have several instances connected to each other', async () => {
       // Workaround for develop branch
       // We should generate genesis block before we connect instances
-      await instanceOne.getApi().generate(1);
+      const { result: address } = await instanceOne.getApi().getNewAddress();
+      await instanceOne.getApi().generateToAddress(1, address);
 
       await instanceOne.connect(instanceTwo);
       await wait(2000);
@@ -143,7 +144,8 @@ describe('createDashCore', function main() {
       expect(blocksInstanceOne).to.equal(1);
       expect(blocksInstanceTwo).to.equal(1);
 
-      await instanceOne.rpcClient.generate(2);
+      const { result: address } = await instanceOne.rpcClient.getNewAddress();
+      await instanceOne.rpcClient.generateToAddress(2, address);
       await wait(3000);
 
       const { result: blocksOne } = await instanceOne.rpcClient.getBlockCount();
@@ -217,7 +219,7 @@ describe('createDashCore', function main() {
 
       const { Mounts } = await instance.container.inspect();
 
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should be able to start an instance with DashCoreOptions', async () => {
@@ -237,7 +239,7 @@ describe('createDashCore', function main() {
 
       const { Mounts } = await instance.container.inspect();
 
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should be able to start an instance with custom default DashCoreOptions', async () => {
