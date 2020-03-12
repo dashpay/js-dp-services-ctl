@@ -44,7 +44,7 @@ describe('startDapi', function main() {
       const { State, Mounts } = await dapiNode.driveApi.container.inspect();
 
       expect(State.Status).to.equal('running');
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should have Insight API container running', async () => {
@@ -250,7 +250,7 @@ describe('startDapi', function main() {
         const { State, Mounts } = await dapiNodes[i].driveApi.container.inspect();
 
         expect(State.Status).to.equal('running');
-        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+        expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
       }
     });
 

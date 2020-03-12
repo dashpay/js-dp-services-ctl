@@ -193,7 +193,6 @@ describe('createMongoDb', function main() {
         .command({ replSetGetStatus: 1 });
 
       expect(status.set).to.equal(mongoDbService.options.options.replicaSetName);
-      expect(status.members[0].ip).to.equal(mongoDbService.getIp());
       expect(status.members[0].stateStr).to.equal('PRIMARY');
     });
   });

@@ -43,7 +43,7 @@ describe('startDrive', function main() {
       const { State, Mounts } = await driveNode.driveApi.container.inspect();
 
       expect(State.Status).to.equal('running');
-      expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+      expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should have proper env variables set for Drive container', async () => {
@@ -128,7 +128,7 @@ describe('startDrive', function main() {
         const { State, Mounts } = await driveNodes[i].driveApi.container.inspect();
 
         expect(State.Status).to.equal('running');
-        expect(Mounts[0].Destination).to.equal(CONTAINER_VOLUME);
+        expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
       }
     });
   });
