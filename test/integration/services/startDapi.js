@@ -40,13 +40,6 @@ describe('startDapi', function main() {
       expect(State.Status).to.equal('running');
     });
 
-    it('should have Drive API container running', async () => {
-      const { State, Mounts } = await dapiNode.driveApi.container.inspect();
-
-      expect(State.Status).to.equal('running');
-      expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
-    });
-
     it('should have Insight API container running', async () => {
       const { State } = await dapiNode.insightApi.container.inspect();
 
@@ -65,20 +58,14 @@ describe('startDapi', function main() {
       expect(State.Status).to.equal('running');
     });
 
-    it('should have Machine container running', async () => {
-      const { State } = await dapiNode.machine.container.inspect();
+    it('should have Drive ABCI container running', async () => {
+      const { State } = await dapiNode.driveAbci.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
 
     it('should have Tendermint Core container running', async () => {
       const { State } = await dapiNode.tendermintCore.container.inspect();
-
-      expect(State.Status).to.equal('running');
-    });
-
-    it('should have Drive Update State container running', async () => {
-      const { State } = await dapiNode.driveUpdateState.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
@@ -160,7 +147,7 @@ describe('startDapi', function main() {
 
       const {
         NetworkSettings: driveApiNetworkSettings,
-      } = await dapiNode.driveApi.container.inspect();
+      } = await dapiNode.driveAbci.container.inspect();
 
       const {
         NetworkSettings: mongoDbNetworkSettings,
@@ -179,12 +166,8 @@ describe('startDapi', function main() {
       } = await dapiNode.dapiTxFilterStream.container.inspect();
 
       const {
-        NetworkSettings: machineNetworkSettings,
-      } = await dapiNode.dapiTxFilterStream.container.inspect();
-
-      const {
         NetworkSettings: tendermintCoreNetworkSettings,
-      } = await dapiNode.dapiTxFilterStream.container.inspect();
+      } = await dapiNode.tendermintCore.container.inspect();
 
       const {
         NetworkSettings: driveUpdateState,

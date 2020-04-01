@@ -31,10 +31,10 @@ The tool provides a convenient JavaScript interface for configuration and intera
 
 ### Available DP services
 
-#### Drive
+#### DriveAbci
 
-[Drive](https://github.com/dashevo/drive) service starts a bunch of related services:
-- Drive Api
+[DriveAbci](https://github.com/dashevo/drive) service starts a bunch of related services:
+- DriveAbci Api
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApi.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApiOptions.js)
 - [MongoDB](#mongodb)
@@ -50,7 +50,7 @@ The tool provides a convenient JavaScript interface for configuration and intera
 - DAPI TxFilterStream
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStream.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions.js)
-- [Drive Api](#drive)
+- [DriveAbci Api](#drive)
 - [MongoDB](#mongodb)
 - [DashCore](#dash-core)
 - [Insight](#insight)

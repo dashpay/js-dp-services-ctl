@@ -17,7 +17,7 @@ const DapiTxFilterStreamOptions = require('../lib/services/dapi/txFilterStream/D
 
 const InsightApiOptions = require('../lib/services/insightApi/InsightApiOptions');
 
-const MachineOptions = require('../lib/services/machine/MachineOptions');
+const MachineOptions = require('../lib/services/drive/abci/DriveAbciOptions');
 
 use(sinonChai);
 use(chaiAsPromised);
