@@ -19,7 +19,7 @@ describe('createDriveAbci', function main() {
       dashCore = await startDashCore();
       mongoDb = await startMongoDb();
       envs = [
-        `DOCUMENT_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}?replicaSet=${mongoDb.options.options.replicaSetName}`,
+        `DOCUMENT_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
         `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
         `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
@@ -88,7 +88,7 @@ describe('createDriveAbci', function main() {
       dashCore = await startDashCore();
       mongoDb = await startMongoDb();
       envs = [
-        `DOCUMENT_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}?replicaSet=${mongoDb.options.options.replicaSetName}`,
+        `DOCUMENT_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
         `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
         `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
