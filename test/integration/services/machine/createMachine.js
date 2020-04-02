@@ -6,7 +6,7 @@ const { createMachine } = require('../../../../lib/index');
 
 
 const MachineOptions = require(
-  '../../../../lib/services/machine/MachineOptions',
+  '../../../../lib/services/drive/abci/DriveAbciOptions',
 );
 
 describe('createMachine', function main() {

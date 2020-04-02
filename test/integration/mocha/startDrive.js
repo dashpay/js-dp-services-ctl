@@ -20,8 +20,8 @@ describe('startDrive', () => {
       expect(State.Status).to.equal('running');
     });
 
-    it('should have Drive API container running', async () => {
-      const { State } = await driveNode.driveApi.container.inspect();
+    it('should have Drive ABCI container running', async () => {
+      const { State } = await driveNode.driveAbci.container.inspect();
 
       expect(State.Status).to.equal('running');
     });
@@ -52,9 +52,9 @@ describe('startDrive', () => {
       }
     });
 
-    it('should have Drive API containers running', async () => {
+    it('should have Drive ABCI containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await driveNodes[i].driveApi.container.inspect();
+        const { State } = await driveNodes[i].driveAbci.container.inspect();
 
         expect(State.Status).to.equal('running');
       }
