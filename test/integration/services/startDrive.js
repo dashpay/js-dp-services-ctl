@@ -54,7 +54,7 @@ describe('startDrive', function main() {
         `DASHCORE_JSON_RPC_PORT=${driveNode.dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${driveNode.dashCore.options.getRpcUser()}`,
         `DASHCORE_JSON_RPC_PASS=${driveNode.dashCore.options.getRpcPassword()}`,
-        `DOCUMENT_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:${driveNode.mongoDb.options.getMongoPort()}`,
+        `DOCUMENT_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:${driveNode.mongoDb.options.getMongoPort()}?replicaSet=${driveNode.mongoDb.options.options.replicaSetName}`,
       ];
 
       const apiEnvs = ApiEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
