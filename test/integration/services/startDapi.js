@@ -1,4 +1,3 @@
-const os = require('os');
 const removeContainers = require('../../../lib/docker/removeContainers');
 const { startDapi } = require('../../../lib');
 
@@ -84,6 +83,8 @@ describe('startDapi', function main() {
         `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
         'DASHCORE_P2P_NETWORK=regtest',
         'NETWORK=regtest',
+        'TENDERMINT_RPC_HOST=node0',
+        `TENDERMINT_RPC_PORT=${dapiNode.tendermintCore.options.getTendermintPort()}`,
       ];
 
       const dapiEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
@@ -105,6 +106,8 @@ describe('startDapi', function main() {
         `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
         'DASHCORE_P2P_NETWORK=regtest',
         'NETWORK=regtest',
+        'TENDERMINT_RPC_HOST=node0',
+        `TENDERMINT_RPC_PORT=${dapiNode.tendermintCore.options.getTendermintPort()}`,
       ];
 
       const dapiEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
