@@ -1,10 +1,10 @@
 const Docker = require('dockerode');
 
 const removeContainers = require('../../../../../lib/docker/removeContainers');
-const { startDashCore, startMongoDb, createDriveApi } = require('../../../../../lib/index');
-const DriveApiOptions = require('../../../../../lib/services/drive/api/DriveApiOptions');
+const { startDashCore, startMongoDb, createDriveAbci } = require('../../../../../lib/index');
+const DriveAbciOptions = require('../../../../../lib/services/drive/abci/DriveAbciOptions');
 
-describe('createDriveApi', function main() {
+describe('createDriveAbci', function main() {
   this.timeout(90000);
 
   before(removeContainers);
@@ -13,13 +13,13 @@ describe('createDriveApi', function main() {
     let dashCore;
     let mongoDb;
     let envs;
-    let driveApi;
+    let driveAbci;
 
     before(async () => {
       dashCore = await startDashCore();
       mongoDb = await startMongoDb();
       envs = [
-        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
+        `DOCUMENT_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
         `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
         `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
@@ -32,22 +32,22 @@ describe('createDriveApi', function main() {
         },
       };
 
-      driveApi = await createDriveApi(options);
+      driveAbci = await createDriveAbci(options);
     });
 
     after(async () => {
       await Promise.all([
         dashCore.remove(),
         mongoDb.remove(),
-        driveApi.remove(),
+        driveAbci.remove(),
       ]);
     });
 
     it('should be able to start an instance with a bridge network called dash_test_network', async () => {
-      await driveApi.start();
+      await driveAbci.start();
       const network = new Docker().getNetwork('dash_test_network');
       const { Driver } = await network.inspect();
-      const { NetworkSettings: { Networks } } = await driveApi.container.inspect();
+      const { NetworkSettings: { Networks } } = await driveAbci.container.inspect();
       const networks = Object.keys(Networks);
 
       expect(Driver).to.equal('bridge');
@@ -56,8 +56,8 @@ describe('createDriveApi', function main() {
     });
 
     it('should be able to start an instance with custom environment variables', async () => {
-      await driveApi.start();
-      const { Config: { Env } } = await driveApi.container.inspect();
+      await driveAbci.start();
+      const { Config: { Env } } = await driveAbci.container.inspect();
 
       const instanceEnv = Env.filter(variable => envs.includes(variable));
 
@@ -65,30 +65,30 @@ describe('createDriveApi', function main() {
     });
 
     it('should be able to start an instance with the default options', async () => {
-      await driveApi.start();
-      const { Args } = await driveApi.container.inspect();
+      await driveAbci.start();
+      const { Args } = await driveAbci.container.inspect();
 
-      expect(Args).to.deep.equal(['npm', 'run', 'api']);
+      expect(Args).to.deep.equal(['npm', 'run', 'abci']);
     });
 
-    it('should return correct Drive API RPC port as a result of calling getRpcPort', async () => {
-      await driveApi.start();
+    it('should return correct Drive ABCI port as a result of calling getAbciPort', async () => {
+      await driveAbci.start();
 
-      expect(driveApi.getRpcPort()).to.equal(driveApi.options.getRpcPort());
+      expect(driveAbci.getAbciPort()).to.equal(driveAbci.options.getAbciPort());
     });
   });
 
   describe('options', async () => {
     let dashCore;
     let mongoDb;
-    let driveApi;
+    let driveAbci;
     let envs;
 
     beforeEach(async () => {
       dashCore = await startDashCore();
       mongoDb = await startMongoDb();
       envs = [
-        `STATEVIEW_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
+        `DOCUMENT_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
         `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
         `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
@@ -100,7 +100,7 @@ describe('createDriveApi', function main() {
       await Promise.all([
         dashCore.remove(),
         mongoDb.remove(),
-        driveApi.remove(),
+        driveAbci.remove(),
       ]);
     });
 
@@ -116,21 +116,21 @@ describe('createDriveApi', function main() {
         },
       };
 
-      driveApi = await createDriveApi(options);
+      driveAbci = await createDriveAbci(options);
 
-      await driveApi.start();
+      await driveAbci.start();
 
-      const { Mounts } = await driveApi.container.inspect();
+      const { Mounts } = await driveAbci.container.inspect();
 
       const destinations = Mounts.map(m => m.Destination);
 
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should be able to start an instance with DriveApiOptions', async () => {
+    it('should be able to start an instance with DriveAbciOptions', async () => {
       const rootPath = process.cwd();
       const CONTAINER_VOLUME = '/usr/src/app/README.md';
-      const options = new DriveApiOptions({
+      const options = new DriveAbciOptions({
         container: {
           envs,
           volumes: [
@@ -139,29 +139,29 @@ describe('createDriveApi', function main() {
         },
       });
 
-      driveApi = await createDriveApi(options);
+      driveAbci = await createDriveAbci(options);
 
-      await driveApi.start();
+      await driveAbci.start();
 
-      const { Mounts } = await driveApi.container.inspect();
+      const { Mounts } = await driveAbci.container.inspect();
 
       const destinations = Mounts.map(m => m.Destination);
 
       expect(destinations).to.include(CONTAINER_VOLUME);
     });
 
-    it('should be able to start an instance with custom default DriveApiOptions', async () => {
-      const options = new DriveApiOptions({
+    it('should be able to start an instance with custom default DriveAbciOptions', async () => {
+      const options = new DriveAbciOptions({
         container: {
           envs,
         },
       });
 
-      driveApi = await createDriveApi(options);
+      driveAbci = await createDriveAbci(options);
 
-      await driveApi.start();
+      await driveAbci.start();
 
-      const { Config: { Image: imageName } } = await driveApi.container.inspect();
+      const { Config: { Image: imageName } } = await driveAbci.container.inspect();
 
       expect(imageName).to.contain('drive');
     });

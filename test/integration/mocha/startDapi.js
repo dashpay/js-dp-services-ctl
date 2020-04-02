@@ -23,8 +23,8 @@ describe('startDapi', () => {
       const { State: stateMongoDb } = await dapiNode.mongoDb.container.inspect();
       expect(stateMongoDb.Status).to.equal('running');
 
-      const { State: stateDriveApi } = await dapiNode.driveApi.container.inspect();
-      expect(stateDriveApi.Status).to.equal('running');
+      const { State: stateDriveAbci } = await dapiNode.driveAbci.container.inspect();
+      expect(stateDriveAbci.Status).to.equal('running');
 
       const { State: stateInsight } = await dapiNode.insightApi.container.inspect();
       expect(stateInsight.Status).to.equal('running');
@@ -56,14 +56,14 @@ describe('startDapi', () => {
       }
     });
 
-    it('should have Drive API containers running', async () => {
+    it('should have Drive ABCI containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
         const { State } = await dapiNodes[i].mongoDb.container.inspect();
 
         expect(State.Status).to.equal('running');
       }
       for (let i = 0; i < nodesCount; i++) {
-        const { State } = await dapiNodes[i].driveApi.container.inspect();
+        const { State } = await dapiNodes[i].driveAbci.container.inspect();
 
         expect(State.Status).to.equal('running');
       }

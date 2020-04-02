@@ -82,7 +82,7 @@ describe('startDapi', function main() {
         `DASHCORE_ZMQ_PORT=${dapiNode.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
         `DASHCORE_P2P_HOST=${dapiNode.dashCore.getIp()}`,
         `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
-        `DRIVE_RPC_PORT=${dapiNode.driveApi.options.getRpcPort()}`,
+        `DRIVE_RPC_PORT=${dapiNode.driveAbci.options.getAbciPort()}`,
         'DASHCORE_P2P_NETWORK=regtest',
         'NETWORK=regtest',
       ];
@@ -90,7 +90,7 @@ describe('startDapi', function main() {
       if (os.platform() === 'darwin') {
         expectedEnv.push('DRIVE_RPC_HOST=docker.for.mac.localhost');
       } else {
-        expectedEnv.push(`DRIVE_RPC_HOST=${dapiNode.driveApi.getIp()}`);
+        expectedEnv.push(`DRIVE_RPC_HOST=${dapiNode.driveAbci.getIp()}`);
       }
 
       const dapiEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
@@ -110,7 +110,7 @@ describe('startDapi', function main() {
         `DASHCORE_ZMQ_PORT=${dapiNode.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
         `DASHCORE_P2P_HOST=${dapiNode.dashCore.getIp()}`,
         `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
-        `DRIVE_RPC_PORT=${dapiNode.driveApi.options.getRpcPort()}`,
+        `DRIVE_RPC_PORT=${dapiNode.driveAbci.options.getAbciPort()}`,
         'DASHCORE_P2P_NETWORK=regtest',
         'NETWORK=regtest',
       ];
@@ -118,26 +118,12 @@ describe('startDapi', function main() {
       if (os.platform() === 'darwin') {
         expectedEnv.push('DRIVE_RPC_HOST=docker.for.mac.localhost');
       } else {
-        expectedEnv.push(`DRIVE_RPC_HOST=${dapiNode.driveApi.getIp()}`);
+        expectedEnv.push(`DRIVE_RPC_HOST=${dapiNode.driveAbci.getIp()}`);
       }
 
       const dapiEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
 
       expect(dapiEnvs.length).to.equal(expectedEnv.length);
-    });
-
-    it('should Machine container has the right env variables', async () => {
-      const { Config: { Env: envs } } = await dapiNode.machine.container.inspect();
-      const expectedEnv = [
-        `DRIVE_UPDATE_STATE_HOST=${dapiNode.driveUpdateState.getIp()}`,
-        `DRIVE_UPDATE_STATE_PORT=${dapiNode.driveUpdateState.getGrpcPort()}`,
-        `DRIVE_API_HOST=${dapiNode.driveApi.getIp()}`,
-        `DRIVE_API_PORT=${dapiNode.driveApi.getRpcPort()}`,
-      ];
-
-      const machineEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
-
-      expect(machineEnvs.length).to.equal(expectedEnv.length);
     });
 
     it('should be on the same network: DashCore, Drive, MongoDb, Insight API, Machine, Tendermint Core and UpdateState', async () => {
@@ -146,7 +132,7 @@ describe('startDapi', function main() {
       } = await dapiNode.dashCore.container.inspect();
 
       const {
-        NetworkSettings: driveApiNetworkSettings,
+        NetworkSettings: driveAbciNetworkSettings,
       } = await dapiNode.driveAbci.container.inspect();
 
       const {
@@ -169,19 +155,13 @@ describe('startDapi', function main() {
         NetworkSettings: tendermintCoreNetworkSettings,
       } = await dapiNode.tendermintCore.container.inspect();
 
-      const {
-        NetworkSettings: driveUpdateState,
-      } = await dapiNode.dapiTxFilterStream.container.inspect();
-
       expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveApiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveAbciNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(insightNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(dapiCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(dapiTxFilterStreamNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(machineNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(tendermintCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveUpdateState.Networks)).to.deep.equal(['dash_test_network']);
     });
   });
 
@@ -228,9 +208,9 @@ describe('startDapi', function main() {
       }
     });
 
-    it('should have Drive API containers running', async () => {
+    it('should have Drive ABCI containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State, Mounts } = await dapiNodes[i].driveApi.container.inspect();
+        const { State, Mounts } = await dapiNodes[i].driveAbci.container.inspect();
 
         expect(State.Status).to.equal('running');
         expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);

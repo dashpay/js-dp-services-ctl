@@ -39,23 +39,22 @@ describe('startDrive', function main() {
       expect(State.Status).to.equal('running');
     });
 
-    it('should have Drive API container running', async () => {
-      const { State, Mounts } = await driveNode.driveApi.container.inspect();
+    it('should have Drive ABCI container running', async () => {
+      const { State, Mounts } = await driveNode.driveAbci.container.inspect();
 
       expect(State.Status).to.equal('running');
       expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
     });
 
     it('should have proper env variables set for Drive container', async () => {
-      const { Config: { Env: ApiEnvs } } = await driveNode.driveApi.container.inspect();
+      const { Config: { Env: ApiEnvs } } = await driveNode.driveAbci.container.inspect();
 
       const expectedEnv = [
-        `DASHCORE_ZMQ_PUB_HASHBLOCK=${driveNode.dashCore.getZmqSockets().hashblock}`,
         `DASHCORE_JSON_RPC_HOST=${driveNode.dashCore.getIp()}`,
         `DASHCORE_JSON_RPC_PORT=${driveNode.dashCore.options.getRpcPort()}`,
         `DASHCORE_JSON_RPC_USER=${driveNode.dashCore.options.getRpcUser()}`,
         `DASHCORE_JSON_RPC_PASS=${driveNode.dashCore.options.getRpcPassword()}`,
-        `STATEVIEW_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:${driveNode.mongoDb.options.getMongoPort()}`,
+        `DOCUMENT_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:${driveNode.mongoDb.options.getMongoPort()}`,
       ];
 
       const apiEnvs = ApiEnvs.filter(variable => expectedEnv.indexOf(variable) !== -1);
@@ -69,15 +68,15 @@ describe('startDrive', function main() {
       } = await driveNode.dashCore.container.inspect();
 
       const {
-        NetworkSettings: driveApiNetworkSettings,
-      } = await driveNode.driveApi.container.inspect();
+        NetworkSettings: driveAbciNetworkSettings,
+      } = await driveNode.driveAbci.container.inspect();
 
       const {
         NetworkSettings: mongoDbNetworkSettings,
       } = await driveNode.mongoDb.container.inspect();
 
       expect(Object.keys(dashCoreNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
-      expect(Object.keys(driveApiNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
+      expect(Object.keys(driveAbciNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
       expect(Object.keys(mongoDbNetworkSettings.Networks)).to.deep.equal(['dash_test_network']);
     });
   });
@@ -123,9 +122,9 @@ describe('startDrive', function main() {
       }
     });
 
-    it('should have Drive API containers running', async () => {
+    it('should have Drive ABCI containers running', async () => {
       for (let i = 0; i < nodesCount; i++) {
-        const { State, Mounts } = await driveNodes[i].driveApi.container.inspect();
+        const { State, Mounts } = await driveNodes[i].driveAbci.container.inspect();
 
         expect(State.Status).to.equal('running');
         expect(Mounts.map(mount => mount.Destination)).to.include(CONTAINER_VOLUME);
