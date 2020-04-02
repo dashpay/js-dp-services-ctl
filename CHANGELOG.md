@@ -2,7 +2,7 @@
 
 ### Bug Fixes
 
-* pass Tendermint RPC connection details to DriveAbci service ([b212f2f](https://github.com/dashevo/js-dp-services-ctl/commit/b212f2f5a493234fcb04ea6204a80aff25692365))
+* pass Tendermint RPC connection details to Machine service ([b212f2f](https://github.com/dashevo/js-dp-services-ctl/commit/b212f2f5a493234fcb04ea6204a80aff25692365))
 
 ### Features
 
