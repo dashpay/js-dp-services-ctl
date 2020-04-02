@@ -82,16 +82,9 @@ describe('startDapi', function main() {
         `DASHCORE_ZMQ_PORT=${dapiNode.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
         `DASHCORE_P2P_HOST=${dapiNode.dashCore.getIp()}`,
         `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
-        `DRIVE_RPC_PORT=${dapiNode.driveAbci.options.getAbciPort()}`,
         'DASHCORE_P2P_NETWORK=regtest',
         'NETWORK=regtest',
       ];
-
-      if (os.platform() === 'darwin') {
-        expectedEnv.push('DRIVE_RPC_HOST=docker.for.mac.localhost');
-      } else {
-        expectedEnv.push(`DRIVE_RPC_HOST=${dapiNode.driveAbci.getIp()}`);
-      }
 
       const dapiEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
 
@@ -110,16 +103,9 @@ describe('startDapi', function main() {
         `DASHCORE_ZMQ_PORT=${dapiNode.dashCore.options.getZmqPorts().rawtxlock}`, // hashblock, hashtx, hashtxlock, rawblock, rawtx, rawtxlock
         `DASHCORE_P2P_HOST=${dapiNode.dashCore.getIp()}`,
         `DASHCORE_P2P_PORT=${dapiNode.dashCore.options.getDashdPort()}`,
-        `DRIVE_RPC_PORT=${dapiNode.driveAbci.options.getAbciPort()}`,
         'DASHCORE_P2P_NETWORK=regtest',
         'NETWORK=regtest',
       ];
-
-      if (os.platform() === 'darwin') {
-        expectedEnv.push('DRIVE_RPC_HOST=docker.for.mac.localhost');
-      } else {
-        expectedEnv.push(`DRIVE_RPC_HOST=${dapiNode.driveAbci.getIp()}`);
-      }
 
       const dapiEnvs = envs.filter(variable => expectedEnv.indexOf(variable) !== -1);
 
