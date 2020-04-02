@@ -31,15 +31,14 @@ The tool provides a convenient JavaScript interface for configuration and intera
 
 ### Available DP services
 
-#### DriveAbci
+#### Drive
 
-[DriveAbci](https://github.com/dashevo/drive) service starts a bunch of related services:
-- DriveAbci Api
-    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApi.js)
-    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/driveApi/DriveApiOptions.js)
+[Drive](https://github.com/dashevo/drive) service starts a bunch of related services:
+- DriveAbci
+    - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/drive/abci/DriveAbci.js)
+    - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/drive/abci/DriveAbciOptions.js)
 - [MongoDB](#mongodb)
 - [Dash Core](#dash-core)
-- [Tendermint Core](#tendermint-core)
 
 #### DAPI
 
@@ -50,10 +49,11 @@ The tool provides a convenient JavaScript interface for configuration and intera
 - DAPI TxFilterStream
     - [Methods](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStream.js)
     - [Options](https://github.com/dashevo/js-dp-services-ctl/blob/master/lib/services/dapi/txFilterStream/DapiTxFilterStreamOptions.js)
-- [DriveAbci Api](#drive)
+- [Drive](#drive)
 - [MongoDB](#mongodb)
 - [DashCore](#dash-core)
 - [Insight](#insight)
+- [Tendermint Core](#tendermint-core)
 
 #### Dash Core
 
