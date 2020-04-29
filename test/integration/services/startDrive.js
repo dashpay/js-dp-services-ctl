@@ -50,10 +50,10 @@ describe('startDrive', function main() {
       const { Config: { Env: ApiEnvs } } = await driveNode.driveAbci.container.inspect();
 
       const expectedEnv = [
-        `DASHCORE_JSON_RPC_HOST=${driveNode.dashCore.getIp()}`,
-        `DASHCORE_JSON_RPC_PORT=${driveNode.dashCore.options.getRpcPort()}`,
-        `DASHCORE_JSON_RPC_USER=${driveNode.dashCore.options.getRpcUser()}`,
-        `DASHCORE_JSON_RPC_PASS=${driveNode.dashCore.options.getRpcPassword()}`,
+        `CORE_JSON_RPC_HOST=${driveNode.dashCore.getIp()}`,
+        `CORE_JSON_RPC_PORT=${driveNode.dashCore.options.getRpcPort()}`,
+        `CORE_JSON_RPC_USERNAME=${driveNode.dashCore.options.getRpcUser()}`,
+        `CORE_JSON_RPC_PASSWORD=${driveNode.dashCore.options.getRpcPassword()}`,
         `DOCUMENT_MONGODB_URL=mongodb://${driveNode.mongoDb.getIp()}:${driveNode.mongoDb.options.getMongoPort()}`,
       ];
 
