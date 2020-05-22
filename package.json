@@ -50,7 +50,7 @@
     "cids": "^0.6.0"
   },
   "dependencies": {
-    "@dashevo/dapi-client": "dashevo/dapi-client#get-identity-endpoints",
+    "@dashevo/dapi-client": "~0.13.0-dev.1",
     "@dashevo/dashd-rpc": "^2.0.0",
     "@dashevo/drive-grpc": "~0.3.0",
     "aws-sdk": "^2.382.0",
