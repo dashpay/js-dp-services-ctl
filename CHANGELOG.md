@@ -1,3 +1,12 @@
+# [0.13.0](https://github.com/dashevo/js-dp-services-ctl/compare/v0.13.0-dev.1...v0.13.0) (2020-06-08)
+
+
+### Features
+
+* update dependencies ([#124](https://github.com/dashevo/js-dp-services-ctl/pull/124))
+
+
+
 # [0.12.0](https://github.com/dashevo/js-dp-services-ctl/compare/v0.11.0...v0.12.0) (2020-04-20)
 
 
