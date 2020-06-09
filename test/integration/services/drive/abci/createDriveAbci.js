@@ -20,10 +20,10 @@ describe('createDriveAbci', function main() {
       mongoDb = await startMongoDb();
       envs = [
         `DOCUMENT_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
-        `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
-        `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
-        `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
-        `DASHCORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
+        `CORE_JSON_RPC_HOST=${dashCore.getIp()}`,
+        `CORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
+        `CORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
+        `CORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
       ];
 
       const options = {
@@ -89,10 +89,10 @@ describe('createDriveAbci', function main() {
       mongoDb = await startMongoDb();
       envs = [
         `DOCUMENT_MONGODB_URL=mongodb://${mongoDb.getIp()}:${mongoDb.options.getMongoPort()}`,
-        `DASHCORE_JSON_RPC_HOST=${dashCore.getIp()}`,
-        `DASHCORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
-        `DASHCORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
-        `DASHCORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
+        `CORE_JSON_RPC_HOST=${dashCore.getIp()}`,
+        `CORE_JSON_RPC_PORT=${dashCore.options.getRpcPort()}`,
+        `CORE_JSON_RPC_USER=${dashCore.options.getRpcUser()}`,
+        `CORE_JSON_RPC_PASS=${dashCore.options.getRpcPassword()}`,
       ];
     });
 
