@@ -1,3 +1,12 @@
+# [0.14.0](https://github.com/dashevo/js-dp-services-ctl/compare/v0.13.1...v0.14.0) (2020-07-23)
+
+
+### Features
+
+* update code to work with DAPI Client v0.14 ([#127](https://github.com/dashevo/js-dp-services-ctl/issues/127))
+
+
+
 ## [0.13.1](https://github.com/dashevo/js-dp-services-ctl/compare/v0.13.0...v0.13.1) (2020-06-09)
 
 
