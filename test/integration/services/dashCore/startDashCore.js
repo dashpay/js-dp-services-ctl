@@ -34,7 +34,7 @@ describe('startDashCore', function main() {
     });
 
     it('should have RPC connected', async () => {
-      const { result } = await dashCoreNode.rpcClient.getInfo();
+      const { result } = await dashCoreNode.rpcClient.getNetworkInfo();
 
       expect(result).to.have.property('version');
     });

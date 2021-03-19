@@ -69,12 +69,14 @@ describe('createDashCore', function main() {
         `-rpcpassword=${dashCore.options.getRpcPassword()}`,
         '-rpcallowip=0.0.0.0/0',
         '-regtest=1',
-        '-keypool=1',
         '-addressindex=1',
         '-spentindex=1',
         '-txindex=1',
         '-timestampindex=1',
         '-daemon=0',
+        '-server=1',
+        '-bind=0.0.0.0',
+        '-rpcbind=0.0.0.0',
         `-rpcport=${dashCore.options.getRpcPort()}`,
         `-zmqpubrawtx=tcp://0.0.0.0:${dashCore.options.getZmqPorts().rawtx}`,
         `-zmqpubrawtxlock=tcp://0.0.0.0:${dashCore.options.getZmqPorts().rawtxlock}`,
@@ -180,7 +182,7 @@ describe('createDashCore', function main() {
       await dashCore.start();
 
       const rpcClient = dashCore.getApi();
-      const { result } = await rpcClient.getInfo();
+      const { result } = await rpcClient.getNetworkInfo();
 
       expect(result).to.have.property('version');
     });
@@ -191,7 +193,7 @@ describe('createDashCore', function main() {
       await dashCore.start();
 
       const rpcClient = dashCore.getApi();
-      const { result } = await rpcClient.getInfo();
+      const { result } = await rpcClient.getNetworkInfo();
 
       expect(result).to.have.property('version');
     });
