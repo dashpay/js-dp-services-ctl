@@ -1,8 +1,6 @@
 const stream = require('stream');
 
 const Docker = require('dockerode');
-const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
-const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
 
 describe('Image', function main() {
@@ -17,7 +15,7 @@ describe('Image', function main() {
     mockedStream._read = () => { /* stub */ };
   });
 
-  it('should pull an image without authentication', async () => {
+  it('should pull an image', async () => {
     const imageName = 'alpine';
 
     const dockerImage = await docker.getImage(imageName);
@@ -28,24 +26,6 @@ describe('Image', function main() {
     }
 
     const image = new Image(imageName);
-    await image.pull();
-  });
-
-  it.skip('should pull an image with authentication', async function it() {
-    const options = new DashCoreOptions();
-    const imageName = 'private/image:name';
-
-    const authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());
-    const image = new Image(imageName, authorizationToken);
-
-    this.sinon.stub(docker, 'pull');
-    docker.pull.returns(mockedStream);
-    image.docker = docker;
-
-    setTimeout(() => {
-      mockedStream.emit('end');
-    }, 1000);
-
     await image.pull();
   });
 
