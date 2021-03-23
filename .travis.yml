@@ -1,9 +1,8 @@
 sudo: required
-dist: trusty
+dist: focal
 language: node_js
 
 node_js:
-  - '10'
   - '12'
 
 branches:
@@ -18,6 +17,8 @@ services:
 
 addons:
   apt:
+    sources:
+      - sourceline: 'deb https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable'
     packages:
       - docker-ce
 

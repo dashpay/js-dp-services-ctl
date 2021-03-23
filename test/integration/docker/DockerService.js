@@ -3,7 +3,6 @@ const Docker = require('dockerode');
 const removeContainers = require('../../../lib/docker/removeContainers');
 const DashCoreOptions = require('../../../lib/services/dashCore/DashCoreOptions');
 const Network = require('../../../lib/docker/Network');
-const getAwsEcrAuthorizationToken = require('../../../lib/docker/getAwsEcrAuthorizationToken');
 const Image = require('../../../lib/docker/Image');
 const Container = require('../../../lib/docker/Container');
 const DockerService = require('../../../lib/docker/DockerService');
@@ -14,12 +13,7 @@ async function createInstance(options) {
   const containerOptions = options.getContainerOptions();
   const network = new Network(networkName, driver);
 
-  let authorizationToken;
-  if (imageName.includes('amazonaws.com')) {
-    authorizationToken = await getAwsEcrAuthorizationToken(options.getAwsOptions());
-  }
-
-  const image = new Image(imageName, authorizationToken);
+  const image = new Image(imageName);
   const container = new Container(networkName, imageName, containerOptions);
 
   return new DockerService(network, image, container, options);
@@ -65,12 +59,14 @@ describe('DockerService', function main() {
         `-rpcpassword=${options.getRpcPassword()}`,
         '-rpcallowip=0.0.0.0/0',
         '-regtest=1',
-        '-keypool=1',
         '-addressindex=1',
         '-spentindex=1',
         '-txindex=1',
         '-timestampindex=1',
         '-daemon=0',
+        '-server=1',
+        '-bind=0.0.0.0',
+        '-rpcbind=0.0.0.0',
         `-rpcport=${options.getRpcPort()}`,
         `-zmqpubrawtx=tcp://0.0.0.0:${options.getZmqPorts().rawtx}`,
         `-zmqpubrawtxlock=tcp://0.0.0.0:${options.getZmqPorts().rawtxlock}`,
