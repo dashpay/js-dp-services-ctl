@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/dashevo/js-dp-services-ctl/actions/workflows/test.yml/badge.svg)](https://github.com/dashevo/js-dp-services-ctl/actions/workflows/test.yml)
 [![NPM version](https://img.shields.io/npm/v/@dashevo/dp-services-ctl.svg)](https://npmjs.org/package/@dashevo/dp-services-ctl)
 
-> Control Dash Platform services using JavaScript and Docker
+Control Dash Platform services using JavaScript and Docker
 
 The tool provides a convenient JavaScript interface for configuration and interaction with Dash Platform services. Services are started in Docker containers.
 
